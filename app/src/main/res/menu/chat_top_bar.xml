@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/chat_top_bar_action_settings"
+        android:title="@string/component_chat_top_bar_action_settings_title_text"
+        android:icon="@drawable/ic_settings"
+        app:iconTint="?attr/colorOnSurfaceVariant"
+        app:showAsAction="ifRoom"/>
+
+</menu>

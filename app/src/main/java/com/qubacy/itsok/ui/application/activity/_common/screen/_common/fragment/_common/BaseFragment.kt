@@ -1,13 +1,16 @@
 package com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common
 
+import androidx.core.graphics.Insets
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.annotation.StringRes
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
-import com.qubacy.itsok._common.error.Error
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.qubacy.itsok.R
+import com.qubacy.itsok._common.error.Error
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model.BaseViewModel
 
 abstract class BaseFragment<
@@ -22,11 +25,30 @@ abstract class BaseFragment<
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        catchViewInsets(view)
+
 //        mModel.uiState.observe(viewLifecycleOwner) {
 //            if (it == null) return@observe
 //
 //            processUiState(it)
 //        }
+    }
+
+    private fun catchViewInsets(view: View) {
+        ViewCompat.setOnApplyWindowInsetsListener(view) { _, insetsRes: WindowInsetsCompat? ->
+            val insets = insetsRes?.getInsets(
+                WindowInsetsCompat.Type.statusBars() or
+                        WindowInsetsCompat.Type.navigationBars()
+            )
+
+            if (insets != null) adjustViewToInsets(insets)
+
+            WindowInsetsCompat.CONSUMED
+        }
+    }
+
+    protected open fun adjustViewToInsets(insets: Insets) {
+
     }
 
     open fun onMessageOccurred(

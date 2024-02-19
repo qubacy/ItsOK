@@ -1,10 +1,11 @@
 package com.qubacy.itsok.ui.application.activity._common.screen.chat
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.graphics.Insets
+import androidx.core.view.updatePadding
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.qubacy.itsok.databinding.FragmentChatBinding
@@ -51,5 +52,13 @@ class ChatFragment(
         super.onViewCreated(view, savedInstanceState)
 
 
+    }
+
+    override fun adjustViewToInsets(insets: Insets) {
+        super.adjustViewToInsets(insets)
+
+        mBinding.fragmentChatTopBarWrapper.apply {
+            updatePadding(top = insets.top)
+        }
     }
 }
