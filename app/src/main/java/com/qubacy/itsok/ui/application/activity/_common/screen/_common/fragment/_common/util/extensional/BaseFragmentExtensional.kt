@@ -7,14 +7,14 @@ import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment.
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.util.permission.PermissionRunner
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.util.permission.PermissionRunnerCallback
 
-fun BaseFragment<*>.closeSoftKeyboard() {
+fun BaseFragment<*, *>.closeSoftKeyboard() {
     val inputMethodManager =
         requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
 
     inputMethodManager?.hideSoftInputFromWindow(requireView().windowToken, 0)
 }
 
-fun <FragmentType>BaseFragment<*>.runPermissionCheck(
+fun <FragmentType>BaseFragment<*, *>.runPermissionCheck(
 
 ) where FragmentType : Fragment, FragmentType : PermissionRunnerCallback {
    PermissionRunner<FragmentType>(this as FragmentType).requestPermissions()

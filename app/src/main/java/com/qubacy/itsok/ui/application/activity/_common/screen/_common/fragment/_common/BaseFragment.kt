@@ -12,9 +12,11 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.qubacy.itsok.R
 import com.qubacy.itsok._common.error.Error
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model.BaseViewModel
+import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model.state.BaseUiState
 
 abstract class BaseFragment<
-    ViewModelType : BaseViewModel
+    UiStateType : BaseUiState,
+    ViewModelType : BaseViewModel<UiStateType>
 >() : Fragment() {
     companion object {
         const val TAG = "BaseFragment"
@@ -22,16 +24,18 @@ abstract class BaseFragment<
 
     protected abstract val mModel: ViewModelType
 
+    protected var mIsInitialized: Boolean = false
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         catchViewInsets(view)
 
-//        mModel.uiState.observe(viewLifecycleOwner) {
-//            if (it == null) return@observe
-//
-//            processUiState(it)
-//        }
+        mModel.uiState.observe(viewLifecycleOwner) {
+            processUiState(it)
+
+            if (!mIsInitialized) mIsInitialized = true
+        }
     }
 
     protected open fun viewInsetsToCatch(): Int {
@@ -49,8 +53,10 @@ abstract class BaseFragment<
         }
     }
 
-    protected open fun adjustViewToInsets(insets: Insets) {
+    protected open fun adjustViewToInsets(insets: Insets) { }
 
+    protected open fun processUiState(uiState: UiStateType) {
+        if (uiState.error != null) onErrorOccurred(uiState.error)
     }
 
     open fun onMessageOccurred(
@@ -67,10 +73,12 @@ abstract class BaseFragment<
         onMessageOccurred(getString(message), duration)
     }
 
-    open fun onErrorOccurred(error: Error, callback: (() -> Unit)? = null) {
+    protected open fun onErrorHandled() { }
+
+    open fun onErrorOccurred(error: Error) {
         val onDismiss = Runnable {
             handleError(error)
-            callback?.invoke()
+            onErrorHandled()
         }
 
         MaterialAlertDialogBuilder(requireContext())

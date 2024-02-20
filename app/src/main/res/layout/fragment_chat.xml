@@ -47,7 +47,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:src="@drawable/itsok_animated_wonder"/>
+        app:srcCompat="@drawable/itsok"/>
 
     <include
         android:id="@+id/fragment_chat_gripe_input"
