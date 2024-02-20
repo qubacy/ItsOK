@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:ordering="together">
+
+    <objectAnimator
+        android:duration="100"
+        android:propertyName="fillAlpha"
+        android:valueFrom="@dimen/itsok_animation_happy_bye_eyelid_from_fillAlpha"
+        android:valueTo="@dimen/itsok_animation_happy_bye_eyelid_to_fillAlpha"/>
+
+    <objectAnimator
+        android:duration="100"
+        android:propertyName="strokeAlpha"
+        android:valueFrom="@dimen/itsok_animation_happy_bye_eyelid_from_strokeAlpha"
+        android:valueTo="@dimen/itsok_animation_happy_bye_eyelid_to_strokeAlpha"/>
+
+</set>

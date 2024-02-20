@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:ordering="together">
+
+    <objectAnimator
+        android:duration="@integer/itsok_animation_thinking_duration"
+        android:propertyName="translateY"
+        android:valueFrom="@integer/itsok_animation_happy_memento_left_brow_from_translationY"
+        android:valueTo="@integer/itsok_animation_happy_memento_left_brow_to_translationY"/>
+
+    <objectAnimator
+        android:duration="@integer/itsok_animation_thinking_duration"
+        android:propertyName="rotation"
+        android:valueFrom="@integer/itsok_animation_happy_memento_left_brow_from_degree"
+        android:valueTo="@integer/itsok_animation_happy_memento_left_brow_to_degree"/>
+
+</set>

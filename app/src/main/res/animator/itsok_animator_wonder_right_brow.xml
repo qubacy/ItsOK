@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<objectAnimator
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:duration="@integer/itsok_animation_wonder_duration"
+    android:propertyName="rotation"
+    android:valueFrom="@integer/itsok_animation_wonder_brow_from_degree"
+    android:valueTo="@integer/itsok_animation_wonder_right_brow_to_degree"/>

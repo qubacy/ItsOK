@@ -10,5 +10,6 @@
     <string name="component_error_dialog_title_text">Error</string>
     <string name="component_error_dialog_button_neutral_caption">OK</string>
     <string name="component_chat_top_bar_action_settings_title_text">Settings</string>
+    <string name="component_chat_gripe_input_hint_text">Speaking from my heart..</string>
 
 </resources>

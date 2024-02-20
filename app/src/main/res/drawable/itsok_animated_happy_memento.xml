@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-vector
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/itsok">
+
+    <target
+        android:animation="@animator/itsok_animator_happy_memento_left_brow"
+        android:name="left_brow_wrapper"/>
+
+    <target
+        android:animation="@animator/itsok_animator_happy_memento_right_brow"
+        android:name="right_brow_wrapper"/>
+    
+    <target
+        android:animation="@animator/itsok_animator_happy_memento_eye_pupil"
+        android:name="right_eye_pupil"/>
+
+    <target
+        android:animation="@animator/itsok_animator_happy_memento_eye_pupil"
+        android:name="left_eye_pupil"/>
+
+</animated-vector>

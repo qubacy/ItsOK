@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-vector
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/itsok_bye">
+
+    <target
+        android:animation="@animator/itsok_animator_happy_bye_left_heart_wrapper"
+        android:name="left_heart_wrapper"/>
+
+    <target
+        android:animation="@animator/itsok_animator_happy_bye_heart"
+        android:name="left_heart"/>
+
+    <target
+        android:animation="@animator/itsok_animator_happy_bye_center_heart_wrapper"
+        android:name="center_heart_wrapper"/>
+
+    <target
+        android:animation="@animator/itsok_animator_happy_bye_heart"
+        android:name="center_heart"/>
+
+    <target
+        android:animation="@animator/itsok_animator_happy_bye_right_heart_wrapper"
+        android:name="right_heart_wrapper"/>
+
+    <target
+        android:animation="@animator/itsok_animator_happy_bye_heart"
+        android:name="right_heart"/>
+
+    <target
+        android:animation="@animator/itsok_animator_happy_memento_left_brow"
+        android:name="left_brow_wrapper"/>
+
+    <target
+        android:animation="@animator/itsok_animator_happy_memento_right_brow"
+        android:name="right_brow_wrapper"/>
+
+    <target
+        android:animation="@animator/itsok_animator_happy_bye_eyelid"
+        android:name="left_eyelid"/>
+
+    <target
+        android:animation="@animator/itsok_animator_happy_bye_eyelid"
+        android:name="right_eyelid"/>
+
+    <target
+        android:animation="@animator/itsok_animator_happy_bye_eyelid_wrapper"
+        android:name="left_eyelid_wrapper"/>
+
+    <target
+        android:animation="@animator/itsok_animator_happy_bye_eyelid_wrapper"
+        android:name="right_eyelid_wrapper"/>
+
+</animated-vector>

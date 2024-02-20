@@ -5,11 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.graphics.Insets
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.qubacy.itsok.databinding.FragmentChatBinding
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.BaseFragment
+import com.qubacy.itsok.ui.application.activity._common.screen.chat.adapter.MessageListAdapter
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.model.ChatViewModel
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.model.ChatViewModelFactoryQualifier
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,6 +35,7 @@ class ChatFragment(
     )
 
     private lateinit var mBinding: FragmentChatBinding
+    private lateinit var mAdapter: MessageListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +55,15 @@ class ChatFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        mAdapter = MessageListAdapter(lifecycleScope)
 
+        mBinding.fragmentChatMessageList.apply {
+            adapter = mAdapter
+        }
+    }
+
+    override fun viewInsetsToCatch(): Int {
+        return (super.viewInsetsToCatch() or WindowInsetsCompat.Type.ime())
     }
 
     override fun adjustViewToInsets(insets: Insets) {
@@ -59,6 +71,9 @@ class ChatFragment(
 
         mBinding.fragmentChatTopBarWrapper.apply {
             updatePadding(top = insets.top)
+        }
+        mBinding.fragmentChatGripeInput.apply {
+            root.updatePadding(bottom = insets.bottom)
         }
     }
 }

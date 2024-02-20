@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:ordering="together">
+
+    <objectAnimator
+        android:duration="@integer/itsok_animation_happy_memento_duration"
+        android:propertyName="scaleX"
+        android:valueFrom="@dimen/itsok_animation_happy_memento_eye_pupil_to_scaleX"
+        android:valueTo="@dimen/itsok_animation_happy_memento_eye_pupil_from_scaleX"/>
+
+    <objectAnimator
+        android:duration="@integer/itsok_animation_happy_memento_duration"
+        android:propertyName="scaleY"
+        android:valueFrom="@dimen/itsok_animation_happy_memento_eye_pupil_to_scaleY"
+        android:valueTo="@dimen/itsok_animation_happy_memento_eye_pupil_from_scaleY"/>
+
+</set>

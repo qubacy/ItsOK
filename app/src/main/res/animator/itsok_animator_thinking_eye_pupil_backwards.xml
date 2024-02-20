@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:ordering="together"
+    android:duration="@integer/itsok_animation_thinking_duration">
+
+    <objectAnimator
+        android:propertyName="translateX"
+        android:valueFrom="@integer/itsok_animation_thinking_eye_pupil_to_translationX_2"
+        android:valueTo="@integer/itsok_animation_thinking_eye_pupil_from_translationX_1"/>
+
+    <objectAnimator
+        android:propertyName="translateY"
+        android:valueFrom="@integer/itsok_animation_thinking_eye_pupil_to_translationY_2"
+        android:valueTo="@integer/itsok_animation_thinking_eye_pupil_from_translationY_1"/>
+
+</set>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-vector
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/itsok">
+
+    <target
+        android:name="right_brow_wrapper"
+        android:animation="@animator/itsok_animator_wonder_right_brow"/>
+
+    <target
+        android:name="left_brow_wrapper"
+        android:animation="@animator/itsok_animator_wonder_left_brow"/>
+
+    <target
+        android:name="right_eye"
+        android:animation="@animator/itsok_animator_wonder_eye"/>
+
+    <target
+        android:name="left_eye"
+        android:animation="@animator/itsok_animator_wonder_eye"/>
+
+</animated-vector>

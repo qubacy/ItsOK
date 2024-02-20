@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:ordering="together">
+
+    <objectAnimator
+        android:duration="@integer/itsok_animation_happy_bye_duration"
+        android:propertyName="scaleY"
+        android:valueFrom="@dimen/itsok_animation_happy_bye_eyelid_wrapper_from_scaleY"
+        android:valueTo="@dimen/itsok_animation_happy_bye_eyelid_wrapper_to_scaleY"/>
+
+</set>

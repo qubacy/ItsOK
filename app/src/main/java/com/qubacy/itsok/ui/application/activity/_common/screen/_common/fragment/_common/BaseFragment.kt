@@ -34,12 +34,14 @@ abstract class BaseFragment<
 //        }
     }
 
+    protected open fun viewInsetsToCatch(): Int {
+        return WindowInsetsCompat.Type.statusBars() or
+               WindowInsetsCompat.Type.navigationBars()
+    }
+
     private fun catchViewInsets(view: View) {
         ViewCompat.setOnApplyWindowInsetsListener(view) { _, insetsRes: WindowInsetsCompat? ->
-            val insets = insetsRes?.getInsets(
-                WindowInsetsCompat.Type.statusBars() or
-                        WindowInsetsCompat.Type.navigationBars()
-            )
+            val insets = insetsRes?.getInsets(viewInsetsToCatch())
 
             if (insets != null) adjustViewToInsets(insets)
 

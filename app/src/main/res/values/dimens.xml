@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="itsok_animation_wonder_duration">1000</integer>
+    <integer name="itsok_animation_thinking_duration">700</integer>
+    <integer name="itsok_animation_happy_memento_duration">700</integer>
+    <integer name="itsok_animation_happy_bye_duration">350</integer>
+
+    <integer name="itsok_animation_wonder_brow_from_degree">0</integer>
+    <integer name="itsok_animation_wonder_right_brow_to_degree">8</integer>
+    <integer name="itsok_animation_wonder_left_brow_to_degree">-8</integer>
+    <integer name="itsok_animation_wonder_eye_from_translationY">0</integer>
+    <integer name="itsok_animation_wonder_eye_to_translationY">-3</integer>
+
+    <integer name="itsok_animation_thinking_eye_pupil_from_translationY_1">0</integer>
+    <integer name="itsok_animation_thinking_eye_pupil_to_translationY_1">-2</integer>
+    <integer name="itsok_animation_thinking_eye_pupil_from_translationY_2">
+        @integer/itsok_animation_thinking_eye_pupil_to_translationY_1</integer>
+    <integer name="itsok_animation_thinking_eye_pupil_to_translationY_2">-3</integer>
+    <integer name="itsok_animation_thinking_eye_pupil_from_translationX_1">0</integer>
+    <integer name="itsok_animation_thinking_eye_pupil_to_translationX_1">-1</integer>
+    <integer name="itsok_animation_thinking_eye_pupil_from_translationX_2">
+        @integer/itsok_animation_thinking_eye_pupil_to_translationX_1</integer>
+    <integer name="itsok_animation_thinking_eye_pupil_to_translationX_2">-3</integer>
+    <integer name="itsok_animation_thinking_left_brow_from_translationY">0</integer>
+    <integer name="itsok_animation_thinking_left_brow_to_translationY">-3</integer>
+
+    <integer name="itsok_animation_happy_memento_right_brow_from_translationY">0</integer>
+    <integer name="itsok_animation_happy_memento_right_brow_to_translationY">-3</integer>
+    <integer name="itsok_animation_happy_memento_right_brow_from_degree">0</integer>
+    <integer name="itsok_animation_happy_memento_right_brow_to_degree">8</integer>
+    <integer name="itsok_animation_happy_memento_left_brow_from_translationY">
+        @integer/itsok_animation_happy_memento_right_brow_from_translationY</integer>
+    <integer name="itsok_animation_happy_memento_left_brow_to_translationY">
+        @integer/itsok_animation_happy_memento_right_brow_to_translationY</integer>
+    <integer name="itsok_animation_happy_memento_left_brow_from_degree">
+        @integer/itsok_animation_happy_memento_right_brow_from_degree</integer>
+    <integer name="itsok_animation_happy_memento_left_brow_to_degree">-8</integer>
+    <dimen name="itsok_animation_happy_memento_eye_pupil_from_scaleX">1</dimen>
+    <dimen name="itsok_animation_happy_memento_eye_pupil_to_scaleX">1.1</dimen>
+    <dimen name="itsok_animation_happy_memento_eye_pupil_from_scaleY">
+        @dimen/itsok_animation_happy_memento_eye_pupil_from_scaleX</dimen>
+    <dimen name="itsok_animation_happy_memento_eye_pupil_to_scaleY">
+        @dimen/itsok_animation_happy_memento_eye_pupil_to_scaleX</dimen>
+
+    <dimen name="itsok_animation_happy_bye_center_heart_wrapper_from_translateY">0</dimen>
+    <dimen name="itsok_animation_happy_bye_center_heart_wrapper_to_translateY">-30</dimen>
+    <dimen name="itsok_animation_happy_bye_left_heart_wrapper_from_translateX">0</dimen>
+    <dimen name="itsok_animation_happy_bye_left_heart_wrapper_to_translateX">-21.8</dimen>
+    <dimen name="itsok_animation_happy_bye_left_heart_wrapper_from_translateY">
+        @dimen/itsok_animation_happy_bye_center_heart_wrapper_from_translateY</dimen>
+    <dimen name="itsok_animation_happy_bye_left_heart_wrapper_to_translateY">
+        @dimen/itsok_animation_happy_bye_center_heart_wrapper_to_translateY</dimen>
+    <dimen name="itsok_animation_happy_bye_right_heart_wrapper_from_translateX">
+        @dimen/itsok_animation_happy_bye_left_heart_wrapper_from_translateX</dimen>
+    <dimen name="itsok_animation_happy_bye_right_heart_wrapper_to_translateX">21.8</dimen>
+    <dimen name="itsok_animation_happy_bye_right_heart_wrapper_from_translateY">
+        @dimen/itsok_animation_happy_bye_center_heart_wrapper_from_translateY</dimen>
+    <dimen name="itsok_animation_happy_bye_right_heart_wrapper_to_translateY">
+        @dimen/itsok_animation_happy_bye_center_heart_wrapper_to_translateY</dimen>
+    <dimen name="itsok_animation_happy_bye_heart_from_fillAlpha">0</dimen>
+    <dimen name="itsok_animation_happy_bye_heart_to_fillAlpha">1</dimen>
+    <dimen name="itsok_animation_happy_bye_eyelid_from_fillAlpha">0</dimen>
+    <dimen name="itsok_animation_happy_bye_eyelid_to_fillAlpha">1</dimen>
+    <dimen name="itsok_animation_happy_bye_eyelid_from_strokeAlpha">0</dimen>
+    <dimen name="itsok_animation_happy_bye_eyelid_to_strokeAlpha">1</dimen>
+    <dimen name="itsok_animation_happy_bye_eyelid_wrapper_from_scaleY">0</dimen>
+    <dimen name="itsok_animation_happy_bye_eyelid_wrapper_to_scaleY">1</dimen>
+    
+</resources>
