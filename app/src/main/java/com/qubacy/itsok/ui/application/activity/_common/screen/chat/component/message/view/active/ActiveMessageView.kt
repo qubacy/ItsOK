@@ -1,4 +1,4 @@
-package com.qubacy.itsok.ui.application.activity._common.screen._common.component.message.view.active
+package com.qubacy.itsok.ui.application.activity._common.screen.chat.component.message.view.active
 
 import android.content.Context
 import android.graphics.drawable.Drawable
@@ -7,18 +7,18 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.animation.AccelerateInterpolator
 import com.qubacy.itsok.R
-import com.qubacy.itsok.ui.application.activity._common.screen._common.component.typing.view.TypingMaterialTextView
-import com.qubacy.itsok.ui.application.activity._common.screen._common.component.typing.view.TypingMaterialTextViewCallback
+import com.qubacy.itsok.ui.application.activity._common.screen.chat.component.typing.view.TypingMaterialTextView
+import com.qubacy.itsok.ui.application.activity._common.screen.chat.component.typing.view.TypingMaterialTextViewCallback
 import com.google.android.material.imageview.ShapeableImageView
-import com.qubacy.itsok.ui.application.activity._common.screen._common.component.message.view._common.MessageView
+import com.qubacy.itsok.ui.application.activity._common.screen.chat.component.message.view._common.MessageView
 import com.qubacy.itsok.ui.application.activity._common.screen.chat._common.data.message.UIMessage
 
 class ActiveMessageView(
     context: Context,
     attrs: AttributeSet
 ) : MessageView<
-    TypingMaterialTextView, ShapeableImageView, UIMessage
->(context, attrs), TypingMaterialTextViewCallback {
+        TypingMaterialTextView, ShapeableImageView, UIMessage
+        >(context, attrs), TypingMaterialTextViewCallback {
     companion object {
         const val TAG = "ActiveMessageView"
 
@@ -95,15 +95,22 @@ class ActiveMessageView(
         }
     }
 
+    fun isTyping(): Boolean {
+        return mTextView?.isTyping() ?: false
+    }
+
     override fun onTextTypingFinished() {
-        mMessage?.image?.also {
-            setImage(it)
+        if (mMessage?.image != null) {
+            setImage(mMessage!!.image)
+
+        } else {
+            mAnimationEndAction?.invoke()
         }
     }
 
     override fun onDetachedFromWindow() {
-        mTextView?.stopTypingText()
         mAnimationDetachmentAction?.invoke()
+        mTextView?.stopTypingText()
 
         super.onDetachedFromWindow()
     }

@@ -1,4 +1,4 @@
-package com.qubacy.itsok.ui.application.activity._common.screen.chat.adapter
+package com.qubacy.itsok.ui.application.activity._common.screen.chat.component.list.adapter
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -6,14 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.qubacy.itsok.R
-import com.qubacy.itsok.ui.application.activity._common.screen._common.component.message.view.active.ActiveMessageView
-import com.qubacy.itsok.ui.application.activity._common.screen._common.component.message.view.previous.PreviousMessageView
+import com.qubacy.itsok.ui.application.activity._common.screen.chat.component.message.view.active.ActiveMessageView
+import com.qubacy.itsok.ui.application.activity._common.screen.chat.component.message.view.previous.PreviousMessageView
 import com.qubacy.itsok.ui.application.activity._common.screen.chat._common.data.message.UIMessage
+import com.qubacy.itsok.ui.application.activity._common.screen.chat.component.list.layout.MessageListLayoutManager
+import com.qubacy.itsok.ui.application.activity._common.screen.chat.component.list.layout.MessageListLayoutManagerCallback
 import kotlinx.coroutines.CoroutineScope
 
 class MessageListAdapter(
     private val mCoroutineScope: CoroutineScope
-) : RecyclerView.Adapter<MessageListAdapter.MessageViewHolder>() {
+) : RecyclerView.Adapter<MessageListAdapter.MessageViewHolder>(), MessageListLayoutManagerCallback {
     enum class ItemType(val id: Int) {
         ACTIVE(0), PREVIOUS(1);
     }
@@ -53,11 +55,24 @@ class MessageListAdapter(
         const val TAG = "MessageListAdapter"
     }
 
+    private lateinit var mRecyclerView: RecyclerView
+
     private val mPendingMessagesToAdd: ArrayDeque<UIMessage> = ArrayDeque()
 
+    private var mLastRecycledActiveMessageViewHolder: ActiveMessageViewHolder? = null
+    private var mIsActiveMessageViewHolderAnimationInterrupted: Boolean = true
     private var mLastActiveMessageHash: Int = 0
+
     private val mItems: MutableList<UIMessage> = mutableListOf()
     val items: List<UIMessage> get() = mItems
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+
+        mRecyclerView = recyclerView
+
+        (mRecyclerView.layoutManager as MessageListLayoutManager).setCallback(this)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageViewHolder {
         return when (viewType) {
@@ -100,10 +115,13 @@ class MessageListAdapter(
 
                 holder as ActiveMessageViewHolder
 
+                mIsActiveMessageViewHolderAnimationInterrupted = false
+
                 holder.setData(message, animate, {
                     runPendingItemAddingAnimation()
                 }) {
-                    onActiveElementDetached()
+                    mIsActiveMessageViewHolderAnimationInterrupted =
+                        holder.messageView.isTyping()
                 }
 
                 mLastActiveMessageHash = messageHash
@@ -133,25 +151,29 @@ class MessageListAdapter(
     }
 
     fun addItem(message: UIMessage) {
-        mItems.add(message)
+        mItems.add(0, message)
 
         notifyItemInserted(0)
         notifyItemRangeChanged(0, mItems.size - 1)
+
+        scrollToActiveMessage()
+    }
+
+    private fun scrollToActiveMessage() {
+        mRecyclerView.scrollToPosition(0)
     }
 
     fun addItems(messages: List<UIMessage>) {
         if (messages.isEmpty()) return
 
-        val reversedMessages = messages.reversed()
-
         val pendingMessages = if (mPendingMessagesToAdd.isEmpty()) {
-            val lastMessage = reversedMessages.first()
+            val lastMessage = messages.first()
 
             addItem(lastMessage)
 
-            reversedMessages.drop(1)
+            messages.drop(1)
         } else
-            reversedMessages
+            messages
 
         mPendingMessagesToAdd.addAll(pendingMessages)
     }
@@ -167,5 +189,24 @@ class MessageListAdapter(
         }
 
         notifyDataSetChanged()
+    }
+
+    override fun onViewRecycled(holder: MessageViewHolder) {
+        super.onViewRecycled(holder)
+
+        if (holder is ActiveMessageViewHolder)
+            mLastRecycledActiveMessageViewHolder = holder
+    }
+
+    override fun onLayoutCompleted() {
+        if (mLastRecycledActiveMessageViewHolder == null
+        || !mIsActiveMessageViewHolderAnimationInterrupted
+        ) {
+            return
+        }
+
+        onActiveElementDetached()
+
+        mLastRecycledActiveMessageViewHolder = null
     }
 }

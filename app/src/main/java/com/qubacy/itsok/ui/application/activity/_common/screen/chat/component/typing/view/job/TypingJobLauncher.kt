@@ -1,4 +1,4 @@
-package com.qubacy.itsok.ui.application.activity._common.screen._common.component.typing.view.job
+package com.qubacy.itsok.ui.application.activity._common.screen.chat.component.typing.view.job
 
 import android.util.Log
 import android.widget.TextView

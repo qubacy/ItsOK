@@ -1,4 +1,4 @@
-package com.qubacy.itsok.ui.application.activity._common.screen._common.component.message.view._common
+package com.qubacy.itsok.ui.application.activity._common.screen.chat.component.message.view._common
 
 import android.content.Context
 import android.graphics.drawable.Drawable

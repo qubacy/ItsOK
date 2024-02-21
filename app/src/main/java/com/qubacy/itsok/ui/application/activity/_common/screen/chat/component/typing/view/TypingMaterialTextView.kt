@@ -1,10 +1,10 @@
-package com.qubacy.itsok.ui.application.activity._common.screen._common.component.typing.view
+package com.qubacy.itsok.ui.application.activity._common.screen.chat.component.typing.view
 
 import android.content.Context
 import android.util.AttributeSet
 import android.util.Log
 import com.qubacy.itsok.R
-import com.qubacy.itsok.ui.application.activity._common.screen._common.component.typing.view.job.TypingJobLauncher
+import com.qubacy.itsok.ui.application.activity._common.screen.chat.component.typing.view.job.TypingJobLauncher
 import com.google.android.material.textview.MaterialTextView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.annotation.DrawableRes
 import androidx.core.graphics.Insets
 import androidx.core.view.WindowInsetsCompat
@@ -21,7 +22,8 @@ import com.qubacy.itsok._common.chat.stage.ChatStage
 import com.qubacy.itsok.domain.chat.model.toUIMessage
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.BaseFragment
 import com.qubacy.itsok.ui.application.activity._common.screen.chat._common.data.message.UIMessage
-import com.qubacy.itsok.ui.application.activity._common.screen.chat.adapter.MessageListAdapter
+import com.qubacy.itsok.ui.application.activity._common.screen.chat.component.list.adapter.MessageListAdapter
+import com.qubacy.itsok.ui.application.activity._common.screen.chat.component.list.layout.MessageListLayoutManager
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.model.ChatViewModel
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.model.ChatViewModelFactoryQualifier
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.model.state.ChatUiState
@@ -71,6 +73,8 @@ class ChatFragment(
         mAdapter = MessageListAdapter(lifecycleScope)
 
         mBinding.fragmentChatMessageList.apply {
+            layoutManager = MessageListLayoutManager(
+                requireContext(), LinearLayout.VERTICAL, true)
             adapter = mAdapter
         }
     }
