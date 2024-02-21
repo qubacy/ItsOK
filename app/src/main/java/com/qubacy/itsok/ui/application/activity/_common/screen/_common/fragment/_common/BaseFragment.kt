@@ -11,8 +11,8 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.qubacy.itsok.R
 import com.qubacy.itsok._common.error.Error
-import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model.BaseViewModel
-import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model.state.BaseUiState
+import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.BaseViewModel
+import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.state.BaseUiState
 
 abstract class BaseFragment<
     UiStateType : BaseUiState,

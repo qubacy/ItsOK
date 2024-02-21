@@ -7,18 +7,18 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.animation.AccelerateInterpolator
 import com.qubacy.itsok.R
-import com.qubacy.itsok.domain.chat.model.Message
 import com.qubacy.itsok.ui.application.activity._common.screen._common.component.typing.view.TypingMaterialTextView
 import com.qubacy.itsok.ui.application.activity._common.screen._common.component.typing.view.TypingMaterialTextViewCallback
 import com.google.android.material.imageview.ShapeableImageView
 import com.qubacy.itsok.ui.application.activity._common.screen._common.component.message.view._common.MessageView
+import com.qubacy.itsok.ui.application.activity._common.screen.chat._common.data.message.UIMessage
 
 class ActiveMessageView(
     context: Context,
     attrs: AttributeSet
 ) : MessageView<
-        TypingMaterialTextView, ShapeableImageView, Message
-        >(context, attrs), TypingMaterialTextViewCallback {
+    TypingMaterialTextView, ShapeableImageView, UIMessage
+>(context, attrs), TypingMaterialTextViewCallback {
     companion object {
         const val TAG = "ActiveMessageView"
 
@@ -26,6 +26,9 @@ class ActiveMessageView(
     }
 
     private var mAnimate: Boolean = true
+
+    private var mAnimationEndAction: (() -> Unit)? = null
+    private var mAnimationDetachmentAction: (() -> Unit)? = null
 
     override fun inflateTextView(): TypingMaterialTextView {
         return (LayoutInflater.from(context).inflate(
@@ -36,8 +39,15 @@ class ActiveMessageView(
             }
     }
 
-    fun setMessage(message: Message, animate: Boolean) {
+    fun setMessage(
+        message: UIMessage,
+        animate: Boolean,
+        endAction: (() -> Unit)? = null,
+        detachmentAction: (() -> Unit)? = null
+    ) {
         mAnimate = animate
+        mAnimationEndAction = endAction
+        mAnimationDetachmentAction = detachmentAction
 
         setMessage(message)
     }
@@ -57,7 +67,7 @@ class ActiveMessageView(
         } else super.resetContent()
     }
 
-    override fun setContentWithMessage(message: Message) {
+    override fun setContentWithMessage(message: UIMessage) {
         if (message.text != null && mAnimate) {
             message.text.also { setText(it) }
         } else super.setContentWithMessage(message)
@@ -79,6 +89,8 @@ class ActiveMessageView(
                 it.duration = DEFAULT_IMAGE_APPEAR_ANIMATION_DURATION
             }.withStartAction {
                 super.setImageViewVisibilityWithImage(image)
+            }.withEndAction {
+                mAnimationEndAction?.invoke()
             }.start()
         }
     }
@@ -91,6 +103,7 @@ class ActiveMessageView(
 
     override fun onDetachedFromWindow() {
         mTextView?.stopTypingText()
+        mAnimationDetachmentAction?.invoke()
 
         super.onDetachedFromWindow()
     }

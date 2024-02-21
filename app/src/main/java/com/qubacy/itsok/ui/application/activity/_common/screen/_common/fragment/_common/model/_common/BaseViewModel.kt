@@ -1,9 +1,9 @@
-package com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model
+package com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model.state.BaseUiState
+import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.state.BaseUiState
 
 abstract class BaseViewModel<UiStateType: BaseUiState>(
 

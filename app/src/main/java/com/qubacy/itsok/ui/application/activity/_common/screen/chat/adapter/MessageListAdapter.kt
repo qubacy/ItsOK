@@ -6,13 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.qubacy.itsok.R
-import com.qubacy.itsok.domain.chat.model.Message
 import com.qubacy.itsok.ui.application.activity._common.screen._common.component.message.view.active.ActiveMessageView
 import com.qubacy.itsok.ui.application.activity._common.screen._common.component.message.view.previous.PreviousMessageView
+import com.qubacy.itsok.ui.application.activity._common.screen.chat._common.data.message.UIMessage
 import kotlinx.coroutines.CoroutineScope
 
 class MessageListAdapter(
-    val coroutineScope: CoroutineScope
+    private val mCoroutineScope: CoroutineScope
 ) : RecyclerView.Adapter<MessageListAdapter.MessageViewHolder>() {
     enum class ItemType(val id: Int) {
         ACTIVE(0), PREVIOUS(1);
@@ -21,13 +21,13 @@ class MessageListAdapter(
     abstract class MessageViewHolder(
         view: View
     ) : RecyclerView.ViewHolder(view) {
-        abstract fun setData(message: Message)
+        abstract fun setData(message: UIMessage)
     }
 
     class PreviousMessageViewHolder(
         val messageView: PreviousMessageView
     ) : MessageViewHolder(messageView) {
-        override fun setData(message: Message) {
+        override fun setData(message: UIMessage) {
             messageView.setMessage(message)
         }
     }
@@ -35,11 +35,16 @@ class MessageListAdapter(
     class ActiveMessageViewHolder(
         val messageView: ActiveMessageView
     ) : MessageViewHolder(messageView) {
-        fun setData(message: Message, animate: Boolean) {
-            messageView.setMessage(message, animate)
+        fun setData(
+            message: UIMessage,
+            animate: Boolean,
+            endAction: (() -> Unit)? = null,
+            detachmentAction: (() -> Unit)? = null
+        ) {
+            messageView.setMessage(message, animate, endAction, detachmentAction)
         }
 
-        override fun setData(message: Message) {
+        override fun setData(message: UIMessage) {
             messageView.setMessage(message)
         }
     }
@@ -48,23 +53,25 @@ class MessageListAdapter(
         const val TAG = "MessageListAdapter"
     }
 
+    private val mPendingMessagesToAdd: ArrayDeque<UIMessage> = ArrayDeque()
+
     private var mLastActiveMessageHash: Int = 0
-    private val mItems: MutableList<Message> = mutableListOf()
-    val items: List<Message> get() = mItems
+    private val mItems: MutableList<UIMessage> = mutableListOf()
+    val items: List<UIMessage> get() = mItems
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageViewHolder {
         return when (viewType) {
             ItemType.PREVIOUS.id -> {
                 val prevMessageView = (LayoutInflater.from(parent.context).inflate(
                     R.layout.component_prev_message, parent, false) as PreviousMessageView)
-                    .apply { setCoroutineScope(coroutineScope) }
+                    .apply { setCoroutineScope(mCoroutineScope) }
 
                 PreviousMessageViewHolder(prevMessageView)
             }
             ItemType.ACTIVE.id -> {
                 val activeMessageView = (LayoutInflater.from(parent.context).inflate(
                     R.layout.component_active_message, parent, false) as ActiveMessageView)
-                    .apply { setCoroutineScope(coroutineScope) }
+                    .apply { setCoroutineScope(mCoroutineScope) }
 
                 ActiveMessageViewHolder(activeMessageView)
             }
@@ -91,21 +98,65 @@ class MessageListAdapter(
                 val messageHash = message.hashCode()
                 val animate = mLastActiveMessageHash != messageHash
 
-                (holder as ActiveMessageViewHolder).setData(message, animate)
+                holder as ActiveMessageViewHolder
+
+                holder.setData(message, animate, {
+                    runPendingItemAddingAnimation()
+                }) {
+                    onActiveElementDetached()
+                }
 
                 mLastActiveMessageHash = messageHash
             }
         }
     }
 
-    fun addItem(message: Message) {
-        mItems.add(0, message)
+    private fun runPendingItemAddingAnimation() {
+        if (mPendingMessagesToAdd.isEmpty()) return
+
+        val nextMessage = mPendingMessagesToAdd.removeFirst()
+
+        addItem(nextMessage)
+    }
+
+    private fun onActiveElementDetached() {
+        val originalMessageCount = mItems.size
+
+        mItems.addAll(mPendingMessagesToAdd)
+
+        notifyItemRangeInserted(0, mPendingMessagesToAdd.size - 1)
+
+        if (originalMessageCount > 0)
+            notifyItemRangeChanged(mPendingMessagesToAdd.size, mItems.size - 1)
+
+        mPendingMessagesToAdd.clear()
+    }
+
+    fun addItem(message: UIMessage) {
+        mItems.add(message)
 
         notifyItemInserted(0)
         notifyItemRangeChanged(0, mItems.size - 1)
     }
 
-    fun setItems(messages: List<Message>) {
+    fun addItems(messages: List<UIMessage>) {
+        if (messages.isEmpty()) return
+
+        val reversedMessages = messages.reversed()
+
+        val pendingMessages = if (mPendingMessagesToAdd.isEmpty()) {
+            val lastMessage = reversedMessages.first()
+
+            addItem(lastMessage)
+
+            reversedMessages.drop(1)
+        } else
+            reversedMessages
+
+        mPendingMessagesToAdd.addAll(pendingMessages)
+    }
+
+    fun setItems(messages: List<UIMessage>) {
         val reversedMessages = messages.reversed()
 
         mLastActiveMessageHash = reversedMessages[0].hashCode()

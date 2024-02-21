@@ -9,13 +9,13 @@ import android.view.View
 import android.widget.LinearLayout
 import androidx.core.view.updateLayoutParams
 import com.qubacy.itsok.R
-import com.qubacy.itsok.domain.chat.model.Message
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textview.MaterialTextView
+import com.qubacy.itsok.ui.application.activity._common.screen.chat._common.data.message.UIMessage
 import kotlinx.coroutines.CoroutineScope
 
 open class MessageView<
-    TextViewType : MaterialTextView, ImageViewType : ShapeableImageView, MessageType: Message
+    TextViewType : MaterialTextView, ImageViewType : ShapeableImageView, MessageType: UIMessage
 >(
     context: Context,
     attrs: AttributeSet

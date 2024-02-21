@@ -17,8 +17,10 @@ import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import com.qubacy.itsok.R
 import com.qubacy.itsok.databinding.FragmentChatBinding
 import com.qubacy.itsok.domain.chat.model.Message
-import com.qubacy.itsok.domain.chat.stage.ChatStage
+import com.qubacy.itsok._common.chat.stage.ChatStage
+import com.qubacy.itsok.domain.chat.model.toUIMessage
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.BaseFragment
+import com.qubacy.itsok.ui.application.activity._common.screen.chat._common.data.message.UIMessage
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.adapter.MessageListAdapter
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.model.ChatViewModel
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.model.ChatViewModelFactoryQualifier
@@ -105,15 +107,25 @@ class ChatFragment(
     private fun initChat() {
         // todo: init the initial chat state:
 
-        mModel.getNextMessage().observe(viewLifecycleOwner) {
-            mAdapter.addItem(it)
+        mModel.getNextMessages().observe(viewLifecycleOwner) {
+            val resolvedMessages = resolveMessages(it)
+
+            mAdapter.addItems(resolvedMessages)
 
             mIsInitialized = true
         }
     }
 
+    private fun resolveMessages(messages: List<Message>): List<UIMessage> {
+        val context = requireContext()
+
+        return messages.map { it.toUIMessage(context) }
+    }
+
     private fun setChatMessages(messages: List<Message>) {
-        mAdapter.setItems(messages)
+        val resolvedMessages = resolveMessages(messages)
+
+        mAdapter.setItems(resolvedMessages)
     }
 
     private fun setStage(stage: ChatStage) {

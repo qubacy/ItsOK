@@ -1,0 +1,22 @@
+package com.qubacy.itsok.ui.application.activity._common.screen.chat.model.module
+
+import androidx.lifecycle.ViewModelProvider
+import com.qubacy.itsok.domain.chat.ChatUseCase
+import com.qubacy.itsok.ui.application.activity._common.screen.chat.model.ChatViewModelFactory
+import com.qubacy.itsok.ui.application.activity._common.screen.chat.model.ChatViewModelFactoryQualifier
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityRetainedComponent
+
+@Module
+@InstallIn(ActivityRetainedComponent::class)
+object ChatViewModelModule {
+    @Provides
+    @ChatViewModelFactoryQualifier
+    fun provideChatViewModelFactory(
+        chatUseCase: ChatUseCase
+    ): ViewModelProvider.Factory {
+        return ChatViewModelFactory(chatUseCase)
+    }
+}

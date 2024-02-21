@@ -1,4 +1,4 @@
-package com.qubacy.itsok.domain.chat.stage
+package com.qubacy.itsok._common.chat.stage
 
 enum class ChatStage(val id: Int) {
     IDLE(0), THINKING(1), MEMENTO_OFFERING(2), BYE(3);
