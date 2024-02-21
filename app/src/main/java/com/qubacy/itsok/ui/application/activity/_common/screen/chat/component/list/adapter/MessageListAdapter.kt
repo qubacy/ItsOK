@@ -179,6 +179,8 @@ class MessageListAdapter(
     }
 
     fun setItems(messages: List<UIMessage>) {
+        if (messages.isEmpty()) return resetItems()
+
         val reversedMessages = messages.reversed()
 
         mLastActiveMessageHash = reversedMessages[0].hashCode()
@@ -189,6 +191,11 @@ class MessageListAdapter(
         }
 
         notifyDataSetChanged()
+    }
+
+    fun resetItems() {
+        notifyItemRangeRemoved(0, mItems.size)
+        mItems.clear()
     }
 
     override fun onViewRecycled(holder: MessageViewHolder) {

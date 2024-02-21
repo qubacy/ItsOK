@@ -1,24 +1,39 @@
 package com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
+import androidx.lifecycle.viewModelScope
+import com.qubacy.itsok._common.error.Error
+import com.qubacy.itsok._common.error.type._common.ErrorType
+import com.qubacy.itsok.domain._common.usecase._common.UseCase
+import com.qubacy.itsok.domain._common.usecase._common.result.SuccessfulResult
+import com.qubacy.itsok.domain._common.usecase._common.result._common.Result
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.state.BaseUiState
 
 abstract class BaseViewModel<UiStateType: BaseUiState>(
-
+    protected val mSavedStateHandle: SavedStateHandle,
+    private val mUseCase: UseCase
 ) : ViewModel() {
-    protected var mUiState: MutableLiveData<UiStateType> = MutableLiveData()
-    /**
-     * The UI State mechanics work like the following:
-     * 1. ViewModel receives a signal from the UI Controller class (it's Fragment for our case).
-     *    This signal is conveyed to the Domain layer, and the UI Controller gets a LiveData obj.
-     *    to obtain the future result;
-     * 2. After the Domain layer processing is finished, the results are MAPPED by calling
-     *    .map() method at the beginning. At this stage, mUiState is updated and the result-related
-     *    LiveData is;
-     * 3. After data recovery (caused by Config. changes, etc.), the UI Controller gets the retained
-     *    UI State from uiState field;
-     */
-    val uiState: LiveData<UiStateType> get() = mUiState
+    companion object {
+        const val UI_STATE_KEY = "uiState"
+    }
+
+    protected abstract var mUiState: UiStateType
+    open val uiState: UiStateType get() = mUiState.copy() as UiStateType
+
+    init {
+        mUseCase.setCoroutineScope(viewModelScope)
+    }
+
+    open fun retrieveError(errorType: ErrorType): LiveData<Result<Error>> {
+        return mUseCase.retrieveError(errorType).map {
+            val error = (it as SuccessfulResult<Error>).data
+
+            mUiState.error = error
+
+            it
+        }
+    }
 }

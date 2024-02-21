@@ -24,18 +24,16 @@ abstract class BaseFragment<
 
     protected abstract val mModel: ViewModelType
 
-    protected var mIsInitialized: Boolean = false
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         catchViewInsets(view)
+    }
 
-        mModel.uiState.observe(viewLifecycleOwner) {
-            processUiState(it)
+    override fun onStart() {
+        super.onStart()
 
-            if (!mIsInitialized) mIsInitialized = true
-        }
+        processUiState(mModel.uiState)
     }
 
     protected open fun viewInsetsToCatch(): Int {
@@ -56,7 +54,7 @@ abstract class BaseFragment<
     protected open fun adjustViewToInsets(insets: Insets) { }
 
     protected open fun processUiState(uiState: UiStateType) {
-        if (uiState.error != null) onErrorOccurred(uiState.error)
+        if (uiState.error != null) onErrorOccurred(uiState.error!!)
     }
 
     open fun onMessageOccurred(

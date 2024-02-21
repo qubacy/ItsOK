@@ -19,6 +19,8 @@ import com.qubacy.itsok.R
 import com.qubacy.itsok.databinding.FragmentChatBinding
 import com.qubacy.itsok.domain.chat.model.Message
 import com.qubacy.itsok._common.chat.stage.ChatStage
+import com.qubacy.itsok.domain._common.usecase._common.result.ErrorResult
+import com.qubacy.itsok.domain._common.usecase._common.result.SuccessfulResult
 import com.qubacy.itsok.domain.chat.model.toUIMessage
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.BaseFragment
 import com.qubacy.itsok.ui.application.activity._common.screen.chat._common.data.message.UIMessage
@@ -82,7 +84,7 @@ class ChatFragment(
     override fun onResume() {
         super.onResume()
 
-        if (!mIsInitialized) initChat()
+        if (mModel.uiState.messages.isEmpty()) initChat()
     }
 
     override fun viewInsetsToCatch(): Int {
@@ -103,8 +105,7 @@ class ChatFragment(
     override fun processUiState(uiState: ChatUiState) {
         super.processUiState(uiState)
 
-        if (!mIsInitialized) setChatMessages(uiState.messages)
-
+        setChatMessages(uiState.messages)
         setStage(uiState.stage)
     }
 
@@ -112,11 +113,13 @@ class ChatFragment(
         // todo: init the initial chat state:
 
         mModel.getNextMessages().observe(viewLifecycleOwner) {
-            val resolvedMessages = resolveMessages(it)
+            if (it is ErrorResult<List<Message>>)
+                return@observe onErrorOccurred(it.error)
+
+            val messages = (it as SuccessfulResult<List<Message>>).data
+            val resolvedMessages = resolveMessages(messages)
 
             mAdapter.addItems(resolvedMessages)
-
-            mIsInitialized = true
         }
     }
 

@@ -1,18 +1,15 @@
 package com.qubacy.itsok.ui.application.activity._common
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
-import com.qubacy.itsok.R
+import android.view.View
+import android.view.ViewGroup
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-open class MainActivity : AppCompatActivity() {
+class HiltTestActivity : MainActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        enableEdgeToEdge()
-
-        setContentView(R.layout.activity_main)
+        (findViewById<View>(android.R.id.content) as ViewGroup).removeAllViews()
     }
 }
