@@ -1,9 +1,11 @@
 package com.qubacy.itsok.ui.application.activity._common.screen.chat
 
 import androidx.test.espresso.Espresso
+import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.qubacy.itsok.domain.chat.model._test.util.MessageUtilGenerator
@@ -17,6 +19,7 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.UninstallModules
 import kotlinx.coroutines.test.runTest
 import com.qubacy.itsok.R
+import com.qubacy.itsok.ui._common._test.view.util.matcher.padding.PaddingViewMatcher
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.component.typing.view.TypingMaterialTextView
 import org.junit.Assert
 import org.junit.Before
@@ -38,6 +41,14 @@ class ChatFragmentTest(
     @Before
     override fun setup() {
         super.setup()
+    }
+
+    @Test
+    fun gripeTextInputGoesUpOnSoftKeyboardAppearanceTest() {
+        Espresso.onView(withId(R.id.fragment_chat_gripe_input))
+            .perform(ViewActions.click())
+        Espresso.onView(withId(R.id.component_chat_gripe_input_text))
+            .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
     }
 
     private fun getActiveMessageCharTypingAnimationDuration(): Long {
