@@ -27,9 +27,4 @@ class ChatFragmentTest(
     override fun setup() {
         super.setup()
     }
-
-    @Test
-    fun test() {
-
-    }
 }

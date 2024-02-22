@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.annotation.StringRes
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
@@ -28,6 +29,8 @@ abstract class BaseFragment<
     }
 
     protected abstract val mModel: ViewModelType
+    private var mErrorDialog: AlertDialog? = null
+
     private var mIsInitialized: Boolean = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -43,10 +46,18 @@ abstract class BaseFragment<
         initUiState(mModel.uiState)
     }
 
+    override fun onStop() {
+        mErrorDialog?.dismiss()
+
+        super.onStop()
+    }
+
     protected fun startOperationCollection() {
         lifecycleScope.launch(Dispatchers.Default) {
             mModel.uiOperationFlow.collect {
-                processUiOperation(it)
+                launch(Dispatchers.Main) {
+                    processUiOperation(it)
+                }
             }
         }
     }
@@ -88,18 +99,18 @@ abstract class BaseFragment<
         onErrorOccurred(errorOperation.error)
     }
 
-    open fun onMessageOccurred(
+    open fun onPopupMessageOccurred(
         message: String,
         duration: Int = Toast.LENGTH_SHORT
     ) {
         Toast.makeText(requireContext(), message, duration).show()
     }
 
-    fun onMessageOccurred(
+    fun onPopupMessageOccurred(
         @StringRes message: Int,
         duration: Int = Toast.LENGTH_SHORT
     ) {
-        onMessageOccurred(getString(message), duration)
+        onPopupMessageOccurred(getString(message), duration)
     }
 
     protected open fun onErrorHandled() {
@@ -112,7 +123,7 @@ abstract class BaseFragment<
             onErrorHandled()
         }
 
-        MaterialAlertDialogBuilder(requireContext())
+        mErrorDialog = MaterialAlertDialogBuilder(requireContext())
             .setTitle(R.string.component_error_dialog_title_text)
             .setMessage(error.message)
             .setNeutralButton(R.string.component_error_dialog_button_neutral_caption) { _, _ ->

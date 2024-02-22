@@ -16,7 +16,7 @@ inline fun <T : Fragment> launchFragmentInHiltContainer(
     @StyleRes themeResId: Int = R.style.AppTheme,
     fragmentClass: Class<T>,
     crossinline action: Fragment.() -> Unit = {}
-) {
+): ActivityScenario<HiltTestActivity> {
     val startActivityIntent = Intent.makeMainActivity(
         ComponentName(
             ApplicationProvider.getApplicationContext(),
@@ -27,7 +27,7 @@ inline fun <T : Fragment> launchFragmentInHiltContainer(
         themeResId
     )
 
-    ActivityScenario.launch<HiltTestActivity>(startActivityIntent).onActivity { activity ->
+    return ActivityScenario.launch<HiltTestActivity>(startActivityIntent).onActivity { activity ->
         val fragmentClassRef = fragmentClass
         val fragment: Fragment = activity.supportFragmentManager.fragmentFactory.instantiate(
             Preconditions.checkNotNull(fragmentClassRef.classLoader) as ClassLoader,

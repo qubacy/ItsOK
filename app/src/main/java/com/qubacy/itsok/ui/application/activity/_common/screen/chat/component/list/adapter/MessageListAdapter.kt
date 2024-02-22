@@ -4,6 +4,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.UiThread
 import androidx.recyclerview.widget.RecyclerView
 import com.qubacy.itsok.R
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.component.message.view.active.ActiveMessageView
@@ -150,6 +151,7 @@ class MessageListAdapter(
         mPendingMessagesToAdd.clear()
     }
 
+    @UiThread
     fun addItem(message: UIMessage) {
         mItems.add(0, message)
 
@@ -163,6 +165,7 @@ class MessageListAdapter(
         mRecyclerView.scrollToPosition(0)
     }
 
+    @UiThread
     fun addItems(messages: List<UIMessage>) {
         if (messages.isEmpty()) return
 
@@ -178,6 +181,7 @@ class MessageListAdapter(
         mPendingMessagesToAdd.addAll(pendingMessages)
     }
 
+    @UiThread
     fun setItems(messages: List<UIMessage>) {
         if (messages.isEmpty()) return resetItems()
 
@@ -193,6 +197,7 @@ class MessageListAdapter(
         notifyDataSetChanged()
     }
 
+    @UiThread
     fun resetItems() {
         notifyItemRangeRemoved(0, mItems.size)
         mItems.clear()

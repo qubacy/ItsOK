@@ -34,7 +34,7 @@ abstract class BaseViewModel<UiStateType: BaseUiState>(
         return mUseCase.retrieveError(errorType)
     }
 
-    fun absorbCurrentError() {
+    open fun absorbCurrentError() {
         mUiState.error = null
     }
 
