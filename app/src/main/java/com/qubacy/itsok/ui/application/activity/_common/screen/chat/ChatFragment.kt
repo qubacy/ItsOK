@@ -102,8 +102,8 @@ class ChatFragment(
         }
     }
 
-    override fun initUiState(uiState: ChatUiState) {
-        super.initUiState(uiState)
+    override fun runInitWithUiState(uiState: ChatUiState) {
+        super.runInitWithUiState(uiState)
 
         setChatMessages(uiState.messages)
         setStage(uiState.stage)
@@ -130,8 +130,6 @@ class ChatFragment(
     }
 
     private fun initChat() {
-        // todo: init the initial chat state:
-
         mModel.getNextMessages()
     }
 

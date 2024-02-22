@@ -1,13 +1,14 @@
 package com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common
 
-import android.content.ActivityNotFoundException
 import android.widget.Toast
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelLazy
 import androidx.navigation.Navigation
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso
+import androidx.test.espresso.NoActivityResumedException
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.RootMatchers
@@ -16,6 +17,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.qubacy.itsok.R
 import com.qubacy.itsok._common._test.util.launcher.launchFragmentInHiltContainer
 import com.qubacy.itsok._common.error.FakeError
+import com.qubacy.itsok.ui._common._test.view.util.action.wait.WaitViewAction
 import com.qubacy.itsok.ui._common._test.view.util.matcher.toast.root.ToastRootMatcher
 import com.qubacy.itsok.ui.application.activity._common.HiltTestActivity
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.BaseViewModel
@@ -86,7 +88,6 @@ abstract class BaseFragmentTest<
         mUiOperationFlow.emit(uiOperation)
     }
 
-    // todo: sometimes it fails for an unknown reason:
     @Test
     fun handleNormalErrorTest() = runTest {
         val errorOperation = ErrorUiOperation(FakeError.normal)
@@ -101,7 +102,6 @@ abstract class BaseFragmentTest<
             .check(ViewAssertions.doesNotExist())
     }
 
-    // todo: sometimes it fails for an unknown reason:
     @Test
     fun handleCriticalErrorTest() = runTest {
         val errorOperation = ErrorUiOperation(FakeError.critical)
@@ -113,8 +113,12 @@ abstract class BaseFragmentTest<
         Espresso.onView(withText(R.string.component_error_dialog_button_neutral_caption))
             .perform(click())
 
-        try { Assert.assertNull(mFragment.activity) }
-        catch (_: ActivityNotFoundException) { }
+        try {
+            mActivityScenario.onActivity {
+                Assert.assertFalse(!it.isFinishing && !it.isDestroyed)
+            }
+        }
+        catch (_: NoActivityResumedException) { }
     }
 
     @Test

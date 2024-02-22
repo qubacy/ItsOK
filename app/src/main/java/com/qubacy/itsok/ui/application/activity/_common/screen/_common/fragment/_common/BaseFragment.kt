@@ -17,7 +17,6 @@ import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment.
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.operation._common.UiOperation
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.operation.error.ErrorUiOperation
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.state.BaseUiState
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 abstract class BaseFragment<
@@ -52,13 +51,9 @@ abstract class BaseFragment<
         super.onStop()
     }
 
-    protected fun startOperationCollection() {
-        lifecycleScope.launch(Dispatchers.Default) {
-            mModel.uiOperationFlow.collect {
-                launch(Dispatchers.Main) {
-                    processUiOperation(it)
-                }
-            }
+    private fun startOperationCollection() {
+        lifecycleScope.launch {
+            mModel.uiOperationFlow.collect { processUiOperation(it) }
         }
     }
 
@@ -79,11 +74,16 @@ abstract class BaseFragment<
 
     protected open fun adjustViewToInsets(insets: Insets) { }
 
-    protected open fun initUiState(uiState: UiStateType) {
+    private fun initUiState(uiState: UiStateType) {
         if (mIsInitialized) return
-        if (uiState.error != null) onErrorOccurred(uiState.error!!)
+
+        runInitWithUiState(uiState)
 
         mIsInitialized = true
+    }
+
+    protected open fun runInitWithUiState(uiState: UiStateType) {
+        if (uiState.error != null) onErrorOccurred(uiState.error!!)
     }
 
     protected open fun processUiOperation(uiOperation: UiOperation): Boolean {
