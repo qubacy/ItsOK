@@ -19,8 +19,9 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.UninstallModules
 import kotlinx.coroutines.test.runTest
 import com.qubacy.itsok.R
-import com.qubacy.itsok.ui._common._test.view.util.matcher.padding.PaddingViewMatcher
+import com.qubacy.itsok._common.chat.stage.ChatStage
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.component.typing.view.TypingMaterialTextView
+import com.qubacy.itsok.ui.application.activity._common.screen.chat.model.operation.ChangeStageUiOperation
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -44,7 +45,9 @@ class ChatFragmentTest(
     }
 
     @Test
-    fun gripeTextInputGoesUpOnSoftKeyboardAppearanceTest() {
+    fun gripeTextInputGoesUpOnSoftKeyboardAppearanceTest() = runTest {
+        mUiOperationFlow.emit(ChangeStageUiOperation(ChatStage.GRIPE))
+
         Espresso.onView(withId(R.id.fragment_chat_gripe_input))
             .perform(ViewActions.click())
         Espresso.onView(withId(R.id.component_chat_gripe_input_text))

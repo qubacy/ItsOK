@@ -27,6 +27,7 @@ import com.qubacy.itsok.ui.application.activity._common.screen.chat.component.li
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.component.list.layout.MessageListLayoutManager
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.model.ChatViewModel
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.model.ChatViewModelFactoryQualifier
+import com.qubacy.itsok.ui.application.activity._common.screen.chat.model.operation.ChangeStageUiOperation
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.model.operation.NextMessagesUiOperation
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.model.state.ChatUiState
 import dagger.hilt.android.AndroidEntryPoint
@@ -115,6 +116,8 @@ class ChatFragment(
         when (uiOperation::class) {
             NextMessagesUiOperation::class ->
                 processNextMessagesOperation(uiOperation as NextMessagesUiOperation)
+            ChangeStageUiOperation::class ->
+                processChangeStageUiOperation(uiOperation as ChangeStageUiOperation)
             else -> return false
         }
 
@@ -125,12 +128,14 @@ class ChatFragment(
         val resolvedMessages = resolveMessages(messagesOperation.messages)
 
         mAdapter.addItems(resolvedMessages)
+    }
 
-        return
+    private fun processChangeStageUiOperation(stageOperation: ChangeStageUiOperation) {
+        setStage(stageOperation.stage)
     }
 
     private fun initChat() {
-        mModel.getNextMessages()
+        mModel.getIntroMessages()
     }
 
     private fun resolveMessages(messages: List<Message>): List<UIMessage> {
@@ -153,16 +158,24 @@ class ChatFragment(
     private fun setControlsWithStage(stage: ChatStage) {
         when (stage) {
             ChatStage.IDLE -> {
+                mBinding.fragmentChatGripeInput.root.visibility = View.GONE
+
+            }
+            ChatStage.GRIPE -> {
                 mBinding.fragmentChatGripeInput.root.visibility = View.VISIBLE
+
             }
             ChatStage.THINKING -> {
                 // todo: mb it has to block all the controls?
+
             }
             ChatStage.MEMENTO_OFFERING -> {
                 mBinding.fragmentChatGripeInput.root.visibility = View.GONE
+
             }
             ChatStage.BYE -> {
                 mBinding.fragmentChatGripeInput.root.visibility = View.GONE
+
             }
         }
     }
@@ -184,7 +197,8 @@ class ChatFragment(
 
     private fun getNextAvatarDrawableWithStage(stage: ChatStage): Int {
         return when (stage) {
-            ChatStage.IDLE -> R.drawable.itsok_animated_wonder
+            ChatStage.IDLE -> R.drawable.itsok_animated_thinking
+            ChatStage.GRIPE -> R.drawable.itsok_animated_wonder
             ChatStage.THINKING -> R.drawable.itsok_animated_thinking
             ChatStage.MEMENTO_OFFERING -> R.drawable.itsok_animated_happy_memento
             ChatStage.BYE -> R.drawable.itsok_animated_happy_bye

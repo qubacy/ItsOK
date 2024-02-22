@@ -3,12 +3,13 @@ package com.qubacy.itsok.ui.application.activity._common.screen.chat.model
 import androidx.lifecycle.AbstractSavedStateViewModelFactory
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import com.qubacy.itsok._common.chat.stage.ChatStage
 import com.qubacy.itsok.domain._common.usecase._common.result._common.DomainResult
 import com.qubacy.itsok.domain.chat.ChatUseCase
+import com.qubacy.itsok.domain.chat.result.ChangeStageDomainResult
 import com.qubacy.itsok.domain.chat.result.GetNextMessagesDomainResult
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.BaseViewModel
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.operation._common.UiOperation
+import com.qubacy.itsok.ui.application.activity._common.screen.chat.model.operation.ChangeStageUiOperation
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.model.operation.NextMessagesUiOperation
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.model.state.ChatUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -40,6 +41,8 @@ open class ChatViewModel @Inject constructor(
         return when (domainResult::class) {
             GetNextMessagesDomainResult::class ->
                 processGetNextMessagesDomainResult(domainResult as GetNextMessagesDomainResult)
+            ChangeStageDomainResult::class ->
+                processChangeStateDomainResult(domainResult as ChangeStageDomainResult)
             else -> null
         }
     }
@@ -52,13 +55,17 @@ open class ChatViewModel @Inject constructor(
         return NextMessagesUiOperation(messagesResult.messages)
     }
 
-    // todo: is it ok?
-    open fun setStage(stage: ChatStage) {
-        mUiState.stage = stage
+    private fun processChangeStateDomainResult(
+        stageResult: ChangeStageDomainResult
+    ): UiOperation {
+        mUiState.stage = stageResult.stage
+
+        return ChangeStageUiOperation(stageResult.stage)
     }
 
-    open fun getNextMessages() {
-        return mChatUseCase.getNextMessagesWithStage(mUiState.stage)
+    open fun getIntroMessages() {
+        return mChatUseCase.getIntroMessages()
+        //return mChatUseCase.getNextMessagesWithStage(mUiState.stage)
     }
 }
 

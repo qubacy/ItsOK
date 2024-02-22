@@ -8,6 +8,7 @@ import com.qubacy.itsok._common.chat.stage.ChatStage
 import com.qubacy.itsok.data.answer.model.type.AnswerType
 import com.qubacy.itsok.data.answer.repository.AnswerDataRepository
 import com.qubacy.itsok.data.memento.model.toMemento
+import com.qubacy.itsok.domain.chat.result.ChangeStageDomainResult
 import com.qubacy.itsok.domain.chat.result.GetNextMessagesDomainResult
 import com.qubacy.itsok.domain.settings.memento.model.Memento
 import kotlinx.coroutines.launch
@@ -18,6 +19,15 @@ class ChatUseCase @Inject constructor(
     private val mAnswerDataRepository: AnswerDataRepository,
     private val mMementoDataRepository: MementoDataRepository
 ) : UseCase(errorDataRepository) {
+    open fun getIntroMessages() {
+        mCoroutineScope.launch(mCoroutineDispatcher) {
+            val messages = getNextMessagesForIdleStage()
+
+            mResultFlow.emit(GetNextMessagesDomainResult(messages))
+            mResultFlow.emit(ChangeStageDomainResult(ChatStage.GRIPE))
+        }
+    }
+
     open fun getNextMessagesWithStage(stage: ChatStage) {
         mCoroutineScope.launch(mCoroutineDispatcher) {
             val messages = when (stage) {
