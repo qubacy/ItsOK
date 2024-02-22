@@ -1,6 +1,5 @@
 package com.qubacy.itsok.ui.application.activity._common.screen.chat.model.module
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.factory.FakeBaseViewModelFactory
@@ -25,9 +24,8 @@ object FakeChatViewModelModule {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val viewModel = super.create(modelClass) as ChatViewModel
 
-            // todo: mb it should be available for modifying at the beginning of the test?:
+            // todo: rethink this one:
             Mockito.`when`(viewModel.uiState).thenReturn(ChatUiState(error = null))
-            Mockito.`when`(viewModel.getNextMessages()).thenReturn(MutableLiveData())
 
             return viewModel as T
         }

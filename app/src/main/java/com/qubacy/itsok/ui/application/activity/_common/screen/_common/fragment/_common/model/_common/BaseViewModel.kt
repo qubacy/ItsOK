@@ -1,16 +1,16 @@
 package com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
-import com.qubacy.itsok._common.error.Error
 import com.qubacy.itsok._common.error.type._common.ErrorType
 import com.qubacy.itsok.domain._common.usecase._common.UseCase
-import com.qubacy.itsok.domain._common.usecase._common.result.SuccessfulResult
-import com.qubacy.itsok.domain._common.usecase._common.result._common.Result
+import com.qubacy.itsok.domain._common.usecase._common.result._common.DomainResult
+import com.qubacy.itsok.domain._common.usecase._common.result.error.ErrorDomainResult
+import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.operation._common.UiOperation
+import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.operation.error.ErrorUiOperation
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.state.BaseUiState
+import kotlinx.coroutines.flow.map
 
 abstract class BaseViewModel<UiStateType: BaseUiState>(
     protected val mSavedStateHandle: SavedStateHandle,
@@ -20,20 +20,38 @@ abstract class BaseViewModel<UiStateType: BaseUiState>(
         const val UI_STATE_KEY = "uiState"
     }
 
-    protected abstract var mUiState: UiStateType
+    open val uiOperationFlow = mUseCase.resultFlow.map {
+        mapDomainResultFlow(it) }
+
+    protected abstract val mUiState: UiStateType
     open val uiState: UiStateType get() = mUiState.copy() as UiStateType
 
     init {
         mUseCase.setCoroutineScope(viewModelScope)
     }
 
-    open fun retrieveError(errorType: ErrorType): LiveData<Result<Error>> {
-        return mUseCase.retrieveError(errorType).map {
-            val error = (it as SuccessfulResult<Error>).data
+    open fun retrieveError(errorType: ErrorType) {
+        return mUseCase.retrieveError(errorType)
+    }
 
-            mUiState.error = error
+    fun absorbCurrentError() {
+        mUiState.error = null
+    }
 
-            it
+    private fun mapDomainResultFlow(domainResult: DomainResult): UiOperation {
+        return processDomainResultFlow(domainResult) ?: throw IllegalStateException()
+    }
+
+    protected open fun processDomainResultFlow(domainResult: DomainResult): UiOperation? {
+        return when (domainResult::class) {
+            ErrorDomainResult::class -> processErrorDomainResult(domainResult as ErrorDomainResult)
+            else -> null
         }
+    }
+
+    private fun processErrorDomainResult(errorResult: ErrorDomainResult): ErrorUiOperation {
+        mUiState.error = errorResult.error
+
+        return ErrorUiOperation(errorResult.error)
     }
 }

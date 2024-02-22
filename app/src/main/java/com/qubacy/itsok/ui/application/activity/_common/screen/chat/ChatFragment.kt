@@ -19,15 +19,15 @@ import com.qubacy.itsok.R
 import com.qubacy.itsok.databinding.FragmentChatBinding
 import com.qubacy.itsok.domain.chat.model.Message
 import com.qubacy.itsok._common.chat.stage.ChatStage
-import com.qubacy.itsok.domain._common.usecase._common.result.ErrorResult
-import com.qubacy.itsok.domain._common.usecase._common.result.SuccessfulResult
 import com.qubacy.itsok.domain.chat.model.toUIMessage
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.BaseFragment
+import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.operation._common.UiOperation
 import com.qubacy.itsok.ui.application.activity._common.screen.chat._common.data.message.UIMessage
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.component.list.adapter.MessageListAdapter
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.component.list.layout.MessageListLayoutManager
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.model.ChatViewModel
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.model.ChatViewModelFactoryQualifier
+import com.qubacy.itsok.ui.application.activity._common.screen.chat.model.operation.NextMessagesUiOperation
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.model.state.ChatUiState
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -102,25 +102,37 @@ class ChatFragment(
         }
     }
 
-    override fun processUiState(uiState: ChatUiState) {
-        super.processUiState(uiState)
+    override fun initUiState(uiState: ChatUiState) {
+        super.initUiState(uiState)
 
         setChatMessages(uiState.messages)
         setStage(uiState.stage)
     }
 
+    override fun processUiOperation(uiOperation: UiOperation): Boolean {
+        if (super.processUiOperation(uiOperation)) return true
+
+        when (uiOperation::class) {
+            NextMessagesUiOperation::class ->
+                processNextMessagesOperation(uiOperation as NextMessagesUiOperation)
+            else -> return false
+        }
+
+        return true
+    }
+
+    private fun processNextMessagesOperation(messagesOperation: NextMessagesUiOperation) {
+        val resolvedMessages = resolveMessages(messagesOperation.messages)
+
+        mAdapter.addItems(resolvedMessages)
+
+        return
+    }
+
     private fun initChat() {
         // todo: init the initial chat state:
 
-        mModel.getNextMessages().observe(viewLifecycleOwner) {
-            if (it is ErrorResult<List<Message>>)
-                return@observe onErrorOccurred(it.error)
-
-            val messages = (it as SuccessfulResult<List<Message>>).data
-            val resolvedMessages = resolveMessages(messages)
-
-            mAdapter.addItems(resolvedMessages)
-        }
+        mModel.getNextMessages()
     }
 
     private fun resolveMessages(messages: List<Message>): List<UIMessage> {

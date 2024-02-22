@@ -1,7 +1,5 @@
 package com.qubacy.itsok.domain.chat
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.qubacy.itsok.data.error.repository.ErrorDataRepository
 import com.qubacy.itsok.data.memento.repository.MementoDataRepository
 import com.qubacy.itsok.domain._common.usecase._common.UseCase
@@ -10,9 +8,8 @@ import com.qubacy.itsok._common.chat.stage.ChatStage
 import com.qubacy.itsok.data.answer.model.type.AnswerType
 import com.qubacy.itsok.data.answer.repository.AnswerDataRepository
 import com.qubacy.itsok.data.memento.model.toMemento
-import com.qubacy.itsok.domain._common.usecase._common.result.SuccessfulResult
+import com.qubacy.itsok.domain.chat.result.GetNextMessagesDomainResult
 import com.qubacy.itsok.domain.settings.memento.model.Memento
-import com.qubacy.itsok.domain._common.usecase._common.result._common.Result
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,9 +18,7 @@ class ChatUseCase @Inject constructor(
     private val mAnswerDataRepository: AnswerDataRepository,
     private val mMementoDataRepository: MementoDataRepository
 ) : UseCase(errorDataRepository) {
-    open fun getNextMessageWithStage(stage: ChatStage): LiveData<Result<List<Message>>> {
-        val resultLiveData = MutableLiveData<Result<List<Message>>>()
-
+    open fun getNextMessagesWithStage(stage: ChatStage) {
         mCoroutineScope.launch(mCoroutineDispatcher) {
             val messages = when (stage) {
                 ChatStage.IDLE -> getNextMessagesForIdleStage()
@@ -32,10 +27,8 @@ class ChatUseCase @Inject constructor(
                 else -> throw IllegalStateException()
             }
 
-            resultLiveData.postValue(SuccessfulResult(messages) as Result<List<Message>>)
+            mResultFlow.emit(GetNextMessagesDomainResult(messages))
         }
-
-        return resultLiveData
     }
 
     private fun getNextMessagesForIdleStage(): List<Message> {

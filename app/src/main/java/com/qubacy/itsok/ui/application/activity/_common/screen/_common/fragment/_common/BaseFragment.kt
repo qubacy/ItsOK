@@ -8,11 +8,16 @@ import androidx.annotation.StringRes
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.qubacy.itsok.R
 import com.qubacy.itsok._common.error.Error
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.BaseViewModel
+import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.operation._common.UiOperation
+import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.operation.error.ErrorUiOperation
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.state.BaseUiState
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 abstract class BaseFragment<
     UiStateType : BaseUiState,
@@ -23,6 +28,7 @@ abstract class BaseFragment<
     }
 
     protected abstract val mModel: ViewModelType
+    private var mIsInitialized: Boolean = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -33,7 +39,16 @@ abstract class BaseFragment<
     override fun onStart() {
         super.onStart()
 
-        processUiState(mModel.uiState)
+        startOperationCollection()
+        initUiState(mModel.uiState)
+    }
+
+    protected fun startOperationCollection() {
+        lifecycleScope.launch(Dispatchers.Default) {
+            mModel.uiOperationFlow.collect {
+                processUiOperation(it)
+            }
+        }
     }
 
     protected open fun viewInsetsToCatch(): Int {
@@ -53,8 +68,24 @@ abstract class BaseFragment<
 
     protected open fun adjustViewToInsets(insets: Insets) { }
 
-    protected open fun processUiState(uiState: UiStateType) {
+    protected open fun initUiState(uiState: UiStateType) {
+        if (mIsInitialized) return
         if (uiState.error != null) onErrorOccurred(uiState.error!!)
+
+        mIsInitialized = true
+    }
+
+    protected open fun processUiOperation(uiOperation: UiOperation): Boolean {
+        when (uiOperation::class) {
+            ErrorUiOperation::class -> processErrorOperation(uiOperation as ErrorUiOperation)
+            else -> return false
+        }
+
+        return true
+    }
+
+    private fun processErrorOperation(errorOperation: ErrorUiOperation) {
+        onErrorOccurred(errorOperation.error)
     }
 
     open fun onMessageOccurred(
@@ -71,11 +102,13 @@ abstract class BaseFragment<
         onMessageOccurred(getString(message), duration)
     }
 
-    protected open fun onErrorHandled() { }
+    protected open fun onErrorHandled() {
+        mModel.absorbCurrentError()
+    }
 
     open fun onErrorOccurred(error: Error) {
         val onDismiss = Runnable {
-            handleError(error)
+            onErrorDismissed(error)
             onErrorHandled()
         }
 
@@ -91,7 +124,7 @@ abstract class BaseFragment<
             .show()
     }
 
-    open fun handleError(error: Error) {
+    open fun onErrorDismissed(error: Error) {
         if (error.isCritical) {
             requireActivity().finishAndRemoveTask()
         }
