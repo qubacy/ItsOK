@@ -8,4 +8,10 @@ object MessageUtilGenerator {
     fun generateMessage(posIndex: Int = 0): Message {
         return Message(DEFAULT_PREFIX + posIndex.toString())
     }
+
+    fun generateMessages(count: Int, startPosIndex: Int = 0): List<Message> {
+        return IntRange(startPosIndex, startPosIndex + count - 1).map {
+            generateMessage(it)
+        }
+    }
 }

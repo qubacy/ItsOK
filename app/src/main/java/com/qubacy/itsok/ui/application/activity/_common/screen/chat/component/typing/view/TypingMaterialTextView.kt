@@ -51,6 +51,10 @@ class TypingMaterialTextView : MaterialTextView {
         attrsTypedArray.recycle()
     }
 
+    fun getChatTypingDuration(): Long {
+        return mCharTypingDuration
+    }
+
     fun setCoroutineScope(coroutineScope: CoroutineScope) {
         mCoroutineScope = coroutineScope
     }
