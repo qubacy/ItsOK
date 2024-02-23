@@ -22,6 +22,9 @@ class MessageListLayoutManager(
     override fun onLayoutCompleted(state: RecyclerView.State?) {
         super.onLayoutCompleted(state)
 
+        try { assertNotInLayoutOrScroll("") }
+        catch (_ : IllegalStateException) { return }
+
         mCallback?.onLayoutCompleted()
     }
 }

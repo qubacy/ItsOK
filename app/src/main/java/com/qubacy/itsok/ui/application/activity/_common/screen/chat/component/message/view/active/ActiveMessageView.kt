@@ -99,6 +99,10 @@ class ActiveMessageView(
         return mTextView?.isTyping() ?: false
     }
 
+    fun stopTyping() {
+        mTextView?.stopTypingText()
+    }
+
     override fun onTextTypingFinished() {
         if (mMessage?.image != null) {
             setImage(mMessage!!.image)

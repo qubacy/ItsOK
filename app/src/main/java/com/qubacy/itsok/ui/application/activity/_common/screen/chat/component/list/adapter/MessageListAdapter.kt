@@ -60,6 +60,7 @@ class MessageListAdapter(
 
     private val mPendingMessagesToAdd: ArrayDeque<UIMessage> = ArrayDeque()
 
+    private var mCurrentActiveMessageViewHolder: ActiveMessageViewHolder? = null
     private var mLastRecycledActiveMessageViewHolder: ActiveMessageViewHolder? = null
     private var mIsActiveMessageViewHolderAnimationInterrupted: Boolean = true
     private var mLastActiveMessageHash: Int = 0
@@ -116,6 +117,7 @@ class MessageListAdapter(
 
                 holder as ActiveMessageViewHolder
 
+                mCurrentActiveMessageViewHolder = holder
                 mIsActiveMessageViewHolderAnimationInterrupted = false
 
                 holder.setData(message, animate, {
@@ -141,12 +143,12 @@ class MessageListAdapter(
     private fun onActiveElementDetached() {
         val originalMessageCount = mItems.size
 
-        mItems.addAll(mPendingMessagesToAdd)
+        mItems.addAll(0, mPendingMessagesToAdd)
 
-        notifyItemRangeInserted(0, mPendingMessagesToAdd.size - 1)
+        notifyItemRangeInserted(0, mPendingMessagesToAdd.size)
 
         if (originalMessageCount > 0)
-            notifyItemRangeChanged(mPendingMessagesToAdd.size, mItems.size - 1)
+            notifyItemRangeChanged(mPendingMessagesToAdd.size, mItems.size)
 
         mPendingMessagesToAdd.clear()
     }
@@ -168,6 +170,8 @@ class MessageListAdapter(
     @UiThread
     fun addItems(messages: List<UIMessage>) {
         if (messages.isEmpty()) return
+
+        onActiveElementDetached()
 
         val pendingMessages = if (mPendingMessagesToAdd.isEmpty()) {
             val lastMessage = messages.first()
