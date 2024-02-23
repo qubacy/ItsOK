@@ -12,8 +12,8 @@ enum class AnswerType(
     MEMENTO_OFFERING_TEXT_AND_IMAGE(ChatStage.MEMENTO_OFFERING, 3);
 
     companion object {
-        fun getTypeByStageIdAndId(stageId: Int, id: Int): AnswerType {
-            return entries.find { it.stage.id == stageId && it.id == id }!!
+        fun getTypeByStageIdAndId(stageId: Int, id: Int): AnswerType? {
+            return entries.find { it.stage.id == stageId && it.id == id }
         }
     }
 }

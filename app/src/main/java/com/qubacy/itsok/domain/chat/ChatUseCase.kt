@@ -8,7 +8,6 @@ import com.qubacy.itsok._common.chat.stage.ChatStage
 import com.qubacy.itsok.data.answer.model.type.AnswerType
 import com.qubacy.itsok.data.answer.repository.AnswerDataRepository
 import com.qubacy.itsok.data.memento.model.toMemento
-import com.qubacy.itsok.domain.chat.result.ChangeStageDomainResult
 import com.qubacy.itsok.domain.chat.result.GetNextMessagesDomainResult
 import com.qubacy.itsok.domain.settings.memento.model.Memento
 import kotlinx.coroutines.launch
@@ -24,18 +23,20 @@ class ChatUseCase @Inject constructor(
             val messages = getNextMessagesForIdleStage()
 
             mResultFlow.emit(GetNextMessagesDomainResult(messages))
-            mResultFlow.emit(ChangeStageDomainResult(ChatStage.GRIPE))
         }
     }
 
-    open fun getNextMessagesWithStage(stage: ChatStage) {
+    open fun getGripeMessages() {
         mCoroutineScope.launch(mCoroutineDispatcher) {
-            val messages = when (stage) {
-                ChatStage.IDLE -> getNextMessagesForIdleStage()
-                ChatStage.MEMENTO_OFFERING -> getNextMessagesForMementoOfferingStage()
-                ChatStage.BYE -> getNextMessagesForByeStage()
-                else -> throw IllegalStateException()
-            }
+            val messages = getNextMessagesForGripeStage()
+
+            mResultFlow.emit(GetNextMessagesDomainResult(messages))
+        }
+    }
+
+    open fun getMementoMessages() {
+        mCoroutineScope.launch(mCoroutineDispatcher) {
+            val messages = getNextMessagesForMementoOfferingStage()
 
             mResultFlow.emit(GetNextMessagesDomainResult(messages))
         }
@@ -43,6 +44,10 @@ class ChatUseCase @Inject constructor(
 
     private fun getNextMessagesForIdleStage(): List<Message> {
         return getNextMessagesForNullTypeStage(ChatStage.IDLE)
+    }
+
+    private fun getNextMessagesForGripeStage(): List<Message> {
+        return getNextMessagesForNullTypeStage(ChatStage.GRIPE)
     }
 
     private fun getNextMessagesForMementoOfferingStage(): List<Message> {

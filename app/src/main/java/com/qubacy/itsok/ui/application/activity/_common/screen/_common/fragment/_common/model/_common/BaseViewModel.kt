@@ -9,8 +9,12 @@ import com.qubacy.itsok.domain._common.usecase._common.result._common.DomainResu
 import com.qubacy.itsok.domain._common.usecase._common.result.error.ErrorDomainResult
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.operation._common.UiOperation
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.operation.error.ErrorUiOperation
+import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.operation.loading.SetLoadingStateUiOperation
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.state.BaseUiState
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.merge
+import kotlinx.coroutines.launch
 
 abstract class BaseViewModel<UiStateType: BaseUiState>(
     protected val mSavedStateHandle: SavedStateHandle,
@@ -20,8 +24,9 @@ abstract class BaseViewModel<UiStateType: BaseUiState>(
         const val UI_STATE_KEY = "uiState"
     }
 
-    open val uiOperationFlow = mUseCase.resultFlow.map {
-        mapDomainResultFlow(it) }
+    protected val mUiOperationFlow = MutableSharedFlow<UiOperation>()
+    open val uiOperationFlow = merge(mUiOperationFlow,
+        mUseCase.resultFlow.map { mapDomainResultFlow(it) })
 
     protected abstract val mUiState: UiStateType
     open val uiState: UiStateType get() = mUiState.copy() as UiStateType
@@ -53,5 +58,13 @@ abstract class BaseViewModel<UiStateType: BaseUiState>(
         mUiState.error = errorResult.error
 
         return ErrorUiOperation(errorResult.error)
+    }
+
+    protected fun changeLoadingState(isLoading: Boolean) {
+        mUiState.isLoading = isLoading
+
+        viewModelScope.launch {
+            mUiOperationFlow.emit(SetLoadingStateUiOperation(isLoading))
+        }
     }
 }

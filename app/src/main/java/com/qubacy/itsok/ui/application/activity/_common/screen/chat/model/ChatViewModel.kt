@@ -3,9 +3,10 @@ package com.qubacy.itsok.ui.application.activity._common.screen.chat.model
 import androidx.lifecycle.AbstractSavedStateViewModelFactory
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.qubacy.itsok._common.chat.stage.ChatStage
 import com.qubacy.itsok.domain._common.usecase._common.result._common.DomainResult
 import com.qubacy.itsok.domain.chat.ChatUseCase
-import com.qubacy.itsok.domain.chat.result.ChangeStageDomainResult
 import com.qubacy.itsok.domain.chat.result.GetNextMessagesDomainResult
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.BaseViewModel
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.operation._common.UiOperation
@@ -13,6 +14,7 @@ import com.qubacy.itsok.ui.application.activity._common.screen.chat.model.operat
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.model.operation.NextMessagesUiOperation
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.model.state.ChatUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Qualifier
 
@@ -21,7 +23,7 @@ open class ChatViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val mChatUseCase: ChatUseCase
 ) : BaseViewModel<ChatUiState>(savedStateHandle, mChatUseCase) {
-    override var mUiState: ChatUiState = ChatUiState(error = null)
+    override var mUiState: ChatUiState = ChatUiState(error = null, isLoading = false)
 
     init {
         mUiState = savedStateHandle[UI_STATE_KEY] ?: mUiState
@@ -41,8 +43,6 @@ open class ChatViewModel @Inject constructor(
         return when (domainResult::class) {
             GetNextMessagesDomainResult::class ->
                 processGetNextMessagesDomainResult(domainResult as GetNextMessagesDomainResult)
-            ChangeStageDomainResult::class ->
-                processChangeStateDomainResult(domainResult as ChangeStageDomainResult)
             else -> null
         }
     }
@@ -50,22 +50,51 @@ open class ChatViewModel @Inject constructor(
     private fun processGetNextMessagesDomainResult(
         messagesResult: GetNextMessagesDomainResult
     ): UiOperation {
+        changeLoadingState(false)
+        updateStageAfterMessages()
+
         mUiState.messages = mUiState.messages.plus(messagesResult.messages)
 
         return NextMessagesUiOperation(messagesResult.messages)
     }
 
-    private fun processChangeStateDomainResult(
-        stageResult: ChangeStageDomainResult
-    ): UiOperation {
-        mUiState.stage = stageResult.stage
+    private fun updateStageAfterMessages() {
+        when (uiState.stage) {
+            ChatStage.IDLE -> setStage(ChatStage.GRIPE)
+            ChatStage.GRIPE -> {
+                setStage(ChatStage.MEMENTO_OFFERING)
+                getMementoMessages()
+            }
+            ChatStage.MEMENTO_OFFERING -> {  }
+            ChatStage.BYE -> {  } // todo: any ideas?
+        }
+    }
 
-        return ChangeStageUiOperation(stageResult.stage)
+    private fun setStage(newStage: ChatStage) {
+        mUiState.stage = newStage
+
+        viewModelScope.launch {
+            mUiOperationFlow.emit(ChangeStageUiOperation(newStage))
+        }
     }
 
     open fun getIntroMessages() {
-        return mChatUseCase.getIntroMessages()
-        //return mChatUseCase.getNextMessagesWithStage(mUiState.stage)
+        changeLoadingState(true)
+        mChatUseCase.getIntroMessages()
+    }
+
+    open fun isGripeValid(gripe: String): Boolean {
+        return gripe.isNotEmpty()
+    }
+
+    open fun getGripeMessages() {
+        changeLoadingState(true)
+        mChatUseCase.getGripeMessages()
+    }
+
+    open fun getMementoMessages() {
+        changeLoadingState(true)
+        mChatUseCase.getMementoMessages()
     }
 }
 

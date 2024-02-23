@@ -10,7 +10,8 @@ import com.qubacy.itsok.data.answer.model.type.AnswerType
     primaryKeys = [
         AnswerEntity.ID_PROP_NAME,
         AnswerEntity.LANG_PROP_NAME,
-        AnswerEntity.STAGE_ID_PROP_NAME
+        AnswerEntity.STAGE_ID_PROP_NAME,
+        AnswerEntity.TYPE_ID_PROP_NAME
     ]
 )
 data class AnswerEntity(
@@ -20,7 +21,7 @@ data class AnswerEntity(
     @ColumnInfo(
         name = TYPE_ID_PROP_NAME,
         defaultValue = TYPE_DEFAULT_VALUE
-    ) val typeId: Int?,
+    ) val typeId: Int,
     val text: String
 ) {
     companion object {
@@ -31,14 +32,12 @@ data class AnswerEntity(
         const val STAGE_ID_PROP_NAME = "stage_id"
         const val TYPE_ID_PROP_NAME = "type_id"
 
-        const val TYPE_DEFAULT_VALUE = "NULL"
+        const val TYPE_DEFAULT_VALUE = "0"
     }
 }
 
 fun AnswerEntity.toDataAnswer(): DataAnswer {
-    val type =
-        if (typeId != null) AnswerType.getTypeByStageIdAndId(stageId, typeId)
-        else null
+    val type = AnswerType.getTypeByStageIdAndId(stageId, typeId)
 
     return DataAnswer(id, type, text)
 }

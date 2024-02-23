@@ -8,9 +8,10 @@ import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment.
 class ChatUiState(
     var stage: ChatStage = ChatStage.IDLE,
     var messages: List<Message> = listOf(),
-    error: Error?
-) : BaseUiState(error) {
+    error: Error?,
+    isLoading: Boolean
+) : BaseUiState(error, isLoading) {
     override fun copy(): ChatUiState {
-        return ChatUiState(stage, messages.toList(), error?.copy())
+        return ChatUiState(stage, messages.toList(), error?.copy(), isLoading)
     }
 }

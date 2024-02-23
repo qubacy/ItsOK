@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--  Common:  -->
+
+    <dimen name="default_gap_between_components">8dp</dimen>
+
+    <!--  Avatar:  -->
+
     <integer name="itsok_animation_wonder_duration">1000</integer>
     <integer name="itsok_animation_thinking_duration">700</integer>
     <integer name="itsok_animation_happy_memento_duration">700</integer>

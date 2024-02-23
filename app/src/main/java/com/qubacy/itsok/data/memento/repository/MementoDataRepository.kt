@@ -21,7 +21,7 @@ class MementoDataRepository(
         if (mementoes.size < 2) return mementoes.first().toDataMemento()
 
         val randomMementoIndex =
-            Random(System.currentTimeMillis()).nextInt(0, mementoes.size - 1)
+            Random(System.currentTimeMillis()).nextInt(0, mementoes.size)
 
         return mementoes[randomMementoIndex].toDataMemento()
     }

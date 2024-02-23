@@ -2,11 +2,13 @@ package com.qubacy.itsok.ui.application.activity._common.screen.chat
 
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.annotation.DrawableRes
+import androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
 import androidx.core.graphics.Insets
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
@@ -22,6 +24,8 @@ import com.qubacy.itsok._common.chat.stage.ChatStage
 import com.qubacy.itsok.domain.chat.model.toUIMessage
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.BaseFragment
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.operation._common.UiOperation
+import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.operation.loading.SetLoadingStateUiOperation
+import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.util.extensional.closeSoftKeyboard
 import com.qubacy.itsok.ui.application.activity._common.screen.chat._common.data.message.UIMessage
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.component.list.adapter.MessageListAdapter
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.component.list.layout.MessageListLayoutManager
@@ -80,6 +84,18 @@ class ChatFragment(
                 requireContext(), LinearLayout.VERTICAL, true)
             adapter = mAdapter
         }
+        mBinding.fragmentChatGripeInput.componentChatGripeInputText
+            .setOnKeyListener { _, keyCode, keyEvent ->
+                onGripeInputKeyPressed(keyCode, keyEvent)
+            }
+        mBinding.fragmentChatMementoButtons.apply {
+            componentChatMementoButtonsButtonPositive.setOnClickListener {
+                onPositiveMementoButtonClicked()
+            }
+            componentChatMementoButtonsButtonNegative.setOnClickListener {
+                onNegativeMementoButtonClicked()
+            }
+        }
     }
 
     override fun onResume() {
@@ -99,6 +115,9 @@ class ChatFragment(
             updatePadding(top = insets.top)
         }
         mBinding.fragmentChatGripeInput.apply {
+            root.updatePadding(bottom = insets.bottom)
+        }
+        mBinding.fragmentChatMementoButtons.apply {
             root.updatePadding(bottom = insets.bottom)
         }
     }
@@ -124,6 +143,10 @@ class ChatFragment(
         return true
     }
 
+    override fun processSetLoadingOperation(loadingOperation: SetLoadingStateUiOperation) {
+        setLoadingState(loadingOperation.isLoading)
+    }
+
     private fun processNextMessagesOperation(messagesOperation: NextMessagesUiOperation) {
         val resolvedMessages = resolveMessages(messagesOperation.messages)
 
@@ -136,6 +159,42 @@ class ChatFragment(
 
     private fun initChat() {
         mModel.getIntroMessages()
+    }
+
+    private fun onGripeInputKeyPressed(keyCode: Int, keyEvent: KeyEvent): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_ENTER && keyEvent.action == KeyEvent.ACTION_DOWN) {
+            onGripeEnterPressed()
+
+            return true
+        }
+
+        return false
+    }
+
+    private fun onGripeEnterPressed() {
+        val gripeText = mBinding.fragmentChatGripeInput.componentChatGripeInputText.text.toString()
+
+        if (!mModel.isGripeValid(gripeText))
+            return onPopupMessageOccurred(R.string.fragment_chat_error_invalid_gripe)
+
+        mBinding.fragmentChatGripeInput.componentChatGripeInputText.text?.clear()
+        closeSoftKeyboard()
+
+        applyGripe(gripeText)
+    }
+
+    private fun applyGripe(gripe: String) {
+        mModel.getGripeMessages()
+    }
+
+    private fun onPositiveMementoButtonClicked() {
+        // todo: implement..
+
+
+    }
+
+    private fun onNegativeMementoButtonClicked() {
+        mModel.getMementoMessages()
     }
 
     private fun resolveMessages(messages: List<Message>): List<UIMessage> {
@@ -159,47 +218,68 @@ class ChatFragment(
         when (stage) {
             ChatStage.IDLE -> {
                 mBinding.fragmentChatGripeInput.root.visibility = View.GONE
+                mBinding.fragmentChatMementoButtons.root.visibility = View.GONE
 
             }
             ChatStage.GRIPE -> {
                 mBinding.fragmentChatGripeInput.root.visibility = View.VISIBLE
-
-            }
-            ChatStage.THINKING -> {
-                // todo: mb it has to block all the controls?
+                mBinding.fragmentChatMementoButtons.root.visibility = View.GONE
 
             }
             ChatStage.MEMENTO_OFFERING -> {
                 mBinding.fragmentChatGripeInput.root.visibility = View.GONE
+                mBinding.fragmentChatMementoButtons.root.visibility = View.VISIBLE
 
             }
             ChatStage.BYE -> {
                 mBinding.fragmentChatGripeInput.root.visibility = View.GONE
+                mBinding.fragmentChatMementoButtons.root.visibility = View.GONE
 
             }
         }
     }
 
+    protected override fun setLoadingState(isLoading: Boolean) {
+        // todo: should I block all the controls?
+
+        setAvatarAppearanceWithLoadingState(isLoading)
+    }
+
     private fun setAvatarAppearanceWithStage(stage: ChatStage) {
+        runBackwardsAvatarAnimation { runNextAvatarAnimationWithStage(stage) }
+    }
+
+    private fun setAvatarAppearanceWithLoadingState(isLoading: Boolean) {
         runBackwardsAvatarAnimation {
-            runNextAvatarAnimationWithStage(stage)
+            if (isLoading) runLoadingAvatarAnimation()
+            else runNextAvatarAnimationWithStage(mModel.uiState.stage)
         }
+    }
+
+    private fun runLoadingAvatarAnimation() {
+        val loadingDrawableResId = R.drawable.itsok_animated_thinking
+
+        runAvatarAnimationDrawable(loadingDrawableResId)
     }
 
     private fun runNextAvatarAnimationWithStage(stage: ChatStage) {
         val nextDrawableIdRes = getNextAvatarDrawableWithStage(stage)
-        val nextDrawable = getAnimatedVectorDrawableByDrawableResId(nextDrawableIdRes)
+
+        runAvatarAnimationDrawable(nextDrawableIdRes)
+    }
+
+    private fun runAvatarAnimationDrawable(@DrawableRes drawableResId: Int) {
+        val nextDrawable = getAnimatedVectorDrawableByDrawableResId(drawableResId)
 
         runAvatarAnimatedVectorDrawable(nextDrawable)
 
-        mPrevAvatarDrawableResId = nextDrawableIdRes
+        mPrevAvatarDrawableResId = drawableResId
     }
 
     private fun getNextAvatarDrawableWithStage(stage: ChatStage): Int {
         return when (stage) {
             ChatStage.IDLE -> R.drawable.itsok_animated_thinking
             ChatStage.GRIPE -> R.drawable.itsok_animated_wonder
-            ChatStage.THINKING -> R.drawable.itsok_animated_thinking
             ChatStage.MEMENTO_OFFERING -> R.drawable.itsok_animated_happy_memento
             ChatStage.BYE -> R.drawable.itsok_animated_happy_bye
         }

@@ -11,7 +11,11 @@ data class DataMemento(
 )
 
 fun DataMemento.toMemento(): Memento {
-    return Memento(id, text, Uri.parse(imageUriString))
+    val uri =
+        if (!imageUriString.isNullOrEmpty()) Uri.parse(imageUriString)
+        else null
+
+    return Memento(id, text, uri)
 }
 
 fun DataMemento.toMementoEntity(): MementoEntity {
