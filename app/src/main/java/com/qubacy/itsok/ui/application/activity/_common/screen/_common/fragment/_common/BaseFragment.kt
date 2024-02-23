@@ -89,8 +89,6 @@ abstract class BaseFragment<
     }
 
     protected open fun processUiOperation(uiOperation: UiOperation): Boolean {
-        setLoadingState(false)
-
         when (uiOperation::class) {
             ErrorUiOperation::class -> processErrorOperation(uiOperation as ErrorUiOperation)
             SetLoadingStateUiOperation::class ->

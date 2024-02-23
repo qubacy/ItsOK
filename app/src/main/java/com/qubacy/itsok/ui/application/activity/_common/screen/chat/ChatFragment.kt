@@ -2,6 +2,7 @@ package com.qubacy.itsok.ui.application.activity._common.screen.chat
 
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -239,10 +240,19 @@ class ChatFragment(
         }
     }
 
-    protected override fun setLoadingState(isLoading: Boolean) {
-        // todo: should I block all the controls?
+    override fun setLoadingState(isLoading: Boolean) {
+        Log.d(TAG, "setLoadingState(): isLoading = $isLoading;")
 
         setAvatarAppearanceWithLoadingState(isLoading)
+        setControlsEnabled(!isLoading)
+    }
+
+    private fun setControlsEnabled(isEnabled: Boolean) {
+        mBinding.fragmentChatGripeInput.root.isEnabled = isEnabled
+        mBinding.fragmentChatMementoButtons
+            .componentChatMementoButtonsButtonPositive.isEnabled = isEnabled
+        mBinding.fragmentChatMementoButtons
+            .componentChatMementoButtonsButtonNegative.isEnabled = isEnabled
     }
 
     private fun setAvatarAppearanceWithStage(stage: ChatStage) {

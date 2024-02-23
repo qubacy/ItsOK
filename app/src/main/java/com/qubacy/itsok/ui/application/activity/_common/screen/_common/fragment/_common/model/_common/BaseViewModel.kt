@@ -22,11 +22,15 @@ abstract class BaseViewModel<UiStateType: BaseUiState>(
 ) : ViewModel() {
     companion object {
         const val UI_STATE_KEY = "uiState"
+
+        const val TAG = "BaseViewModel"
     }
 
     protected val mUiOperationFlow = MutableSharedFlow<UiOperation>()
-    open val uiOperationFlow = merge(mUiOperationFlow,
-        mUseCase.resultFlow.map { mapDomainResultFlow(it) })
+    open val uiOperationFlow = merge(
+        mUiOperationFlow,
+        mUseCase.resultFlow.map { mapDomainResultFlow(it) }
+    )
 
     protected abstract val mUiState: UiStateType
     open val uiState: UiStateType get() = mUiState.copy() as UiStateType
@@ -55,6 +59,8 @@ abstract class BaseViewModel<UiStateType: BaseUiState>(
     }
 
     private fun processErrorDomainResult(errorResult: ErrorDomainResult): ErrorUiOperation {
+        changeLoadingState(false)
+
         mUiState.error = errorResult.error
 
         return ErrorUiOperation(errorResult.error)
