@@ -50,7 +50,7 @@ class ChatFragmentTest(
     }
 
     @Test
-    fun loadingStateTest() = runTest {
+    fun loadingStateChangeLeadsToAvatarChangeTest() = runTest {
         val thinkingAnimDuration = InstrumentationRegistry.getInstrumentation().targetContext
             .resources.getInteger(R.integer.itsok_animation_thinking_duration).toLong()
 
@@ -67,6 +67,27 @@ class ChatFragmentTest(
             .perform(WaitViewAction(thinkingAnimDuration))
             .check(ViewAssertions.matches(
                 ImageViewMatcher(R.drawable.itsok_animated_thinking)))
+    }
+
+    @Test
+    fun loadingStateChangeLeadsToControlsEnabledChangeTest() = runTest {
+        mUiOperationFlow.emit(SetLoadingStateUiOperation(true))
+
+        Espresso.onView(withId(R.id.fragment_chat_gripe_input))
+            .check(ViewAssertions.matches(Matchers.not(ViewMatchers.isEnabled())))
+        Espresso.onView(withId(R.id.component_chat_memento_buttons_button_positive))
+            .check(ViewAssertions.matches(Matchers.not(ViewMatchers.isEnabled())))
+        Espresso.onView(withId(R.id.component_chat_memento_buttons_button_negative))
+            .check(ViewAssertions.matches(Matchers.not(ViewMatchers.isEnabled())))
+
+        mUiOperationFlow.emit(SetLoadingStateUiOperation(false))
+
+        Espresso.onView(withId(R.id.fragment_chat_gripe_input))
+            .check(ViewAssertions.matches(ViewMatchers.isEnabled()))
+        Espresso.onView(withId(R.id.component_chat_memento_buttons_button_positive))
+            .check(ViewAssertions.matches(ViewMatchers.isEnabled()))
+        Espresso.onView(withId(R.id.component_chat_memento_buttons_button_negative))
+            .check(ViewAssertions.matches(ViewMatchers.isEnabled()))
     }
 
     @Test
@@ -148,4 +169,46 @@ class ChatFragmentTest(
             Espresso.onView(withText(prevMessage.text))
                 .check(ViewAssertions.matches(isDisplayed()))
     }
+
+    @Test
+    fun settingStageFromGripeToMementoOfferingLeadsToControlsSetChangeTest() = runTest {
+        mUiOperationFlow.emit(ChangeStageUiOperation(ChatStage.GRIPE))
+
+        Espresso.onView(withId(R.id.fragment_chat_gripe_input))
+            .check(ViewAssertions.matches(isDisplayed()))
+        Espresso.onView(withId(R.id.fragment_chat_memento_buttons))
+            .check(ViewAssertions.matches(
+                ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
+
+        mUiOperationFlow.emit(ChangeStageUiOperation(ChatStage.MEMENTO_OFFERING))
+
+        Espresso.onView(withId(R.id.fragment_chat_gripe_input))
+            .check(ViewAssertions.matches(
+                ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
+        Espresso.onView(withId(R.id.fragment_chat_memento_buttons))
+            .check(ViewAssertions.matches(isDisplayed()))
+    }
+
+    @Test
+    fun settingStageFromGripeToMementoOfferingLeadsToAvatarChangeTest() = runTest {
+        val wonderAnimationDuration = InstrumentationRegistry.getInstrumentation().targetContext
+            .resources.getInteger(R.integer.itsok_animation_wonder_duration).toLong()
+        val happyMementoAnimationDuration = InstrumentationRegistry.getInstrumentation().targetContext
+            .resources.getInteger(R.integer.itsok_animation_happy_memento_duration).toLong()
+
+        mUiOperationFlow.emit(ChangeStageUiOperation(ChatStage.GRIPE))
+
+        Espresso.onView(withId(R.id.fragment_chat_image_avatar))
+            .perform(WaitViewAction(wonderAnimationDuration))
+            .check(ViewAssertions.matches(
+                ImageViewMatcher(R.drawable.itsok_animated_wonder_backwards)))
+
+        mUiOperationFlow.emit(ChangeStageUiOperation(ChatStage.MEMENTO_OFFERING))
+
+        Espresso.onView(withId(R.id.fragment_chat_image_avatar))
+            .perform(WaitViewAction(happyMementoAnimationDuration))
+            .check(ViewAssertions.matches(
+                ImageViewMatcher(R.drawable.itsok_animated_happy_memento_backwards)))
+    }
+
 }

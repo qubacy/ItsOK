@@ -1,12 +1,10 @@
 package com.qubacy.itsok.data.answer.repository.module
 
-import android.content.Context
 import com.qubacy.itsok.data.answer.repository.AnswerDataRepository
-import com.qubacy.itsok.ui.application.ItsOkApplication
+import com.qubacy.itsok.data.answer.repository.source.local.LocalAnswerDataSource
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 
 @Module
@@ -14,8 +12,8 @@ import dagger.hilt.components.SingletonComponent
 object AnswerDataRepositoryModule {
     @Provides
     fun provideAnswerDataRepository(
-        @ApplicationContext context: Context
+        localAnswerDataSource: LocalAnswerDataSource
     ): AnswerDataRepository {
-        return AnswerDataRepository((context as ItsOkApplication).db.answerDao())
+        return AnswerDataRepository(localAnswerDataSource)
     }
 }

@@ -1,12 +1,10 @@
 package com.qubacy.itsok.data.error.repository.module
 
-import android.content.Context
 import com.qubacy.itsok.data.error.repository.ErrorDataRepository
-import com.qubacy.itsok.ui.application.ItsOkApplication
+import com.qubacy.itsok.data.error.repository.source.local.LocalErrorDataSource
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 
 @Module
@@ -14,8 +12,8 @@ import dagger.hilt.components.SingletonComponent
 object ErrorDataRepositoryModule {
     @Provides
     fun provideErrorDataRepository(
-        @ApplicationContext context: Context
+        localErrorDataSource: LocalErrorDataSource
     ): ErrorDataRepository {
-        return ErrorDataRepository((context as ItsOkApplication).db.errorDao())
+        return ErrorDataRepository(localErrorDataSource)
     }
 }

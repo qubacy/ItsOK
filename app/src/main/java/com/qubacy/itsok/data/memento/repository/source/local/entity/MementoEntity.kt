@@ -9,16 +9,16 @@ import com.qubacy.itsok.data.memento.model.DataMemento
     tableName = MementoEntity.TABLE_NAME
 )
 data class MementoEntity(
-    @PrimaryKey
-    @ColumnInfo(name = ID_PROP_NAME) val id: Long,
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = ID_PROP_NAME) val id: Long = 0,
     @ColumnInfo(
         name = "text",
         defaultValue = TEXT_DEFAULT_VALUE
-    ) val text: String?,
+    ) val text: String? = null,
     @ColumnInfo(
         name = "image_uri",
         defaultValue = IMAGE_URI_DEFAULT_VALUE
-    ) val imageUri: String?
+    ) val imageUri: String? = null
 ) {
     companion object {
         const val TABLE_NAME = "Memento"
