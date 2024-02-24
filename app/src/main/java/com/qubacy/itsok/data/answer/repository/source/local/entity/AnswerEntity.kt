@@ -21,8 +21,8 @@ data class AnswerEntity(
     @ColumnInfo(
         name = TYPE_ID_PROP_NAME,
         defaultValue = TYPE_DEFAULT_VALUE
-    ) val typeId: Int,
-    val text: String
+    ) val typeId: Int = TYPE_DEFAULT_VALUE.toInt(),
+    @ColumnInfo(name = TEXT_PROP_NAME) val text: String
 ) {
     companion object {
         const val TABLE_NAME = "Answer"
@@ -31,6 +31,7 @@ data class AnswerEntity(
         const val LANG_PROP_NAME = "lang"
         const val STAGE_ID_PROP_NAME = "stage_id"
         const val TYPE_ID_PROP_NAME = "type_id"
+        const val TEXT_PROP_NAME = "text"
 
         const val TYPE_DEFAULT_VALUE = "0"
     }
