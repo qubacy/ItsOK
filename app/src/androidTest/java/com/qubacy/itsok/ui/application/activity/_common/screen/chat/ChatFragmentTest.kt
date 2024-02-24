@@ -4,10 +4,12 @@ import androidx.test.espresso.Espresso
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
 import com.qubacy.itsok.domain.chat.model._test.util.MessageUtilGenerator
 import com.qubacy.itsok.ui._common._test.view.util.action.wait.WaitViewAction
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.BaseFragmentTest
@@ -20,8 +22,11 @@ import dagger.hilt.android.testing.UninstallModules
 import kotlinx.coroutines.test.runTest
 import com.qubacy.itsok.R
 import com.qubacy.itsok._common.chat.stage.ChatStage
+import com.qubacy.itsok.ui._common._test.view.util.matcher.image.ImageViewMatcher
+import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.operation.loading.SetLoadingStateUiOperation
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.component.typing.view.TypingMaterialTextView
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.model.operation.ChangeStageUiOperation
+import org.hamcrest.Matchers
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -42,6 +47,26 @@ class ChatFragmentTest(
     @Before
     override fun setup() {
         super.setup()
+    }
+
+    @Test
+    fun loadingStateTest() = runTest {
+        val thinkingAnimDuration = InstrumentationRegistry.getInstrumentation().targetContext
+            .resources.getInteger(R.integer.itsok_animation_thinking_duration).toLong()
+
+        mUiOperationFlow.emit(SetLoadingStateUiOperation(true))
+
+        Espresso.onView(withId(R.id.fragment_chat_image_avatar))
+            .perform(WaitViewAction(thinkingAnimDuration))
+            .check(ViewAssertions.matches(
+                ImageViewMatcher(R.drawable.itsok_animated_thinking_backwards)))
+
+        mUiOperationFlow.emit(SetLoadingStateUiOperation(false))
+
+        Espresso.onView(withId(R.id.fragment_chat_image_avatar))
+            .perform(WaitViewAction(thinkingAnimDuration))
+            .check(ViewAssertions.matches(
+                ImageViewMatcher(R.drawable.itsok_animated_thinking)))
     }
 
     @Test
@@ -105,5 +130,22 @@ class ChatFragmentTest(
             Espresso.onView(isRoot()).perform(WaitViewAction(textTypingDuration))
             Assert.assertEquals(message.text, activeTextView!!.fullText)
         }
+    }
+
+    @Test
+    fun newMessageChunksChangingTest() = runTest {
+        val prevMessageChunk = MessageUtilGenerator.generateMessages(2)
+        val nextMessageChunk = MessageUtilGenerator.generateMessages(1, prevMessageChunk.size)
+
+        mUiOperationFlow.emit(NextMessagesUiOperation(prevMessageChunk))
+
+        Espresso.onView(withText(prevMessageChunk.last().text))
+            .check(ViewAssertions.doesNotExist())
+
+        mUiOperationFlow.emit(NextMessagesUiOperation(nextMessageChunk))
+
+        for (prevMessage in prevMessageChunk)
+            Espresso.onView(withText(prevMessage.text))
+                .check(ViewAssertions.matches(isDisplayed()))
     }
 }

@@ -6,9 +6,9 @@
 
     <!--  Avatar:  -->
 
-    <integer name="itsok_animation_wonder_duration">1000</integer>
-    <integer name="itsok_animation_thinking_duration">700</integer>
-    <integer name="itsok_animation_happy_memento_duration">700</integer>
+    <integer name="itsok_animation_wonder_duration">300</integer>
+    <integer name="itsok_animation_thinking_duration">280</integer>
+    <integer name="itsok_animation_happy_memento_duration">400</integer>
     <integer name="itsok_animation_happy_bye_duration">350</integer>
 
     <integer name="itsok_animation_wonder_brow_from_degree">0</integer>

@@ -25,7 +25,7 @@ object FakeChatViewModelModule {
             val viewModel = super.create(modelClass) as ChatViewModel
 
             // todo: rethink this one:
-            Mockito.`when`(viewModel.uiState).thenReturn(ChatUiState(error = null))
+            Mockito.`when`(viewModel.uiState).thenReturn(ChatUiState(error = null, isLoading = false))
 
             return viewModel as T
         }

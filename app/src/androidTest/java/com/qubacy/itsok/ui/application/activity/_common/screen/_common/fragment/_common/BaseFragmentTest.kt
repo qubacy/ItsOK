@@ -13,6 +13,7 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.RootMatchers
 import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.qubacy.itsok.R
 import com.qubacy.itsok._common._test.util.launcher.launchFragmentInHiltContainer
@@ -113,11 +114,7 @@ abstract class BaseFragmentTest<
         Espresso.onView(withText(R.string.component_error_dialog_button_neutral_caption))
             .perform(click())
 
-        try {
-            mActivityScenario.onActivity {
-                Assert.assertFalse(!it.isFinishing && !it.isDestroyed)
-            }
-        }
+        try { Espresso.onView(isRoot()).check(ViewAssertions.doesNotExist()) }
         catch (_: NoActivityResumedException) { }
     }
 

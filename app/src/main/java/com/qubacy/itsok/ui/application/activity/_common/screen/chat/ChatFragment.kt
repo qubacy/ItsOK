@@ -256,26 +256,28 @@ class ChatFragment(
     }
 
     private fun setAvatarAppearanceWithStage(stage: ChatStage) {
-        runBackwardsAvatarAnimation { runNextAvatarAnimationWithStage(stage) }
+        val nextDrawableIdRes = getNextAvatarDrawableWithStage(stage)
+
+        if (nextDrawableIdRes == mPrevAvatarDrawableResId) return
+        else runBackwardsAvatarAnimation { runAvatarAnimationDrawable(nextDrawableIdRes) }
     }
 
     private fun setAvatarAppearanceWithLoadingState(isLoading: Boolean) {
         runBackwardsAvatarAnimation {
-            if (isLoading) runLoadingAvatarAnimation()
-            else runNextAvatarAnimationWithStage(mModel.uiState.stage)
+            if (isLoading && mPrevAvatarDrawableResId != getLoadingAvatarDrawableResId())
+                runLoadingAvatarAnimation()
+            else setAvatarAppearanceWithStage(mModel.uiState.stage)
         }
     }
 
-    private fun runLoadingAvatarAnimation() {
-        val loadingDrawableResId = R.drawable.itsok_animated_thinking
-
-        runAvatarAnimationDrawable(loadingDrawableResId)
+    private fun getLoadingAvatarDrawableResId(): Int {
+        return R.drawable.itsok_animated_thinking
     }
 
-    private fun runNextAvatarAnimationWithStage(stage: ChatStage) {
-        val nextDrawableIdRes = getNextAvatarDrawableWithStage(stage)
+    private fun runLoadingAvatarAnimation() {
+        val loadingDrawableResId = getLoadingAvatarDrawableResId()
 
-        runAvatarAnimationDrawable(nextDrawableIdRes)
+        runAvatarAnimationDrawable(loadingDrawableResId)
     }
 
     private fun runAvatarAnimationDrawable(@DrawableRes drawableResId: Int) {
