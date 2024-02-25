@@ -11,9 +11,9 @@ import com.qubacy.itsok._common.error.Error
 data class ErrorEntity(
     @ColumnInfo(name = ID_PROP_NAME) val id: Long,
     @ColumnInfo(name = LANG_PROP_NAME) val lang: String,
-    val message: String,
+    @ColumnInfo(name = MESSAGE_PROP_NAME) val message: String,
     @ColumnInfo(
-        name = "is_critical",
+        name = IS_CRITICAL_PROP_NAME,
         defaultValue = IS_CRITICAL_DEFAULT_VALUE
     ) val isCritical: Boolean
 ) {
@@ -22,6 +22,8 @@ data class ErrorEntity(
 
         const val ID_PROP_NAME = "id"
         const val LANG_PROP_NAME = "lang"
+        const val MESSAGE_PROP_NAME = "message"
+        const val IS_CRITICAL_PROP_NAME = "is_critical"
 
         const val IS_CRITICAL_DEFAULT_VALUE = "0"
     }

@@ -4,7 +4,7 @@ import android.content.ContentValues
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.qubacy.itsok._common.chat.stage.ChatStage
 import com.qubacy.itsok.data._common.repository.source_common.local.database.LocalDatabaseDataSourceTest
-import com.qubacy.itsok.data._common.repository.source_common.local.database.util.insert
+import com.qubacy.itsok.data._common.repository.source_common.local.database._common._test.insertable.LocalInsertableDatabaseDataSourceTest
 import com.qubacy.itsok.data.answer.model.type.AnswerType
 import com.qubacy.itsok.data.answer.repository.source.local.entity.AnswerEntity
 import org.junit.Assert
@@ -13,7 +13,9 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class LocalAnswerDataSourceTest : LocalDatabaseDataSourceTest() {
+class LocalAnswerDataSourceTest(
+
+) : LocalDatabaseDataSourceTest(), LocalInsertableDatabaseDataSourceTest<AnswerEntity> {
     private lateinit var mLocalAnswerDataSource: LocalAnswerDataSource
 
     @Before
@@ -23,18 +25,16 @@ class LocalAnswerDataSourceTest : LocalDatabaseDataSourceTest() {
         mLocalAnswerDataSource = mDatabase.answerDao()
     }
 
-    private fun insertAnswers(answerEntities: List<AnswerEntity>) {
-        for (answerEntity in answerEntities) {
-            val argValues = ContentValues()
-
-            argValues.put(AnswerEntity.ID_PROP_NAME, answerEntity.id)
-            argValues.put(AnswerEntity.LANG_PROP_NAME, answerEntity.lang)
-            argValues.put(AnswerEntity.STAGE_ID_PROP_NAME, answerEntity.stageId)
-            argValues.put(AnswerEntity.TYPE_ID_PROP_NAME, answerEntity.typeId)
-            argValues.put(AnswerEntity.TEXT_PROP_NAME, answerEntity.text)
-
-            mDatabase.insert(AnswerEntity.TABLE_NAME, argValues)
+    override fun packEntityContent(itemEntity: AnswerEntity): ContentValues {
+        val contentValues = ContentValues().apply {
+            put(AnswerEntity.ID_PROP_NAME, itemEntity.id)
+            put(AnswerEntity.LANG_PROP_NAME, itemEntity.lang)
+            put(AnswerEntity.STAGE_ID_PROP_NAME, itemEntity.stageId)
+            put(AnswerEntity.TYPE_ID_PROP_NAME, itemEntity.typeId)
+            put(AnswerEntity.TEXT_PROP_NAME, itemEntity.text)
         }
+
+        return contentValues
     }
 
     @Test
@@ -49,7 +49,7 @@ class LocalAnswerDataSourceTest : LocalDatabaseDataSourceTest() {
         val expectedAnswerEntities = originalAnswerEntities.filter {
             it.stageId == stageId && it.lang == langCode }
 
-        insertAnswers(expectedAnswerEntities)
+        insertItems(mDatabase, AnswerEntity.TABLE_NAME, expectedAnswerEntities)
 
         val gottenAnswers = mLocalAnswerDataSource.getAnswersForLangAndStage(langCode, stageId)
 
@@ -73,7 +73,7 @@ class LocalAnswerDataSourceTest : LocalDatabaseDataSourceTest() {
         val expectedAnswerEntities = originalAnswerEntities.filter {
             it.stageId == stageId && it.lang == langCode && it.typeId == typeId }
 
-        insertAnswers(expectedAnswerEntities)
+        insertItems(mDatabase, AnswerEntity.TABLE_NAME, expectedAnswerEntities)
 
         val gottenAnswers = mLocalAnswerDataSource.getAnswersForLangAndStage(langCode, stageId)
 
