@@ -1,4 +1,4 @@
-package com.qubacy.itsok.ui._common._test.view.util.matcher.image
+package com.qubacy.itsok.ui._common._test.view.util.matcher.image.animated
 
 import android.view.View
 import android.widget.ImageView
@@ -9,7 +9,7 @@ import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import org.hamcrest.BaseMatcher
 import org.hamcrest.Description
 
-class ImageViewMatcher(
+class AnimatedImageViewMatcher(
     @DrawableRes private val mImageResId: Int
 ) : BaseMatcher<View>() {
     override fun describeTo(description: Description?) { }

@@ -1,0 +1,25 @@
+package com.qubacy.itsok.ui._common._test.view.util.matcher.image.common
+
+import android.graphics.drawable.Drawable
+import android.view.View
+import android.widget.ImageView
+import androidx.core.graphics.drawable.toBitmap
+import org.hamcrest.BaseMatcher
+import org.hamcrest.Description
+
+class CommonImageViewMatcher(
+    private val mImage: Drawable
+) : BaseMatcher<View>() {
+    override fun describeTo(description: Description?) { }
+
+    override fun matches(item: Any?): Boolean {
+        if (item !is ImageView) return false
+
+        item as ImageView
+
+        val imageBitmap = mImage.toBitmap()
+        val itemImageBitmap = item.drawable.toBitmap()
+
+        return (itemImageBitmap.sameAs(imageBitmap))
+    }
+}

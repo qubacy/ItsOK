@@ -22,7 +22,7 @@ import dagger.hilt.android.testing.UninstallModules
 import kotlinx.coroutines.test.runTest
 import com.qubacy.itsok.R
 import com.qubacy.itsok._common.chat.stage.ChatStage
-import com.qubacy.itsok.ui._common._test.view.util.matcher.image.ImageViewMatcher
+import com.qubacy.itsok.ui._common._test.view.util.matcher.image.animated.AnimatedImageViewMatcher
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.operation.loading.SetLoadingStateUiOperation
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.component.typing.view.TypingMaterialTextView
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.model.operation.ChangeStageUiOperation
@@ -59,14 +59,16 @@ class ChatFragmentTest(
         Espresso.onView(withId(R.id.fragment_chat_image_avatar))
             .perform(WaitViewAction(thinkingAnimDuration))
             .check(ViewAssertions.matches(
-                ImageViewMatcher(R.drawable.itsok_animated_thinking_backwards)))
+                AnimatedImageViewMatcher(R.drawable.itsok_animated_thinking_backwards)
+            ))
 
         mUiOperationFlow.emit(SetLoadingStateUiOperation(false))
 
         Espresso.onView(withId(R.id.fragment_chat_image_avatar))
             .perform(WaitViewAction(thinkingAnimDuration))
             .check(ViewAssertions.matches(
-                ImageViewMatcher(R.drawable.itsok_animated_thinking)))
+                AnimatedImageViewMatcher(R.drawable.itsok_animated_thinking)
+            ))
     }
 
     @Test
@@ -201,14 +203,16 @@ class ChatFragmentTest(
         Espresso.onView(withId(R.id.fragment_chat_image_avatar))
             .perform(WaitViewAction(wonderAnimationDuration))
             .check(ViewAssertions.matches(
-                ImageViewMatcher(R.drawable.itsok_animated_wonder_backwards)))
+                AnimatedImageViewMatcher(R.drawable.itsok_animated_wonder_backwards)
+            ))
 
         mUiOperationFlow.emit(ChangeStageUiOperation(ChatStage.MEMENTO_OFFERING))
 
         Espresso.onView(withId(R.id.fragment_chat_image_avatar))
             .perform(WaitViewAction(happyMementoAnimationDuration))
             .check(ViewAssertions.matches(
-                ImageViewMatcher(R.drawable.itsok_animated_happy_memento_backwards)))
+                AnimatedImageViewMatcher(R.drawable.itsok_animated_happy_memento_backwards)
+            ))
     }
 
 }

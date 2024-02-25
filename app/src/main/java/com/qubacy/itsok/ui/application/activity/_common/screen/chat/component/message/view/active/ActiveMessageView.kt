@@ -17,8 +17,8 @@ class ActiveMessageView(
     context: Context,
     attrs: AttributeSet
 ) : MessageView<
-        TypingMaterialTextView, ShapeableImageView, UIMessage
-        >(context, attrs), TypingMaterialTextViewCallback {
+    TypingMaterialTextView, ShapeableImageView, UIMessage
+>(context, attrs), TypingMaterialTextViewCallback {
     companion object {
         const val TAG = "ActiveMessageView"
 
