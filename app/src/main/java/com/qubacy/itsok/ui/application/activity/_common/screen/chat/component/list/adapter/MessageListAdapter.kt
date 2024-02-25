@@ -13,9 +13,10 @@ import com.qubacy.itsok.ui.application.activity._common.screen.chat._common.data
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.component.list.layout.MessageListLayoutManager
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.component.list.layout.MessageListLayoutManagerCallback
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.GlobalScope
 
 class MessageListAdapter(
-    private val mCoroutineScope: CoroutineScope
+    private val mCoroutineScope: CoroutineScope = GlobalScope
 ) : RecyclerView.Adapter<MessageListAdapter.MessageViewHolder>(), MessageListLayoutManagerCallback {
     enum class ItemType(val id: Int) {
         ACTIVE(0), PREVIOUS(1);
@@ -106,8 +107,6 @@ class MessageListAdapter(
 
     override fun onBindViewHolder(holder: MessageViewHolder, position: Int) {
         val message = mItems[position]
-
-        Log.d(TAG, "onBindViewHolder(): pos. = $position; message = ${message.toString()};")
 
         when (getItemViewType(position)) {
             ItemType.PREVIOUS.id -> holder.setData(message)
