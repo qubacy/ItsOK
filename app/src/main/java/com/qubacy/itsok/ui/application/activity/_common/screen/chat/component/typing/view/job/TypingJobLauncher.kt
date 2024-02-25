@@ -1,6 +1,5 @@
 package com.qubacy.itsok.ui.application.activity._common.screen.chat.component.typing.view.job
 
-import android.util.Log
 import android.widget.TextView
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
@@ -26,10 +25,6 @@ class TypingJobLauncher(
         return coroutineScope.launch(Dispatchers.IO) {
             try {
                 for (i in 1..mText.length) {
-                    Log.d(
-                        TAG, "run(): job = ${coroutineContext.job.toString()};" +
-                            " text = ${mText.substring(0, 5)}; curLength = $i;")
-
                     withContext(Dispatchers.Main) {
                         coroutineContext.job.ensureActive()
 
