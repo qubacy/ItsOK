@@ -1,0 +1,104 @@
+package com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common
+
+import androidx.lifecycle.SavedStateHandle
+import app.cash.turbine.test
+import com.qubacy.itsok._common._test.util.mock.AnyMockUtil
+import com.qubacy.itsok._common.error.Error
+import com.qubacy.itsok._common.error.type._common.ErrorType
+import com.qubacy.itsok._common.error.type._test.TestErrorType
+import com.qubacy.itsok.domain._common.usecase._common.UseCase
+import com.qubacy.itsok.domain._common.usecase._common.result._common.DomainResult
+import com.qubacy.itsok.domain._common.usecase._common.result.error.ErrorDomainResult
+import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.operation.error.ErrorUiOperation
+import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.state.BaseUiState
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.test.runTest
+import org.junit.Assert
+import org.junit.Before
+import org.junit.Test
+import org.mockito.Mockito
+import java.util.concurrent.atomic.AtomicReference
+
+abstract class BaseViewModelTest<
+    UiStateType : BaseUiState, UseCaseType: UseCase, ViewModelType : BaseViewModel<UiStateType>
+>(
+    private val mUseCaseClass: Class<UseCaseType>
+) {
+    protected lateinit var mModel: ViewModelType
+    protected lateinit var mResultFlow: MutableSharedFlow<DomainResult>
+
+    protected var mRetrieveErrorTypeCallArg: AtomicReference<ErrorType?> =
+        AtomicReference<ErrorType?>(null)
+
+    @Before
+    fun setup() {
+        init()
+    }
+
+    private fun init() {
+        resetResults()
+
+        val useCase = initUseCase()
+
+        initViewModel(useCase)
+    }
+
+    protected open fun resetResults() {
+        mRetrieveErrorTypeCallArg.set(null)
+    }
+
+    protected open fun initUseCase(): UseCaseType {
+        val useCase = createUseCaseMock()
+
+        mResultFlow = MutableSharedFlow()
+
+        Mockito.`when`(useCase.resultFlow).thenReturn(mResultFlow)
+        Mockito.`when`(useCase.retrieveError(AnyMockUtil.anyObject()))
+            .thenAnswer {
+                mRetrieveErrorTypeCallArg.set(it.arguments[0] as ErrorType)
+            }
+
+        return useCase
+    }
+
+    private fun createUseCaseMock(): UseCaseType {
+        return Mockito.mock(mUseCaseClass)
+    }
+
+    protected open fun initViewModel(useCase: UseCaseType) {
+        val savedStateHandleMock = Mockito.mock(SavedStateHandle::class.java)
+
+        mModel = createViewModel(savedStateHandleMock, useCase)
+    }
+
+    protected abstract fun createViewModel(
+        savedStateHandle: SavedStateHandle, useCase: UseCaseType
+    ): ViewModelType
+
+    @Test
+    fun retrieveErrorTest() {
+        val expectedErrorType = TestErrorType.TEST
+
+        mModel.retrieveError(expectedErrorType)
+
+        Assert.assertEquals(expectedErrorType, mRetrieveErrorTypeCallArg.get())
+    }
+
+    @Test
+    fun processErrorDomainResultTest() = runTest {
+        val expectedError = Error(TestErrorType.TEST.id, "test error", false)
+        val errorResult = ErrorDomainResult(expectedError)
+
+        mModel.uiOperationFlow.test {
+            mResultFlow.emit(errorResult)
+
+            val gottenOperation = awaitItem()
+
+            Assert.assertEquals(ErrorUiOperation::class, gottenOperation::class)
+
+            val gottenError = (gottenOperation as ErrorUiOperation).error
+
+            Assert.assertEquals(expectedError, gottenError)
+        }
+    }
+}
