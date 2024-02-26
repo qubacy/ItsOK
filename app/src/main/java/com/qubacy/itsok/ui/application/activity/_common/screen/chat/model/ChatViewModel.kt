@@ -24,6 +24,11 @@ open class ChatViewModel @Inject constructor(
     private val mChatUseCase: ChatUseCase
 ) : BaseViewModel<ChatUiState>(savedStateHandle, mChatUseCase) {
     override var mUiState: ChatUiState = ChatUiState(error = null, isLoading = false)
+    companion object {
+        const val TAG = "ChatViewModel"
+
+        val GRIPE_REGEX = Regex("^\\S.*\$")
+    }
 
     init {
         mUiState = savedStateHandle[UI_STATE_KEY] ?: mUiState
@@ -84,7 +89,7 @@ open class ChatViewModel @Inject constructor(
     }
 
     open fun isGripeValid(gripe: String): Boolean {
-        return gripe.isNotEmpty()
+        return GRIPE_REGEX.matches(gripe)
     }
 
     open fun getGripeMessages() {
