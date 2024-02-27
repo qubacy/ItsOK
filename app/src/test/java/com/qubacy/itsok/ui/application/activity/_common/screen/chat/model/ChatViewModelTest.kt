@@ -24,6 +24,7 @@ class ChatViewModelTest : BaseViewModelTest<ChatUiState, ChatUseCase, ChatViewMo
     private var mGetIntroMessagesCallFlag: AtomicBoolean = AtomicBoolean(false)
     private var mGetGripeMessagesCallFlag: AtomicBoolean = AtomicBoolean(false)
     private var mGetMementoMessagesCallFlag: AtomicBoolean = AtomicBoolean(false)
+    private var mGetByeMessagesCallFlag: AtomicBoolean = AtomicBoolean(false)
 
     override fun initUseCase(): ChatUseCase {
         val useCase = super.initUseCase()
@@ -37,6 +38,9 @@ class ChatViewModelTest : BaseViewModelTest<ChatUiState, ChatUseCase, ChatViewMo
         Mockito.`when`(useCase.getMementoMessages()).thenAnswer {
             mGetMementoMessagesCallFlag.set(true)
         }
+        Mockito.`when`(useCase.getByeMessages()).thenAnswer {
+            mGetByeMessagesCallFlag.set(true)
+        }
 
         return useCase
     }
@@ -47,6 +51,7 @@ class ChatViewModelTest : BaseViewModelTest<ChatUiState, ChatUseCase, ChatViewMo
         mGetIntroMessagesCallFlag.set(false)
         mGetGripeMessagesCallFlag.set(false)
         mGetMementoMessagesCallFlag.set(false)
+        mGetByeMessagesCallFlag.set(false)
     }
 
     override fun createViewModel(
@@ -150,8 +155,7 @@ class ChatViewModelTest : BaseViewModelTest<ChatUiState, ChatUseCase, ChatViewMo
 
         val testCases = listOf(
             TestCase(ChatStage.IDLE, ChatStage.GRIPE),
-            TestCase(ChatStage.GRIPE, ChatStage.MEMENTO_OFFERING),
-            //TestCase(ChatStage.MEMENTO_OFFERING, ChatStage.BYE) // todo: not implemented yet;
+            TestCase(ChatStage.GRIPE, ChatStage.MEMENTO_OFFERING)
         )
         val updateStageAfterMessagesMethodReflection = ChatViewModel::class.java
             .getDeclaredMethod("updateStageAfterMessages")
@@ -168,6 +172,55 @@ class ChatViewModelTest : BaseViewModelTest<ChatUiState, ChatUseCase, ChatViewMo
             updateStageAfterMessagesMethodReflection.invoke(mModel)
 
             Assert.assertEquals(testCase.expectedEndStage, mModel.uiState.stage)
+        }
+    }
+
+    @Test
+    fun moveToByeTest() = runTest {
+        val expectedStage = ChatStage.BYE
+
+        mModel.uiOperationFlow.test {
+            mModel.moveToBye()
+
+            Assert.assertTrue(mGetByeMessagesCallFlag.get())
+
+            val gottenStageOperation = awaitItem()
+
+            Assert.assertEquals(ChangeStageUiOperation::class, gottenStageOperation::class)
+
+            val gottenStage = (gottenStageOperation as ChangeStageUiOperation).stage
+
+            Assert.assertEquals(expectedStage, gottenStage)
+            Assert.assertEquals(expectedStage, mModel.uiState.stage)
+        }
+    }
+
+    @Test
+    fun restartTest() = runTest {
+        val initUiState = ChatUiState(stage = ChatStage.GRIPE, error = null, isLoading = false)
+        val expectedStage = ChatStage.IDLE
+        val expectedLoadingState = true
+
+        setUiState(initUiState)
+
+        mModel.uiOperationFlow.test {
+            mModel.restart()
+
+            val gottenStageOperation = awaitItem()
+            val gottenLoadingOperation = awaitItem()
+
+            Assert.assertEquals(ChangeStageUiOperation::class, gottenStageOperation::class)
+            Assert.assertEquals(SetLoadingStateUiOperation::class, gottenLoadingOperation::class)
+            Assert.assertTrue(mGetIntroMessagesCallFlag.get())
+
+            val gottenStage = (gottenStageOperation as ChangeStageUiOperation).stage
+            val gottenLoadingState = (gottenLoadingOperation as SetLoadingStateUiOperation).isLoading
+
+            Assert.assertEquals(expectedStage, gottenStage)
+            Assert.assertEquals(expectedLoadingState, gottenLoadingState)
+
+            Assert.assertEquals(expectedStage, mModel.uiState.stage)
+            Assert.assertEquals(expectedLoadingState, mModel.uiState.isLoading)
         }
     }
 }

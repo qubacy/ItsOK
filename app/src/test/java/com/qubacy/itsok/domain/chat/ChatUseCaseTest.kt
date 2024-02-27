@@ -109,6 +109,22 @@ class ChatUseCaseTest : UseCaseTest<ChatUseCase>() {
         }
     }
 
+    @Test
+    fun getByeMessagesTest() = runTest {
+        val expectedByeAnswer = DataAnswer(0, null, "test answer")
+        val expectedMessage = Message(expectedByeAnswer.text)
+
+        mGetRandomAnswerForStageAndTypeResult = expectedByeAnswer
+
+        mUseCase.resultFlow.test {
+            mUseCase.getByeMessages()
+
+            val gottenResult = awaitItem()
+
+            assertGottenMessageFromResult(gottenResult, expectedMessage)
+        }
+    }
+
     private fun assertGottenMessageFromResult(gottenResult: DomainResult, expectedMessage: Message) {
         Assert.assertEquals(GetNextMessagesDomainResult::class, gottenResult::class)
 

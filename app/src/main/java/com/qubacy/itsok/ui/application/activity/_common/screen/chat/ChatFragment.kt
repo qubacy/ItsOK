@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.annotation.DrawableRes
-import androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
 import androidx.core.graphics.Insets
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
@@ -97,6 +96,15 @@ class ChatFragment(
                 onNegativeMementoButtonClicked()
             }
         }
+        mBinding.fragmentChatByeButtons.apply {
+            componentChatByeButtonsButtonBye.setOnClickListener {
+                onByeButtonClicked()
+            }
+            componentChatByeButtonsButtonRestart.setOnClickListener {
+                onRestartButtonClicked()
+            }
+        }
+
     }
 
     override fun onResume() {
@@ -119,6 +127,9 @@ class ChatFragment(
             root.updatePadding(bottom = insets.bottom)
         }
         mBinding.fragmentChatMementoButtons.apply {
+            root.updatePadding(bottom = insets.bottom)
+        }
+        mBinding.fragmentChatByeButtons.apply {
             root.updatePadding(bottom = insets.bottom)
         }
     }
@@ -189,13 +200,20 @@ class ChatFragment(
     }
 
     private fun onPositiveMementoButtonClicked() {
-        // todo: implement..
-
-
+        mModel.moveToBye()
     }
 
     private fun onNegativeMementoButtonClicked() {
         mModel.getMementoMessages()
+    }
+
+    private fun onByeButtonClicked() {
+        requireActivity().finishAndRemoveTask()
+    }
+
+    private fun onRestartButtonClicked() {
+        mAdapter.resetItems()
+        mModel.restart()
     }
 
     private fun resolveMessages(messages: List<Message>): List<UIMessage> {
@@ -216,28 +234,12 @@ class ChatFragment(
     }
 
     private fun setControlsWithStage(stage: ChatStage) {
-        when (stage) {
-            ChatStage.IDLE -> {
-                mBinding.fragmentChatGripeInput.root.visibility = View.GONE
-                mBinding.fragmentChatMementoButtons.root.visibility = View.GONE
-
-            }
-            ChatStage.GRIPE -> {
-                mBinding.fragmentChatGripeInput.root.visibility = View.VISIBLE
-                mBinding.fragmentChatMementoButtons.root.visibility = View.GONE
-
-            }
-            ChatStage.MEMENTO_OFFERING -> {
-                mBinding.fragmentChatGripeInput.root.visibility = View.GONE
-                mBinding.fragmentChatMementoButtons.root.visibility = View.VISIBLE
-
-            }
-            ChatStage.BYE -> {
-                mBinding.fragmentChatGripeInput.root.visibility = View.GONE
-                mBinding.fragmentChatMementoButtons.root.visibility = View.GONE
-
-            }
-        }
+        mBinding.fragmentChatGripeInput.root.visibility =
+            if (stage == ChatStage.GRIPE) View.VISIBLE else View.GONE
+        mBinding.fragmentChatMementoButtons.root.visibility =
+            if (stage == ChatStage.MEMENTO_OFFERING) View.VISIBLE else View.GONE
+        mBinding.fragmentChatByeButtons.root.visibility =
+            if (stage == ChatStage.BYE) View.VISIBLE else View.GONE
     }
 
     override fun setLoadingState(isLoading: Boolean) {
@@ -253,6 +255,10 @@ class ChatFragment(
             .componentChatMementoButtonsButtonPositive.isEnabled = isEnabled
         mBinding.fragmentChatMementoButtons
             .componentChatMementoButtonsButtonNegative.isEnabled = isEnabled
+        mBinding.fragmentChatByeButtons
+            .componentChatByeButtonsButtonBye.isEnabled = isEnabled
+        mBinding.fragmentChatByeButtons
+            .componentChatByeButtonsButtonRestart.isEnabled = isEnabled
     }
 
     private fun setAvatarAppearanceWithStage(stage: ChatStage) {

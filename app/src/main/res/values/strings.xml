@@ -13,5 +13,7 @@
     <string name="component_chat_gripe_input_hint_text">Speaking from my heart..</string>
     <string name="component_chat_memento_buttons_button_positive_caption">You\'re right!</string>
     <string name="component_chat_memento_buttons_button_negative_caption">Not enough</string>
+    <string name="component_chat_bye_buttons_button_bye_caption">Bye!</string>
+    <string name="component_chat_bye_buttons_button_restart_caption">Restart</string>
 
 </resources>

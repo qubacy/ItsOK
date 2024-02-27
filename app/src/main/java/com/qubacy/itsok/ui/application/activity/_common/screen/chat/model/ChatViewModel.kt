@@ -70,8 +70,7 @@ open class ChatViewModel @Inject constructor(
                 setStage(ChatStage.MEMENTO_OFFERING)
                 getMementoMessages()
             }
-            ChatStage.MEMENTO_OFFERING -> {  }
-            ChatStage.BYE -> {  } // todo: any ideas?
+            else -> { }
         }
     }
 
@@ -100,6 +99,18 @@ open class ChatViewModel @Inject constructor(
     open fun getMementoMessages() {
         changeLoadingState(true)
         mChatUseCase.getMementoMessages()
+    }
+
+    open fun moveToBye() {
+        setStage(ChatStage.BYE)
+        mChatUseCase.getByeMessages()
+    }
+
+    open fun restart() {
+        mUiState = ChatUiState(error = null, isLoading = false)
+
+        setStage(ChatStage.IDLE)
+        getIntroMessages()
     }
 }
 

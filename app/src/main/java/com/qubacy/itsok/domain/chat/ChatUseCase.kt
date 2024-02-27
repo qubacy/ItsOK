@@ -42,6 +42,14 @@ class ChatUseCase @Inject constructor(
         }
     }
 
+    open fun getByeMessages() {
+        mCoroutineScope.launch(mCoroutineDispatcher) {
+            val messages = getNextMessagesForByeStage()
+
+            mResultFlow.emit(GetNextMessagesDomainResult(messages))
+        }
+    }
+
     private fun getNextMessagesForIdleStage(): List<Message> {
         return getNextMessagesForNullTypeStage(ChatStage.IDLE)
     }

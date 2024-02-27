@@ -215,4 +215,46 @@ class ChatFragmentTest(
             ))
     }
 
+    @Test
+    fun settingStageFromMementoOfferingToByeLeadsToControlsSetChangeTest() = runTest {
+        mUiOperationFlow.emit(ChangeStageUiOperation(ChatStage.MEMENTO_OFFERING))
+
+        Espresso.onView(withId(R.id.fragment_chat_memento_buttons))
+            .check(ViewAssertions.matches(isDisplayed()))
+        Espresso.onView(withId(R.id.fragment_chat_bye_buttons))
+            .check(ViewAssertions.matches(
+                ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
+
+        mUiOperationFlow.emit(ChangeStageUiOperation(ChatStage.BYE))
+
+        Espresso.onView(withId(R.id.fragment_chat_memento_buttons))
+            .check(ViewAssertions.matches(
+                ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.GONE)))
+        Espresso.onView(withId(R.id.fragment_chat_bye_buttons))
+            .check(ViewAssertions.matches(isDisplayed()))
+    }
+
+    @Test
+    fun settingStageFromMementoOfferingToByeLeadsToAvatarChangeTest() = runTest {
+        val happyMementoAnimationDuration = InstrumentationRegistry.getInstrumentation().targetContext
+            .resources.getInteger(R.integer.itsok_animation_wonder_duration).toLong()
+        val byeAnimationDuration = InstrumentationRegistry.getInstrumentation().targetContext
+            .resources.getInteger(R.integer.itsok_animation_happy_memento_duration).toLong()
+
+        mUiOperationFlow.emit(ChangeStageUiOperation(ChatStage.MEMENTO_OFFERING))
+
+        Espresso.onView(withId(R.id.fragment_chat_image_avatar))
+            .perform(WaitViewAction(happyMementoAnimationDuration))
+            .check(ViewAssertions.matches(
+                AnimatedImageViewMatcher(R.drawable.itsok_animated_happy_memento_backwards)
+            ))
+
+        mUiOperationFlow.emit(ChangeStageUiOperation(ChatStage.BYE))
+
+        Espresso.onView(withId(R.id.fragment_chat_image_avatar))
+            .perform(WaitViewAction(byeAnimationDuration))
+            .check(ViewAssertions.matches(
+                AnimatedImageViewMatcher(R.drawable.itsok_animated_happy_bye_backwards)
+            ))
+    }
 }

@@ -66,4 +66,15 @@
         android:visibility="gone"
         layout="@layout/component_chat_memento_buttons"/>
 
+    <include
+        android:id="@+id/fragment_chat_bye_buttons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="@dimen/default_gap_between_components"
+        android:visibility="gone"
+        layout="@layout/component_chat_bye_buttons"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
