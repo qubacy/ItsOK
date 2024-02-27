@@ -1,7 +1,7 @@
 package com.qubacy.itsok.data.answer.repository
 
 import com.qubacy.itsok._common.chat.stage.ChatStage
-import com.qubacy.itsok.data._common.repository.DataRepository
+import com.qubacy.itsok.data._common.repository._common.DataRepository
 import com.qubacy.itsok.data.answer.model.DataAnswer
 import com.qubacy.itsok.data.answer.model.type.AnswerType
 import com.qubacy.itsok.data.answer.repository.source.local.LocalAnswerDataSource

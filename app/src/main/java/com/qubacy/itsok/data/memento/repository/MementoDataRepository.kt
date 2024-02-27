@@ -1,13 +1,14 @@
 package com.qubacy.itsok.data.memento.repository
 
-import com.qubacy.itsok.data._common.repository.DataRepository
+import com.qubacy.itsok.data._common.repository._common.DataRepository
 import com.qubacy.itsok.data.memento.model.DataMemento
 import com.qubacy.itsok.data.memento.model.toMementoEntity
 import com.qubacy.itsok.data.memento.repository.source.local.LocalMementoDataSource
 import com.qubacy.itsok.data.memento.repository.source.local.entity.toDataMemento
+import javax.inject.Inject
 import kotlin.random.Random
 
-class MementoDataRepository(
+class MementoDataRepository @Inject constructor(
     private val mLocalMementoDataSource: LocalMementoDataSource
 ) : DataRepository {
     fun getMementoById(mementoId: Long): DataMemento {

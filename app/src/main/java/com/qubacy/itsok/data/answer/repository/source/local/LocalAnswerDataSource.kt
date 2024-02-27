@@ -2,7 +2,7 @@ package com.qubacy.itsok.data.answer.repository.source.local
 
 import androidx.room.Dao
 import androidx.room.Query
-import com.qubacy.itsok.data._common.repository.source._common.DataSource
+import com.qubacy.itsok.data._common.repository._common.source._common.DataSource
 import com.qubacy.itsok.data.answer.repository.source.local.entity.AnswerEntity
 
 @Dao

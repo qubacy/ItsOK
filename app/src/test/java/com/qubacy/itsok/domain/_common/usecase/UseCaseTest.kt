@@ -3,7 +3,7 @@ package com.qubacy.itsok.domain._common.usecase
 import app.cash.turbine.test
 import com.qubacy.itsok._common.error.Error
 import com.qubacy.itsok._common.error.type._test.TestErrorType
-import com.qubacy.itsok.data._common.repository.DataRepository
+import com.qubacy.itsok.data._common.repository._common.DataRepository
 import com.qubacy.itsok.data.error.repository.ErrorDataRepository
 import com.qubacy.itsok.domain._common.usecase._common.UseCase
 import com.qubacy.itsok.domain._common.usecase._common.result.error.ErrorDomainResult

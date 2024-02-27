@@ -1,5 +1,6 @@
 package com.qubacy.itsok.domain._common.usecase._common
 
+import com.qubacy.itsok._common.coroutine.CoroutineUser
 import com.qubacy.itsok._common.error.type._common.ErrorType
 import com.qubacy.itsok.data.error.repository.ErrorDataRepository
 import com.qubacy.itsok.domain._common.usecase._common.result._common.DomainResult
@@ -14,19 +15,11 @@ import kotlinx.coroutines.launch
 
 abstract class UseCase(
     protected val mErrorDataRepository: ErrorDataRepository,
-    protected var mCoroutineScope: CoroutineScope = GlobalScope,
-    protected var mCoroutineDispatcher: CoroutineDispatcher = Dispatchers.IO
-) {
+    mCoroutineScope: CoroutineScope = GlobalScope,
+    mCoroutineDispatcher: CoroutineDispatcher = Dispatchers.IO
+) : CoroutineUser(mCoroutineScope, mCoroutineDispatcher) {
     protected val mResultFlow: MutableSharedFlow<DomainResult> = MutableSharedFlow()
     val resultFlow: SharedFlow<DomainResult> get() = mResultFlow
-
-    fun setCoroutineScope(coroutineScope: CoroutineScope) {
-        mCoroutineScope = coroutineScope
-    }
-
-    fun setCoroutineDispatcher(coroutineDispatcher: CoroutineDispatcher) {
-        mCoroutineDispatcher = coroutineDispatcher
-    }
 
     open fun retrieveError(errorType: ErrorType) {
         mCoroutineScope.launch(mCoroutineDispatcher) {

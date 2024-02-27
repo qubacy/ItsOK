@@ -1,6 +1,5 @@
 package com.qubacy.itsok.ui.application.activity._common.screen.chat.component.list.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

@@ -1,4 +1,4 @@
-package com.qubacy.itsok.data._common.repository.source.local.database
+package com.qubacy.itsok.data._common.repository._common.source.local.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

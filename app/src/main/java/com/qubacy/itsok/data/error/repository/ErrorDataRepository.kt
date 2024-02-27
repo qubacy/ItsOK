@@ -1,6 +1,6 @@
 package com.qubacy.itsok.data.error.repository
 
-import com.qubacy.itsok.data._common.repository.DataRepository
+import com.qubacy.itsok.data._common.repository._common.DataRepository
 import com.qubacy.itsok.data.error.repository.source.local.LocalErrorDataSource
 import com.qubacy.itsok.data.error.repository.source.local.model.toError
 import com.qubacy.itsok._common.error.Error
