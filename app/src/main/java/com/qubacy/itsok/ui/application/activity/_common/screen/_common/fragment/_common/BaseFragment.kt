@@ -16,7 +16,6 @@ import com.qubacy.itsok._common.error.Error
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.BaseViewModel
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.operation._common.UiOperation
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.operation.error.ErrorUiOperation
-import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.operation.loading.SetLoadingStateUiOperation
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.state.BaseUiState
 import kotlinx.coroutines.launch
 
@@ -39,6 +38,12 @@ abstract class BaseFragment<
         catchViewInsets(view)
     }
 
+    override fun onStop() {
+        mErrorDialog?.dismiss()
+
+        super.onStop()
+    }
+
     override fun onStart() {
         super.onStart()
 
@@ -46,16 +51,35 @@ abstract class BaseFragment<
         initUiState(mModel.uiState)
     }
 
-    override fun onStop() {
-        mErrorDialog?.dismiss()
-
-        super.onStop()
-    }
-
     private fun startOperationCollection() {
         lifecycleScope.launch {
             mModel.uiOperationFlow.collect { processUiOperation(it) }
         }
+    }
+
+    private fun initUiState(uiState: UiStateType) {
+        if (mIsInitialized) return
+
+        runInitWithUiState(uiState)
+
+        mIsInitialized = true
+    }
+
+    protected open fun runInitWithUiState(uiState: UiStateType) {
+        if (uiState.error != null) onErrorOccurred(uiState.error!!)
+    }
+
+    protected open fun processUiOperation(uiOperation: UiOperation): Boolean {
+        when (uiOperation::class) {
+            ErrorUiOperation::class -> processErrorOperation(uiOperation as ErrorUiOperation)
+            else -> return false
+        }
+
+        return true
+    }
+
+    private fun processErrorOperation(errorOperation: ErrorUiOperation) {
+        onErrorOccurred(errorOperation.error)
     }
 
     protected open fun viewInsetsToCatch(): Int {
@@ -74,38 +98,6 @@ abstract class BaseFragment<
     }
 
     protected open fun adjustViewToInsets(insets: Insets) { }
-
-    private fun initUiState(uiState: UiStateType) {
-        if (mIsInitialized) return
-
-        runInitWithUiState(uiState)
-
-        mIsInitialized = true
-    }
-
-    protected open fun runInitWithUiState(uiState: UiStateType) {
-        if (uiState.error != null) onErrorOccurred(uiState.error!!)
-        if (uiState.isLoading) setLoadingState(true)
-    }
-
-    protected open fun processUiOperation(uiOperation: UiOperation): Boolean {
-        when (uiOperation::class) {
-            ErrorUiOperation::class -> processErrorOperation(uiOperation as ErrorUiOperation)
-            SetLoadingStateUiOperation::class ->
-                processSetLoadingOperation(uiOperation as SetLoadingStateUiOperation)
-            else -> return false
-        }
-
-        return true
-    }
-
-    private fun processErrorOperation(errorOperation: ErrorUiOperation) {
-        onErrorOccurred(errorOperation.error)
-    }
-
-    protected open fun processSetLoadingOperation(loadingOperation: SetLoadingStateUiOperation) { }
-
-    protected open fun setLoadingState(isLoading: Boolean) { }
 
     open fun onPopupMessageOccurred(
         message: String,

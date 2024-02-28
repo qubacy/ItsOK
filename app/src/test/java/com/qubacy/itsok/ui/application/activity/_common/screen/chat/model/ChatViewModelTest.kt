@@ -3,6 +3,7 @@ package com.qubacy.itsok.ui.application.activity._common.screen.chat.model
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.qubacy.itsok._common.chat.stage.ChatStage
+import com.qubacy.itsok.data.error.repository.ErrorDataRepository
 import com.qubacy.itsok.domain.chat.ChatUseCase
 import com.qubacy.itsok.domain.chat.model._test.util.MessageGeneratorUtil
 import com.qubacy.itsok.domain.chat.result.GetNextMessagesDomainResult
@@ -56,9 +57,10 @@ class ChatViewModelTest : BaseViewModelTest<ChatUiState, ChatUseCase, ChatViewMo
 
     override fun createViewModel(
         savedStateHandle: SavedStateHandle,
+        errorDataRepository: ErrorDataRepository,
         useCase: ChatUseCase
     ): ChatViewModel {
-        return ChatViewModel(savedStateHandle, useCase)
+        return ChatViewModel(savedStateHandle, errorDataRepository, useCase)
     }
 
     @Test

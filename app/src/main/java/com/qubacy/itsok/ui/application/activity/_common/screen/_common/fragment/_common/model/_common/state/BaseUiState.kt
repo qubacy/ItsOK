@@ -4,8 +4,7 @@ import com.qubacy.itsok._common.error.Error
 import java.io.Serializable
 
 abstract class BaseUiState(
-    var error: Error? = null,
-    var isLoading: Boolean = false
+    var error: Error? = null
 ) : Serializable {
     abstract fun copy(): BaseUiState
 }

@@ -2,11 +2,10 @@ package com.qubacy.itsok.ui.application.activity._common.screen._common.fragment
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
-import com.qubacy.itsok._common._test.util.mock.AnyMockUtil
 import com.qubacy.itsok._common._test.util.rule.dispatcher.MainDispatcherRule
 import com.qubacy.itsok._common.error.Error
-import com.qubacy.itsok._common.error.type._common.ErrorType
 import com.qubacy.itsok._common.error.type._test.TestErrorType
+import com.qubacy.itsok.data.error.repository.ErrorDataRepository
 import com.qubacy.itsok.domain._common.usecase._common.UseCase
 import com.qubacy.itsok.domain._common.usecase._common.result._common.DomainResult
 import com.qubacy.itsok.domain._common.usecase._common.result.error.ErrorDomainResult
@@ -20,7 +19,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito
-import java.util.concurrent.atomic.AtomicReference
 
 abstract class BaseViewModelTest<
     UiStateType : BaseUiState, UseCaseType: UseCase, ViewModelType : BaseViewModel<UiStateType>
@@ -33,9 +31,6 @@ abstract class BaseViewModelTest<
 
     protected lateinit var mModel: ViewModelType
     protected lateinit var mResultFlow: MutableSharedFlow<DomainResult>
-
-    protected val mRetrieveErrorTypeCallArg: AtomicReference<ErrorType?> =
-        AtomicReference<ErrorType?>(null)
 
     protected open fun setUiState(uiState: UiStateType) {
         if (mViewModelClass == null) throw IllegalStateException()
@@ -59,7 +54,7 @@ abstract class BaseViewModelTest<
     }
 
     protected open fun resetResults() {
-        mRetrieveErrorTypeCallArg.set(null)
+
     }
 
     protected open fun initUseCase(): UseCaseType {
@@ -68,10 +63,6 @@ abstract class BaseViewModelTest<
         mResultFlow = MutableSharedFlow()
 
         Mockito.`when`(useCase.resultFlow).thenReturn(mResultFlow)
-        Mockito.`when`(useCase.retrieveError(AnyMockUtil.anyObject()))
-            .thenAnswer {
-                mRetrieveErrorTypeCallArg.set(it.arguments[0] as ErrorType)
-            }
 
         return useCase
     }
@@ -80,23 +71,43 @@ abstract class BaseViewModelTest<
         return Mockito.mock(mUseCaseClass)
     }
 
-    protected open fun initViewModel(useCase: UseCaseType) {
+    protected open fun initViewModel(
+        useCase: UseCaseType
+    ) {
         val savedStateHandleMock = Mockito.mock(SavedStateHandle::class.java)
+        val errorDataRepositoryMock = Mockito.mock(ErrorDataRepository::class.java)
 
-        mModel = createViewModel(savedStateHandleMock, useCase)
+        Mockito.`when`(errorDataRepositoryMock.getError(Mockito.anyLong()))
+            .thenAnswer {
+                val errorTypeId = it.arguments[0] as Long
+
+                return@thenAnswer Error(errorTypeId, "", false)
+            }
+
+        mModel = createViewModel(savedStateHandleMock, errorDataRepositoryMock, useCase)
     }
 
     protected abstract fun createViewModel(
-        savedStateHandle: SavedStateHandle, useCase: UseCaseType
+        savedStateHandle: SavedStateHandle,
+        errorDataRepository: ErrorDataRepository,
+        useCase: UseCaseType
     ): ViewModelType
 
     @Test
-    fun retrieveErrorTest() {
+    fun retrieveErrorTest() = runTest {
         val expectedErrorType = TestErrorType.TEST
 
-        mModel.retrieveError(expectedErrorType)
+        mModel.uiOperationFlow.test {
+            mModel.retrieveError(expectedErrorType)
 
-        Assert.assertEquals(expectedErrorType, mRetrieveErrorTypeCallArg.get())
+            val errorOperation = awaitItem()
+
+            Assert.assertEquals(ErrorUiOperation::class, errorOperation::class)
+
+            val error = (errorOperation as ErrorUiOperation).error
+
+            Assert.assertEquals(expectedErrorType.id, error.id)
+        }
     }
 
     @Test

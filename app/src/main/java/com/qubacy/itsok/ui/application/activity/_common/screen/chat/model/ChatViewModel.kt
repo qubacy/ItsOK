@@ -5,11 +5,12 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.qubacy.itsok._common.chat.stage.ChatStage
+import com.qubacy.itsok.data.error.repository.ErrorDataRepository
 import com.qubacy.itsok.domain._common.usecase._common.result._common.DomainResult
 import com.qubacy.itsok.domain.chat.ChatUseCase
 import com.qubacy.itsok.domain.chat.result.GetNextMessagesDomainResult
-import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.BaseViewModel
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.operation._common.UiOperation
+import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment.business.model.BusinessViewModel
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.model.operation.ChangeStageUiOperation
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.model.operation.NextMessagesUiOperation
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.model.state.ChatUiState
@@ -20,10 +21,11 @@ import javax.inject.Qualifier
 
 @HiltViewModel
 open class ChatViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
+    mSavedStateHandle: SavedStateHandle,
+    mErrorDataRepository: ErrorDataRepository,
     private val mChatUseCase: ChatUseCase
-) : BaseViewModel<ChatUiState>(savedStateHandle, mChatUseCase) {
-    override var mUiState: ChatUiState = ChatUiState(error = null, isLoading = false)
+) : BusinessViewModel<ChatUiState>(mSavedStateHandle, mErrorDataRepository, mChatUseCase) {
+    override var mUiState: ChatUiState = ChatUiState()
     companion object {
         const val TAG = "ChatViewModel"
 
@@ -31,7 +33,7 @@ open class ChatViewModel @Inject constructor(
     }
 
     init {
-        mUiState = savedStateHandle[UI_STATE_KEY] ?: mUiState
+        mUiState = mSavedStateHandle[UI_STATE_KEY] ?: mUiState
     }
 
     override fun onCleared() {
@@ -107,7 +109,7 @@ open class ChatViewModel @Inject constructor(
     }
 
     open fun restart() {
-        mUiState = ChatUiState(error = null, isLoading = false)
+        mUiState = ChatUiState()
 
         setStage(ChatStage.IDLE)
         getIntroMessages()
@@ -118,6 +120,7 @@ open class ChatViewModel @Inject constructor(
 annotation class ChatViewModelFactoryQualifier
 
 class ChatViewModelFactory(
+    private val mErrorDataRepository: ErrorDataRepository,
     private val mChatUseCase: ChatUseCase
 ) : AbstractSavedStateViewModelFactory() {
     override fun <T : ViewModel> create(
@@ -128,6 +131,6 @@ class ChatViewModelFactory(
         if (!modelClass.isAssignableFrom(ChatViewModel::class.java))
             throw IllegalArgumentException()
 
-        return ChatViewModel(handle, mChatUseCase) as T
+        return ChatViewModel(handle, mErrorDataRepository, mChatUseCase) as T
     }
 }
