@@ -3,6 +3,7 @@
     <!--  Common:  -->
 
     <dimen name="default_gap_between_components">8dp</dimen>
+    <dimen name="medium_gap_between_components">16dp</dimen>
 
     <!--  Avatar:  -->
 

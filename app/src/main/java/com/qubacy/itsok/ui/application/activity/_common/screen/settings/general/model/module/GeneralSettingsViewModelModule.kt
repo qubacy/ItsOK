@@ -1,5 +1,6 @@
 package com.qubacy.itsok.ui.application.activity._common.screen.settings.general.model.module
 
+import androidx.lifecycle.ViewModelProvider
 import com.qubacy.itsok.data.error.repository.ErrorDataRepository
 import com.qubacy.itsok.ui.application.activity._common.screen.settings.general.model.GeneralSettingsViewModelFactory
 import com.qubacy.itsok.ui.application.activity._common.screen.settings.general.model.GeneralSettingsViewModelFactoryQualifier
@@ -15,7 +16,7 @@ object GeneralSettingsViewModelModule {
     @GeneralSettingsViewModelFactoryQualifier
     fun provideGeneralSettingsViewModelFactory(
         errorDataRepository: ErrorDataRepository
-    ): GeneralSettingsViewModelFactory {
+    ): ViewModelProvider.Factory {
         return GeneralSettingsViewModelFactory(errorDataRepository)
     }
 }

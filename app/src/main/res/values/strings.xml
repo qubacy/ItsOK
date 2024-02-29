@@ -5,6 +5,9 @@
 
     <string name="fragment_chat_error_invalid_gripe">Invalid gripe has been provided!</string>
 
+    <string name="fragment_general_settings_top_bar_title">Settings</string>
+    <string name="fragment_general_settings_setting_positive_mementoes_title">Positive mementoes</string>
+
     <!--  Components:  -->
 
     <string name="component_error_dialog_title_text">Error</string>
@@ -15,5 +18,6 @@
     <string name="component_chat_memento_buttons_button_negative_caption">Not enough</string>
     <string name="component_chat_bye_buttons_button_bye_caption">Bye!</string>
     <string name="component_chat_bye_buttons_button_restart_caption">Restart</string>
+    <string name="fragment_general_settings_main_section_title_text">Main</string>
 
 </resources>

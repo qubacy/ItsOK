@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
@@ -15,6 +16,7 @@ import androidx.core.view.updatePadding
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation
 import androidx.vectordrawable.graphics.drawable.Animatable2Compat.AnimationCallback
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import com.qubacy.itsok.R
@@ -77,6 +79,8 @@ class ChatFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        mBinding.fragmentChatTopBar.setOnMenuItemClickListener { onTopBarMenuItemClicked(it) }
+
         mAdapter = MessageListAdapter(lifecycleScope)
 
         mBinding.fragmentChatMessageList.apply {
@@ -104,13 +108,26 @@ class ChatFragment(
                 onRestartButtonClicked()
             }
         }
-
     }
 
     override fun onResume() {
         super.onResume()
 
         if (mModel.uiState.messages.isEmpty()) initChat()
+    }
+
+    private fun onTopBarMenuItemClicked(menuItem: MenuItem): Boolean {
+        when (menuItem.itemId) {
+            R.id.chat_top_bar_action_settings -> onSettingsMenuItemClicked()
+            else -> return false
+        }
+
+        return true
+    }
+
+    private fun onSettingsMenuItemClicked() {
+        Navigation.findNavController(requireView())
+            .navigate(R.id.action_chatFragment_to_generalSettingsFragment)
     }
 
     override fun viewInsetsToCatch(): Int {

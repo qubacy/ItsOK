@@ -13,4 +13,10 @@
     <declare-styleable name="MessageViewWrapper">
         <attr name="messageBackground" format="reference"/>
     </declare-styleable>
+
+    <declare-styleable name="SettingView">
+        <attr name="settingIcon" format="reference"/>
+        <attr name="settingTitle" format="string"/>
+        <attr name="settingButtonIcon" format="reference"/>
+    </declare-styleable>
 </resources>

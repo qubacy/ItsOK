@@ -7,5 +7,17 @@
     <fragment
         android:id="@+id/chatFragment"
         android:name="com.qubacy.itsok.ui.application.activity._common.screen.chat.ChatFragment"
-        android:label="ChatFragment" />
+        android:label="ChatFragment" >
+        <action
+            android:id="@+id/action_chatFragment_to_generalSettingsFragment"
+            app:destination="@id/generalSettingsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/generalSettingsFragment"
+        android:name="com.qubacy.itsok.ui.application.activity._common.screen.settings.general.GeneralSettingsFragment"
+        android:label="GeneralSettingsFragment" />
 </navigation>

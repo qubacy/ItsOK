@@ -257,4 +257,14 @@ class ChatFragmentTest(
                 AnimatedImageViewMatcher(R.drawable.itsok_animated_happy_bye_backwards)
             ))
     }
+
+    @Test
+    fun clickingOnSettingsMenuItemLeadsToTransitionToGeneralSettingsFragmentTest() {
+        Espresso.onView(withId(R.id.chat_top_bar_action_settings))
+            .perform(ViewActions.click())
+
+        val gottenDestination = mNavController.currentDestination!!.id
+
+        Assert.assertEquals(R.id.generalSettingsFragment, gottenDestination)
+    }
 }
