@@ -3,7 +3,6 @@ package com.qubacy.itsok.ui.application.activity._common.screen.chat.component.m
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +11,7 @@ import androidx.core.view.updateLayoutParams
 import com.qubacy.itsok.R
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textview.MaterialTextView
+import com.qubacy.itsok._common.util.context.dpToPx
 import com.qubacy.itsok.ui.application.activity._common.screen.chat._common.data.message.UIMessage
 
 open class MessageView<
@@ -42,11 +42,7 @@ open class MessageView<
     protected var mMessage: MessageType? = null
 
     init {
-        mElementGapInPx = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            DEFAULT_ELEMENT_GAP_IN_DP.toFloat(),
-            context.resources.displayMetrics
-        ).toInt()
+        mElementGapInPx = context.dpToPx(DEFAULT_ELEMENT_GAP_IN_DP)
 
         if (attrs == null) setDefaultAttrs()
 

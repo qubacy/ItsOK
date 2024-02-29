@@ -20,5 +20,7 @@
     <string name="component_chat_bye_buttons_button_bye_caption">Bye!</string>
     <string name="component_chat_bye_buttons_button_restart_caption">Restart</string>
     <string name="fragment_general_settings_main_section_title_text">Main</string>
+    <string name="fragment_positive_mementoes_header_title_text">Your inspiration</string>
+    <string name="fragment_positive_mementoes_header_description_text">Feel free to swipe aside unnecessary stuff or click item to edit it</string>
 
 </resources>
