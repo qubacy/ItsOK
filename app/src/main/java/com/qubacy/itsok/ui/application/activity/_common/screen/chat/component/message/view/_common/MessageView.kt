@@ -6,19 +6,19 @@ import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.core.view.updateLayoutParams
 import com.qubacy.itsok.R
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textview.MaterialTextView
 import com.qubacy.itsok.ui.application.activity._common.screen.chat._common.data.message.UIMessage
-import kotlinx.coroutines.CoroutineScope
 
 open class MessageView<
     TextViewType : MaterialTextView, ImageViewType : ShapeableImageView, MessageType: UIMessage
 >(
     context: Context,
-    attrs: AttributeSet
+    attrs: AttributeSet? = null
 ) : LinearLayout(context, attrs) {
     interface ElementType {
         val id: Int
@@ -34,8 +34,6 @@ open class MessageView<
         const val DEFAULT_ELEMENT_GAP_IN_DP = 8
     }
 
-    protected var mCoroutineScope: CoroutineScope? = null
-
     protected var mElementGapInPx: Int
 
     protected var mTextView: TextViewType? = null
@@ -49,14 +47,25 @@ open class MessageView<
             DEFAULT_ELEMENT_GAP_IN_DP.toFloat(),
             context.resources.displayMetrics
         ).toInt()
+
+        if (attrs == null) setDefaultAttrs()
+
+        inflate()
     }
 
-    override fun onFinishInflate() {
-        super.onFinishInflate()
+    private fun setDefaultAttrs() {
+        setDefaultLayoutParams()
     }
 
-    fun setCoroutineScope(coroutineScope: CoroutineScope) {
-        mCoroutineScope = coroutineScope
+    private fun setDefaultLayoutParams() {
+        layoutParams = LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+    }
+
+    private fun inflate() {
+        View.inflate(context, R.layout.component_message, this)
     }
 
     protected open fun setImage(image: Drawable?) {

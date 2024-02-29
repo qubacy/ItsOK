@@ -29,7 +29,7 @@ class GeneralSettingsFragmentTest(
 
     @Test
     fun clickingOnNavigateUpButtonLeadsToTransitionToChatFragment() {
-        Espresso.onView(NavigationButtonViewMatcher(R.id.fragment_general_settings_top_bar))
+        Espresso.onView(NavigationButtonViewMatcher(R.id.component_settings_top_bar))
             .perform(ViewActions.click())
 
         val gottenDestination = mNavController.currentDestination!!.id

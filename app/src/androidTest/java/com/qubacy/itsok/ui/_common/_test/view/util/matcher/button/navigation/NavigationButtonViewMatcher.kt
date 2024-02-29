@@ -12,7 +12,7 @@ class NavigationButtonViewMatcher(
     @IdRes private val mAppBarId: Int
 ) : BaseMatcher<View>() {
     companion object {
-        const val CHILDREN_INDEX = 1
+        const val CHILDREN_INDEX = 0
     }
 
     override fun describeTo(description: Description?) {}

@@ -7,6 +7,7 @@
 
     <string name="fragment_general_settings_top_bar_title">Settings</string>
     <string name="fragment_general_settings_setting_positive_mementoes_title">Positive mementoes</string>
+    <string name="fragment_positive_mementoes_settings_top_bar_title">Positive mementoes</string>
 
     <!--  Components:  -->
 

@@ -1,11 +1,9 @@
 package com.qubacy.itsok.ui.application.activity._common.screen.chat.component.list.adapter
 
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.UiThread
 import androidx.recyclerview.widget.RecyclerView
-import com.qubacy.itsok.R
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.component.message.view.active.ActiveMessageView
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.component.message.view.previous.PreviousMessageView
 import com.qubacy.itsok.ui.application.activity._common.screen.chat._common.data.message.UIMessage
@@ -79,16 +77,14 @@ class MessageListAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageViewHolder {
         return when (viewType) {
             ItemType.PREVIOUS.id -> {
-                val prevMessageView = (LayoutInflater.from(parent.context).inflate(
-                    R.layout.component_prev_message, parent, false) as PreviousMessageView)
-                    .apply { setCoroutineScope(mCoroutineScope) }
+                val prevMessageView = PreviousMessageView(parent.context)
 
                 PreviousMessageViewHolder(prevMessageView)
             }
             ItemType.ACTIVE.id -> {
-                val activeMessageView = (LayoutInflater.from(parent.context).inflate(
-                    R.layout.component_active_message, parent, false) as ActiveMessageView)
-                    .apply { setCoroutineScope(mCoroutineScope) }
+                val activeMessageView = ActiveMessageView(parent.context).apply {
+                    setCoroutineScope(mCoroutineScope)
+                }
 
                 ActiveMessageViewHolder(activeMessageView)
             }

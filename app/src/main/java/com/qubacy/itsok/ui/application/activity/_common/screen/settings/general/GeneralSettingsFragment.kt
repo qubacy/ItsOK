@@ -44,7 +44,7 @@ class GeneralSettingsFragment : BaseFragment<
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mBinding.fragmentGeneralSettingsTopBar.setNavigationOnClickListener {
+        mBinding.fragmentGeneralSettingsTopBarWrapper.getToolbar().setNavigationOnClickListener {
             Navigation.findNavController(requireView()).navigateUp()
         }
     }

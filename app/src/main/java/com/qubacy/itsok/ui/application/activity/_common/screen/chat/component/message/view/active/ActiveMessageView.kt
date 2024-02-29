@@ -6,16 +6,18 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.animation.AccelerateInterpolator
+import androidx.core.content.res.ResourcesCompat
 import com.qubacy.itsok.R
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.component.typing.view.TypingMaterialTextView
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.component.typing.view.TypingMaterialTextViewCallback
 import com.google.android.material.imageview.ShapeableImageView
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.component.message.view._common.MessageView
 import com.qubacy.itsok.ui.application.activity._common.screen.chat._common.data.message.UIMessage
+import kotlinx.coroutines.CoroutineScope
 
 class ActiveMessageView(
     context: Context,
-    attrs: AttributeSet
+    attrs: AttributeSet? = null
 ) : MessageView<
     TypingMaterialTextView, ShapeableImageView, UIMessage
 >(context, attrs), TypingMaterialTextViewCallback {
@@ -25,10 +27,17 @@ class ActiveMessageView(
         const val DEFAULT_IMAGE_APPEAR_ANIMATION_DURATION = 300L
     }
 
+    private var mCoroutineScope: CoroutineScope? = null
+
     private var mAnimate: Boolean = true
 
     private var mAnimationEndAction: (() -> Unit)? = null
     private var mAnimationDetachmentAction: (() -> Unit)? = null
+
+    init {
+        background = ResourcesCompat.getDrawable(
+            context.resources, R.drawable.active_message_back, context.theme)
+    }
 
     override fun inflateTextView(): TypingMaterialTextView {
         return (LayoutInflater.from(context).inflate(
@@ -37,6 +46,10 @@ class ActiveMessageView(
                 setCoroutineScope(mCoroutineScope!!)
                 setCallback(this@ActiveMessageView)
             }
+    }
+
+    fun setCoroutineScope(coroutineScope: CoroutineScope) {
+        mCoroutineScope = coroutineScope
     }
 
     fun setMessage(
