@@ -17,6 +17,7 @@ import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment.
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.operation._common.UiOperation
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.operation.error.ErrorUiOperation
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.state.BaseUiState
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 abstract class BaseFragment<
@@ -29,8 +30,7 @@ abstract class BaseFragment<
 
     protected abstract val mModel: ViewModelType
     private var mErrorDialog: AlertDialog? = null
-
-    private var mIsInitialized: Boolean = false
+    private var mOperationCollectionJob: Job? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -40,6 +40,7 @@ abstract class BaseFragment<
 
     override fun onStop() {
         mErrorDialog?.dismiss()
+        mOperationCollectionJob?.cancel()
 
         super.onStop()
     }
@@ -52,17 +53,13 @@ abstract class BaseFragment<
     }
 
     private fun startOperationCollection() {
-        lifecycleScope.launch {
+        mOperationCollectionJob = lifecycleScope.launch {
             mModel.uiOperationFlow.collect { processUiOperation(it) }
         }
     }
 
     private fun initUiState(uiState: UiStateType) {
-        if (mIsInitialized) return
-
         runInitWithUiState(uiState)
-
-        mIsInitialized = true
     }
 
     protected open fun runInitWithUiState(uiState: UiStateType) {

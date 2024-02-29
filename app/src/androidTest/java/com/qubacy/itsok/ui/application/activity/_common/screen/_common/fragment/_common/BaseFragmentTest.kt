@@ -18,7 +18,6 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.qubacy.itsok.R
 import com.qubacy.itsok._common._test.util.launcher.launchFragmentInHiltContainer
 import com.qubacy.itsok._common.error.FakeError
-import com.qubacy.itsok.ui._common._test.view.util.action.wait.WaitViewAction
 import com.qubacy.itsok.ui._common._test.view.util.matcher.toast.root.ToastRootMatcher
 import com.qubacy.itsok.ui.application.activity._common.HiltTestActivity
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.BaseViewModel
@@ -133,5 +132,20 @@ abstract class BaseFragmentTest<
         Espresso.onView(withText(TEST_MESSAGE))
             .inRoot(RootMatchers.withDecorView(ToastRootMatcher(mFragment.requireActivity())))
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+    }
+
+    @Test
+    fun operationFlowCollectedOnceAfterFragmentRestartTest() {
+        val expectedCollectorCount = 1
+
+        mActivityScenario.moveToState(Lifecycle.State.CREATED)
+        mActivityScenario.moveToState(Lifecycle.State.STARTED)
+
+        val gottenCollectorCount = Class
+            .forName("kotlinx.coroutines.flow.internal.AbstractSharedFlow")
+            .getDeclaredField("nCollectors")
+            .apply { isAccessible = true }.get(mUiOperationFlow)
+
+        Assert.assertEquals(expectedCollectorCount, gottenCollectorCount)
     }
 }

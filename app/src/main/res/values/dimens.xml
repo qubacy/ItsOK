@@ -5,6 +5,10 @@
     <dimen name="default_gap_between_components">8dp</dimen>
     <dimen name="medium_gap_between_components">16dp</dimen>
 
+    <!-- Fragment: -->
+
+    <integer name="navigation_transition_animation_duration">300</integer>
+
     <!--  Avatar:  -->
 
     <integer name="itsok_animation_wonder_duration">300</integer>
@@ -72,5 +76,5 @@
     <dimen name="itsok_animation_happy_bye_eyelid_to_strokeAlpha">1</dimen>
     <dimen name="itsok_animation_happy_bye_eyelid_wrapper_from_scaleY">0</dimen>
     <dimen name="itsok_animation_happy_bye_eyelid_wrapper_to_scaleY">1</dimen>
-    
+
 </resources>
