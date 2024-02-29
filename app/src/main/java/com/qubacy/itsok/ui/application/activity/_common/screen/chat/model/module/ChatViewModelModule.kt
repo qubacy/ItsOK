@@ -2,7 +2,7 @@ package com.qubacy.itsok.ui.application.activity._common.screen.chat.model.modul
 
 import androidx.lifecycle.ViewModelProvider
 import com.qubacy.itsok.data.error.repository.ErrorDataRepository
-import com.qubacy.itsok.domain.chat.ChatUseCase
+import com.qubacy.itsok.domain.chat.usecase.ChatUseCase
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.model.ChatViewModelFactory
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.model.ChatViewModelFactoryQualifier
 import dagger.Module

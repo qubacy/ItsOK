@@ -3,6 +3,7 @@ package com.qubacy.itsok.ui.application.activity._common.screen.settings._common
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import androidx.navigation.Navigation
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.MaterialToolbar
 import com.qubacy.itsok.R
@@ -17,6 +18,7 @@ class SettingsTopBarView(
     init {
         inflate()
         initWithAttrs(attrs)
+        initComponents()
     }
 
     private fun inflate() {
@@ -39,7 +41,9 @@ class SettingsTopBarView(
         }
     }
 
-    fun getToolbar(): MaterialToolbar {
-        return mBinding.componentSettingsTopBar
+    private fun initComponents() {
+        mBinding.componentSettingsTopBar.setNavigationOnClickListener {
+            Navigation.findNavController(this).navigateUp()
+        }
     }
 }

@@ -9,6 +9,7 @@ import androidx.core.view.updatePadding
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
+import com.qubacy.itsok.R
 import com.qubacy.itsok.databinding.FragmentGeneralSettingsBinding
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.BaseFragment
 import com.qubacy.itsok.ui.application.activity._common.screen.settings.general.model.GeneralSettingsViewModel
@@ -44,9 +45,14 @@ class GeneralSettingsFragment : BaseFragment<
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mBinding.fragmentGeneralSettingsTopBarWrapper.getToolbar().setNavigationOnClickListener {
-            Navigation.findNavController(requireView()).navigateUp()
+        mBinding.fragmentGeneralSettingsMainSectionPositiveMementoes.getButton().setOnClickListener {
+            onPositiveMementoesSettingClicked()
         }
+    }
+
+    private fun onPositiveMementoesSettingClicked() {
+        Navigation.findNavController(requireView())
+            .navigate(R.id.action_generalSettingsFragment_to_positiveMementoesFragment)
     }
 
     override fun adjustViewToInsets(insets: Insets) {

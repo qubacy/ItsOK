@@ -1,4 +1,4 @@
-package com.qubacy.itsok.domain.chat
+package com.qubacy.itsok.domain.chat.usecase
 
 import com.qubacy.itsok.data.error.repository.ErrorDataRepository
 import com.qubacy.itsok.data.memento.repository.MementoDataRepository
@@ -8,7 +8,7 @@ import com.qubacy.itsok._common.chat.stage.ChatStage
 import com.qubacy.itsok.data.answer.model.type.AnswerType
 import com.qubacy.itsok.data.answer.repository.AnswerDataRepository
 import com.qubacy.itsok.data.memento.model.toMemento
-import com.qubacy.itsok.domain.chat.result.GetNextMessagesDomainResult
+import com.qubacy.itsok.domain.chat.usecase.result.GetNextMessagesDomainResult
 import com.qubacy.itsok.domain.settings.memento.model.Memento
 import kotlinx.coroutines.launch
 import javax.inject.Inject

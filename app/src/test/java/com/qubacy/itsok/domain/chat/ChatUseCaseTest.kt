@@ -12,7 +12,8 @@ import com.qubacy.itsok.data.memento.repository.MementoDataRepository
 import com.qubacy.itsok.domain._common.usecase.UseCaseTest
 import com.qubacy.itsok.domain._common.usecase._common.result._common.DomainResult
 import com.qubacy.itsok.domain.chat.model.Message
-import com.qubacy.itsok.domain.chat.result.GetNextMessagesDomainResult
+import com.qubacy.itsok.domain.chat.usecase.result.GetNextMessagesDomainResult
+import com.qubacy.itsok.domain.chat.usecase.ChatUseCase
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert
 import org.junit.Test

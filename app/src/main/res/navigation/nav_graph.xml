@@ -19,5 +19,17 @@
     <fragment
         android:id="@+id/generalSettingsFragment"
         android:name="com.qubacy.itsok.ui.application.activity._common.screen.settings.general.GeneralSettingsFragment"
-        android:label="GeneralSettingsFragment" />
+        android:label="GeneralSettingsFragment" >
+        <action
+            android:id="@+id/action_generalSettingsFragment_to_positiveMementoesFragment"
+            app:destination="@id/positiveMementoesFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/positiveMementoesFragment"
+        android:name="com.qubacy.itsok.ui.application.activity._common.screen.settings.memento.PositiveMementoesFragment"
+        android:label="PositiveMementoesFragment" />
 </navigation>

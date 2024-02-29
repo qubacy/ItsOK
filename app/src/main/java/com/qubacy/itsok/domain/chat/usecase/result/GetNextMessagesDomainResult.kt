@@ -1,4 +1,4 @@
-package com.qubacy.itsok.domain.chat.result
+package com.qubacy.itsok.domain.chat.usecase.result
 
 import com.qubacy.itsok.domain._common.usecase._common.result._common.DomainResult
 import com.qubacy.itsok.domain.chat.model.Message

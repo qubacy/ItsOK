@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.appcompat.widget.LinearLayoutCompat
+import com.google.android.material.button.MaterialButton
 import com.qubacy.itsok.R
 import com.qubacy.itsok.databinding.ComponentSettingBinding
 
@@ -40,5 +41,9 @@ class SettingView(
             }
             finally { recycle() }
         }
+    }
+
+    fun getButton(): MaterialButton {
+        return mBinding.componentSettingButton
     }
 }

@@ -4,9 +4,9 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.qubacy.itsok._common.chat.stage.ChatStage
 import com.qubacy.itsok.data.error.repository.ErrorDataRepository
-import com.qubacy.itsok.domain.chat.ChatUseCase
+import com.qubacy.itsok.domain.chat.usecase.ChatUseCase
 import com.qubacy.itsok.domain.chat.model._test.util.MessageGeneratorUtil
-import com.qubacy.itsok.domain.chat.result.GetNextMessagesDomainResult
+import com.qubacy.itsok.domain.chat.usecase.result.GetNextMessagesDomainResult
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.BaseViewModelTest
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.operation.loading.SetLoadingStateUiOperation
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.model.operation.ChangeStageUiOperation
