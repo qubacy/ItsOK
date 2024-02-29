@@ -24,8 +24,8 @@ import org.junit.Assert
 @HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
 class ActiveMessageViewTest : ViewTest<ActiveMessageView>() {
-    override fun getViewLayoutResId(): Int {
-        return R.layout.component_active_message
+    override fun createView(): ActiveMessageView {
+        return ActiveMessageView(InstrumentationRegistry.getInstrumentation().targetContext)
     }
 
     override fun setup() {

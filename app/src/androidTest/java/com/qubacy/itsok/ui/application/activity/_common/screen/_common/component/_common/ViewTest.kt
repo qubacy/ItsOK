@@ -1,10 +1,8 @@
 package com.qubacy.itsok.ui.application.activity._common.screen._common.component._common
 
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
-import androidx.core.view.get
 import androidx.lifecycle.Lifecycle
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.qubacy.itsok.ui.application.activity._common.HiltTestActivity
@@ -25,7 +23,7 @@ abstract class ViewTest<ViewType : View> {
     protected lateinit var mView: ViewType
 
     @LayoutRes
-    protected abstract fun getViewLayoutResId(): Int
+    protected abstract fun createView(): ViewType
 
     @Before
     open fun setup() {
@@ -34,11 +32,11 @@ abstract class ViewTest<ViewType : View> {
 
     private fun initView() {
         mActivityScenarioRule.scenario.onActivity {
-            val viewLayoutResId = getViewLayoutResId()
             val container = it.findViewById<ViewGroup>(android.R.id.content)
 
-            mView = (LayoutInflater.from(it)
-                .inflate(viewLayoutResId, container, true) as ViewGroup)[0] as ViewType
+            mView = createView()
+
+            container.addView(mView)
         }
 
         setupViewConfiguration()
