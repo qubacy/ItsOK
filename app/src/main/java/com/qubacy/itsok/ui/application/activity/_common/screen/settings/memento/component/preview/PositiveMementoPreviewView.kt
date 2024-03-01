@@ -173,8 +173,8 @@ class PositiveMementoPreviewView(
     }
 
     private fun addViewsToLayout() {
-        if (mImageView != null && mTextView == null &&
-            mImageView?.parent != null && mTextView?.parent == null
+        if (mImageView != null && mTextView != null &&
+            mImageView!!.parent != null && mTextView!!.parent == null
         ) {
             mBinding.componentPositiveMementoPreviewWrapper.apply {
                 removeViewAt(TEXT_VIEW_INDEX)
@@ -184,7 +184,7 @@ class PositiveMementoPreviewView(
             }
 
         } else {
-            if (mTextView != null) {
+            if (mTextView != null && mTextView!!.parent == null) {
                 val viewIndex = getViewIndex(mTextView!!)
 
                 mBinding.componentPositiveMementoPreviewWrapper.addView(
@@ -192,7 +192,7 @@ class PositiveMementoPreviewView(
                     viewIndex
                 )
             }
-            if (mImageView != null) {
+            if (mImageView != null && mImageView!!.parent == null) {
                 val viewIndex = getViewIndex(mImageView!!)
 
                 mBinding.componentPositiveMementoPreviewWrapper.addView(

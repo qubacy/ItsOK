@@ -1,5 +1,6 @@
 package com.qubacy.itsok.ui.application.activity._common.screen.chat.component.message.view.active
 
+import android.content.Context
 import android.widget.ImageView
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.assertion.ViewAssertions
@@ -24,8 +25,8 @@ import org.junit.Assert
 @HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
 class ActiveMessageViewTest : ViewTest<ActiveMessageView>() {
-    override fun createView(): ActiveMessageView {
-        return ActiveMessageView(InstrumentationRegistry.getInstrumentation().targetContext)
+    override fun createView(context: Context): ActiveMessageView {
+        return ActiveMessageView(context)
     }
 
     override fun setup() {

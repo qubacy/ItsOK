@@ -1,5 +1,6 @@
 package com.qubacy.itsok.ui.application.activity._common.screen._common.component._common
 
+import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
@@ -23,7 +24,7 @@ abstract class ViewTest<ViewType : View> {
     protected lateinit var mView: ViewType
 
     @LayoutRes
-    protected abstract fun createView(): ViewType
+    protected abstract fun createView(context: Context): ViewType
 
     @Before
     open fun setup() {
@@ -34,7 +35,7 @@ abstract class ViewTest<ViewType : View> {
         mActivityScenarioRule.scenario.onActivity {
             val container = it.findViewById<ViewGroup>(android.R.id.content)
 
-            mView = createView()
+            mView = createView(it)
 
             container.addView(mView)
         }
