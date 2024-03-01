@@ -111,6 +111,8 @@ class PositiveMementoPreviewView(
 
     private fun setStyle() {
         setCardBackgroundColor(mCardBackgroundColor)
+
+        isClickable = true
     }
 
     fun setMemento(memento: UIMemento) {
