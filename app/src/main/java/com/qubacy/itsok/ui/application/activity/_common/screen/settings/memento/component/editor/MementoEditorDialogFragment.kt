@@ -1,16 +1,13 @@
 package com.qubacy.itsok.ui.application.activity._common.screen.settings.memento.component.editor
 
 import android.animation.Animator
-import android.animation.Animator.AnimatorListener
 import android.animation.AnimatorListenerAdapter
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewPropertyAnimator
 import android.view.animation.AccelerateInterpolator
-import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.Insets
 import androidx.core.os.BundleCompat
 import androidx.core.view.updatePadding
@@ -165,77 +162,80 @@ class MementoEditorDialogFragment() : BaseFragment() {
             preparedImageUri != null, preparedImageUri)
     }
 
-    private fun changeMementoImagePreviewVisibilityWithImage(areVisible: Boolean, imageUri: Uri?) {
-        animateMementoImagePreviewViewVisibilityChange(
-            mBinding.componentMementoEditorImagePreview,
-            areVisible,
-            {
-                if (!areVisible) {
-                    mBinding.componentMementoEditorImagePreview.visibility = View.GONE
-                    mBinding.componentMementoEditorImagePreview.setImageURI(imageUri)
-                }
-            }
-        ) {
-            if (areVisible)
-                mBinding.componentMementoEditorImagePreview.setImageURI(imageUri)
-        }
-
-        animateMementoImagePreviewViewVisibilityChange(
-            mBinding.componentMementoEditorImagePreviewButtonRemove,
-            areVisible,
-            {
-                if (!areVisible)
-                    mBinding.componentMementoEditorImagePreview.visibility = View.GONE
-            }
-        )
+    private fun changeMementoImagePreviewVisibilityWithImage(toVisible: Boolean, imageUri: Uri?) {
+        animateMementoImagePreviewVisibilityChangeForImageView(imageUri, toVisible)
+        animateMementoImagePreviewVisibilityChangeForRemoveButton(toVisible)
     }
 
-    @Deprecated("Could be optimized much better.")
-    private fun animateMementoImagePreviewViewVisibilityChange(
-        animatedView: View,
-        areVisible: Boolean,
-        afterAction: () -> Unit,
-        startAction: (() -> Unit)? = null
+    private fun animateMementoImagePreviewVisibilityChangeForImageView(
+        imageUri: Uri?,
+        toVisible: Boolean
     ) {
-        val startAlpha = if (areVisible) 0f else 1f
-        val endAlpha = if (areVisible) 1f else 0f
+        val startScaleY = if (toVisible) 0f else 1f
+        val endScaleY = if (toVisible) 1f else 0f
 
-        val beforeAction = { view: View ->
-            view.apply {
-                visibility = View.VISIBLE
-                alpha = startAlpha
-            }
-
-            Unit
+        val startAction = {
+            if (toVisible) mBinding.componentMementoEditorImagePreview.setImageURI(imageUri)
         }
-        fun View.animateVisibility(beforeAction: (View) -> Unit): ViewPropertyAnimator {
-            beforeAction(this)
-
-            return animate().apply {
-                alpha(endAlpha)
-
-                interpolator = AccelerateInterpolator()
-                duration = mImagePreviewVisibilityChangeAnimationDuration
+        val endAction = {
+            if (!toVisible) {
+                mBinding.componentMementoEditorImagePreview.visibility = View.GONE
+                mBinding.componentMementoEditorImagePreview.setImageURI(imageUri)
             }
         }
 
-       animatedView.animateVisibility(beforeAction)
-            .setListener(
-                object : AnimatorListenerAdapter() {
-                    override fun onAnimationStart(animation: Animator) {
-                        startAction?.invoke()
-                    }
+        mBinding.componentMementoEditorImagePreview.apply {
+            visibility = View.VISIBLE
+            scaleY = startScaleY
+            pivotY = 0f
 
-                    override fun onAnimationCancel(animation: Animator) {
-                        startAction?.invoke()
-                        afterAction.invoke()
-                    }
+        }.animate().apply {
+            scaleY(endScaleY)
 
-                    override fun onAnimationEnd(animation: Animator) {
-                        afterAction.invoke()
-                    }
+            interpolator = AccelerateInterpolator()
+            duration = mImagePreviewVisibilityChangeAnimationDuration
+
+        }.setListener(
+            object : AnimatorListenerAdapter() {
+                override fun onAnimationStart(animation: Animator) { startAction() }
+
+                override fun onAnimationCancel(animation: Animator) {
+                    startAction()
+                    endAction()
                 }
-            ).start()
+
+                override fun onAnimationEnd(animation: Animator) { endAction() }
+            }
+        ).start()
+    }
+
+    private fun animateMementoImagePreviewVisibilityChangeForRemoveButton(
+        toVisible: Boolean
+    ) {
+        val startAlpha = if (toVisible) 0f else 1f
+        val endAlpha = if (toVisible) 1f else 0f
+
+        val endAction = {
+            if (!toVisible)
+                mBinding.componentMementoEditorImagePreviewButtonRemove.visibility = View.GONE
+        }
+
+        mBinding.componentMementoEditorImagePreviewButtonRemove.apply {
+            visibility = View.VISIBLE
+            alpha = startAlpha
+
+        }.animate().apply {
+            alpha(endAlpha)
+
+            interpolator = AccelerateInterpolator()
+            duration = mImagePreviewVisibilityChangeAnimationDuration
+
+        }.setListener(
+            object : AnimatorListenerAdapter() {
+                override fun onAnimationCancel(animation: Animator) { endAction() }
+                override fun onAnimationEnd(animation: Animator) { endAction() }
+            }
+        ).start()
     }
 
     private fun prepareImageUriBeforeShowing(imageUri: Uri?): Uri? {

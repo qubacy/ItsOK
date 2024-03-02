@@ -98,7 +98,9 @@
         android:layout_marginTop="@dimen/medium_gap_between_components"
         android:scaleType="centerCrop"
         app:shapeAppearanceOverlay="@style/ShapeAppearance.Corner.Rounded"
-        tools:srcCompat="@drawable/ic_launcher_foreground"/>
+        android:visibility="gone"
+        tools:srcCompat="@drawable/ic_launcher_foreground"
+        tools:visibility="visible"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/component_memento_editor_image_preview_button_remove"
@@ -107,6 +109,8 @@
         app:layout_constraintTop_toTopOf="@id/component_memento_editor_image_preview"
         app:layout_constraintEnd_toEndOf="@id/component_memento_editor_image_preview"
         style="@style/Widget.Material3.Button.IconButton.Filled.Tonal"
-        app:icon="@drawable/ic_cross"/>
+        android:visibility="gone"
+        app:icon="@drawable/ic_cross"
+        tools:visibility="visible"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
