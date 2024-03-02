@@ -24,10 +24,22 @@ abstract class BaseViewModel<UiStateType: BaseUiState>(
     }
 
     protected val mUiOperationFlow = MutableSharedFlow<UiOperation>()
-    abstract val uiOperationFlow: Flow<UiOperation>
+    open val uiOperationFlow: Flow<UiOperation> = mUiOperationFlow
 
-    protected abstract val mUiState: UiStateType
+    protected var mUiState: UiStateType
     open val uiState: UiStateType get() = mUiState.copy() as UiStateType
+
+    init {
+        mUiState = mSavedStateHandle[UI_STATE_KEY] ?: generateDefaultUiState()
+    }
+
+    override fun onCleared() {
+        mSavedStateHandle[UI_STATE_KEY] = mUiState
+
+        super.onCleared()
+    }
+
+    protected abstract fun generateDefaultUiState() : UiStateType
 
     open fun retrieveError(errorType: ErrorType) {
         viewModelScope.launch(Dispatchers.IO) {

@@ -61,11 +61,6 @@ class ChatFragment(
     @DrawableRes
     private var mPrevAvatarDrawableResId: Int = R.drawable.itsok
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

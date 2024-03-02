@@ -25,21 +25,14 @@ open class ChatViewModel @Inject constructor(
     mErrorDataRepository: ErrorDataRepository,
     private val mChatUseCase: ChatUseCase
 ) : BusinessViewModel<ChatUiState>(mSavedStateHandle, mErrorDataRepository, mChatUseCase) {
-    override var mUiState: ChatUiState = ChatUiState()
     companion object {
         const val TAG = "ChatViewModel"
 
         val GRIPE_REGEX = Regex("^\\S.*\$")
     }
 
-    init {
-        mUiState = mSavedStateHandle[UI_STATE_KEY] ?: mUiState
-    }
-
-    override fun onCleared() {
-        mSavedStateHandle[UI_STATE_KEY] = mUiState
-
-        super.onCleared()
+    override fun generateDefaultUiState(): ChatUiState {
+        return ChatUiState()
     }
 
     override fun processDomainResultFlow(domainResult: DomainResult): UiOperation? {

@@ -15,6 +15,10 @@ class MementoDataRepository @Inject constructor(
         return mLocalMementoDataSource.getMementoById(mementoId)!!.toDataMemento()
     }
 
+    fun getAllMementoes(): List<DataMemento> {
+        return mLocalMementoDataSource.getMementoes().map { it.toDataMemento() }
+    }
+
     fun getRandomMemento(): DataMemento? {
         val mementoes = mLocalMementoDataSource.getMementoes()
 

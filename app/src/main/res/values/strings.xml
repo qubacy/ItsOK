@@ -22,5 +22,11 @@
     <string name="fragment_general_settings_main_section_title_text">Main</string>
     <string name="fragment_positive_mementoes_header_title_text">Your inspiration</string>
     <string name="fragment_positive_mementoes_header_description_text">Feel free to swipe aside unnecessary stuff or click item to edit it</string>
+    <string name="component_memento_editor_text_input_wrapper_helper_text">You\'re welcome to write down a positive message for yourself</string>
+    <string name="component_memento_editor_image_title_text">Image</string>
+    <string name="component_memento_editor_text_input_wrapper_hint_text">Memento text</string>
+    <string name="component_memento_editor_image_description_text">You can upload an image that is associated with positive experience</string>
+    <string name="component_memento_editor_title_editor_mode">Edit memento</string>
+    <string name="component_memento_editor_title_create_mode">Create memento</string>
 
 </resources>

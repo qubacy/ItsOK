@@ -9,6 +9,13 @@
 
     <integer name="navigation_transition_animation_duration">300</integer>
 
+    <!-- Component: -->
+
+    <dimen name="component_memento_editor_input_icon_container_size">56dp</dimen>
+    <integer name="component_memento_editor_image_preview_visibility_change_animation_duration">
+        300
+    </integer>
+
     <!--  Avatar:  -->
 
     <integer name="itsok_animation_wonder_duration">300</integer>

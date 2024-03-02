@@ -31,5 +31,27 @@
     <fragment
         android:id="@+id/positiveMementoesFragment"
         android:name="com.qubacy.itsok.ui.application.activity._common.screen.settings.memento.PositiveMementoesFragment"
-        android:label="PositiveMementoesFragment" />
+        android:label="PositiveMementoesFragment" >
+        <action
+            android:id="@+id/action_positiveMementoesFragment_to_mementoEditorDialogFragment"
+            app:destination="@id/mementoEditorDialogFragment"
+            app:enterAnim="@anim/slide_in_top"
+            app:exitAnim="@anim/scale_fade_out"
+            app:popEnterAnim="@anim/scale_fade_in"
+            app:popExitAnim="@anim/slide_out_bottom" />
+    </fragment>
+    <fragment
+        android:id="@+id/mementoEditorDialogFragment"
+        android:name="com.qubacy.itsok.ui.application.activity._common.screen.settings.memento.component.editor.MementoEditorDialogFragment"
+        android:label="MementoEditorDialogFragment" >
+        <argument
+            android:name="mode"
+            app:argType="com.qubacy.itsok.ui.application.activity._common.screen.settings.memento.component.editor._common.mode.MementoEditorMode"
+            android:defaultValue="CREATOR" />
+        <argument
+            android:name="memento"
+            app:argType="com.qubacy.itsok.domain.settings.memento.model.Memento"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
 </navigation>

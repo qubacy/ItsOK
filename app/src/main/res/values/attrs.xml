@@ -21,6 +21,11 @@
     </declare-styleable>
 
     <declare-styleable name="SettingsTopBarView">
+        <attr name="settingsTopBarNavigationButtonIcon" format="reference"/>
         <attr name="settingsTopBarTitle" format="string"/>
+    </declare-styleable>
+
+    <declare-styleable name="WrappedIconView">
+        <attr name="wrappedIconViewSrc" format="reference"/>
     </declare-styleable>
 </resources>

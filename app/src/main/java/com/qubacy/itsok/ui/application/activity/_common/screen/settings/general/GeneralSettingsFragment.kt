@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.qubacy.itsok.R
 import com.qubacy.itsok.databinding.FragmentGeneralSettingsBinding
-import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.BaseFragment
+import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment.stateful.StatefulFragment
 import com.qubacy.itsok.ui.application.activity._common.screen.settings.general.model.GeneralSettingsViewModel
 import com.qubacy.itsok.ui.application.activity._common.screen.settings.general.model.GeneralSettingsViewModelFactoryQualifier
 import com.qubacy.itsok.ui.application.activity._common.screen.settings.general.model.state.GeneralSettingsUiState
@@ -19,7 +19,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class GeneralSettingsFragment : BaseFragment<
+class GeneralSettingsFragment : StatefulFragment<
     GeneralSettingsUiState, GeneralSettingsViewModel
 >() {
     @Inject

@@ -1,16 +1,16 @@
 package com.qubacy.itsok.ui.application.activity._common.screen._common.fragment.business
 
-import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.BaseFragment
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.operation._common.UiOperation
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.operation.error.ErrorUiOperation
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.operation.loading.SetLoadingStateUiOperation
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment.business.model.BusinessViewModel
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment.business.model.state.BusinessUiState
+import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment.stateful.StatefulFragment
 
 abstract class BusinessFragment<
     UiStateType : BusinessUiState,
     ViewModelType : BusinessViewModel<UiStateType>
->() : BaseFragment<UiStateType, ViewModelType>() {
+>() : StatefulFragment<UiStateType, ViewModelType>() {
     companion object {
         const val TAG = "BusinessFragment"
     }

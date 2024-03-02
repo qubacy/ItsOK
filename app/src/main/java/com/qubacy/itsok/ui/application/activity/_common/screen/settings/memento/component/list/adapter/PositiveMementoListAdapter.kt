@@ -34,7 +34,11 @@ class PositiveMementoListAdapter(
     override fun onBindViewHolder(holder: PositiveMementoViewHolder, position: Int) {
         val memento = mMementoList[position]
 
-        holder.setData(memento)
+        holder.apply {
+            setData(memento)
+
+            view.setOnClickListener { mCallback?.onMementoClicked(memento.id) }
+        }
     }
 
     fun removeMementoAt(position: Int) {

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/component_memento_editor_top_bar_wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/component_memento_editor_top_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:navigationIcon="@drawable/ic_cross"
+            tools:title="Edit memento"/>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <com.qubacy.itsok.ui.application.activity._common.screen.settings.memento.component.icon.WrappedIconView
+        android:id="@+id/component_memento_editor_text_icon"
+        android:layout_width="@dimen/component_memento_editor_input_icon_container_size"
+        android:layout_height="@dimen/component_memento_editor_input_icon_container_size"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/component_memento_editor_top_bar_wrapper"
+        android:layout_marginTop="@dimen/medium_gap_between_components"
+        app:wrappedIconViewSrc="@drawable/ic_letters"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/component_memento_editor_text_input_wrapper"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/component_memento_editor_text_icon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/component_memento_editor_text_icon"
+        android:layout_marginEnd="@dimen/medium_gap_between_components"
+        android:hint="@string/component_memento_editor_text_input_wrapper_hint_text"
+        app:helperText="@string/component_memento_editor_text_input_wrapper_helper_text">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/component_memento_editor_text_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Test"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.qubacy.itsok.ui.application.activity._common.screen.settings.memento.component.icon.WrappedIconView
+        android:id="@+id/component_memento_editor_image_icon"
+        android:layout_width="@dimen/component_memento_editor_input_icon_container_size"
+        android:layout_height="@dimen/component_memento_editor_input_icon_container_size"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/component_memento_editor_text_input_wrapper"
+        android:layout_marginTop="@dimen/medium_gap_between_components"
+        app:wrappedIconViewSrc="@drawable/ic_image"/>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/component_memento_editor_image_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/component_memento_editor_image_icon"
+        app:layout_constraintStart_toEndOf="@id/component_memento_editor_image_icon"
+        android:textAppearance="?attr/textAppearanceTitleMedium"
+        android:text="@string/component_memento_editor_image_title_text"/>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/component_memento_editor_image_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/component_memento_editor_image_title"
+        app:layout_constraintStart_toStartOf="@id/component_memento_editor_image_title"
+        app:layout_constraintEnd_toStartOf="@id/component_memento_editor_image_button_upload"
+        android:layout_marginTop="@dimen/default_gap_between_components"
+        android:layout_marginEnd="@dimen/default_gap_between_components"
+        android:textAppearance="?attr/textAppearanceBodyMedium"
+        android:text="@string/component_memento_editor_image_description_text"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/component_memento_editor_image_button_upload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/component_memento_editor_image_description"
+        app:layout_constraintEnd_toEndOf="@id/component_memento_editor_text_input_wrapper"
+        style="@style/Widget.Material3.Button.IconButton"
+        app:icon="@drawable/ic_upload"/>
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/component_memento_editor_image_preview"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/component_memento_editor_image_description"
+        app:layout_constraintStart_toStartOf="@id/component_memento_editor_image_description"
+        app:layout_constraintEnd_toEndOf="@id/component_memento_editor_image_button_upload"
+        android:layout_marginTop="@dimen/medium_gap_between_components"
+        android:scaleType="centerCrop"
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.Corner.Rounded"
+        tools:srcCompat="@drawable/ic_launcher_foreground"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/component_memento_editor_image_preview_button_remove"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/component_memento_editor_image_preview"
+        app:layout_constraintEnd_toEndOf="@id/component_memento_editor_image_preview"
+        style="@style/Widget.Material3.Button.IconButton.Filled.Tonal"
+        app:icon="@drawable/ic_cross"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
