@@ -1,7 +1,6 @@
 package com.qubacy.itsok.ui.application.activity._common.screen._common.fragment.business
 
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.operation._common.UiOperation
-import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.operation.error.ErrorUiOperation
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.operation.loading.SetLoadingStateUiOperation
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment.business.model.BusinessViewModel
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment.business.model.state.BusinessUiState
@@ -25,7 +24,6 @@ abstract class BusinessFragment<
         if (super.processUiOperation(uiOperation)) return true
 
         when (uiOperation::class) {
-            ErrorUiOperation::class -> processErrorOperation(uiOperation as ErrorUiOperation)
             SetLoadingStateUiOperation::class ->
                 processSetLoadingOperation(uiOperation as SetLoadingStateUiOperation)
 
@@ -33,10 +31,6 @@ abstract class BusinessFragment<
         }
 
         return true
-    }
-
-    private fun processErrorOperation(errorOperation: ErrorUiOperation) {
-        onErrorOccurred(errorOperation.error)
     }
 
     protected open fun processSetLoadingOperation(loadingOperation: SetLoadingStateUiOperation) {}

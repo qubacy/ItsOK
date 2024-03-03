@@ -19,8 +19,7 @@ import org.mockito.Mockito
 import java.util.concurrent.atomic.AtomicBoolean
 
 class ChatViewModelTest : BaseViewModelTest<ChatUiState, ChatUseCase, ChatViewModel>(
-    ChatUseCase::class.java,
-    ChatViewModel::class.java
+    ChatUseCase::class.java
 ) {
     private var mGetIntroMessagesCallFlag: AtomicBoolean = AtomicBoolean(false)
     private var mGetGripeMessagesCallFlag: AtomicBoolean = AtomicBoolean(false)

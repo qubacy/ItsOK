@@ -1,5 +1,6 @@
 package com.qubacy.itsok.ui.application.activity._common.screen.chat.component.list.adapter
 
+import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.UiThread
@@ -12,7 +13,7 @@ import com.qubacy.itsok.ui.application.activity._common.screen.chat.component.li
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
 
-class MessageListAdapter(
+open class MessageListAdapter(
     private val mCoroutineScope: CoroutineScope = GlobalScope
 ) : RecyclerView.Adapter<MessageListAdapter.MessageViewHolder>(), MessageListLayoutManagerCallback {
     enum class ItemType(val id: Int) {
@@ -76,20 +77,24 @@ class MessageListAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageViewHolder {
         return when (viewType) {
-            ItemType.PREVIOUS.id -> {
-                val prevMessageView = PreviousMessageView(parent.context)
-
-                PreviousMessageViewHolder(prevMessageView)
-            }
-            ItemType.ACTIVE.id -> {
-                val activeMessageView = ActiveMessageView(parent.context).apply {
-                    setCoroutineScope(mCoroutineScope)
-                }
-
-                ActiveMessageViewHolder(activeMessageView)
-            }
+            ItemType.PREVIOUS.id -> createPreviousMessageViewHolder(parent.context)
+            ItemType.ACTIVE.id -> createActiveMessageViewHolder(parent.context)
             else -> throw IllegalStateException()
         }
+    }
+
+    open fun createPreviousMessageViewHolder(context: Context): PreviousMessageViewHolder {
+        val prevMessageView = PreviousMessageView(context)
+
+        return PreviousMessageViewHolder(prevMessageView)
+    }
+
+    open fun createActiveMessageViewHolder(context: Context): ActiveMessageViewHolder {
+        val activeMessageView = ActiveMessageView(context).apply {
+            setCoroutineScope(mCoroutineScope)
+        }
+
+        return ActiveMessageViewHolder(activeMessageView)
     }
 
     override fun getItemViewType(position: Int): Int {

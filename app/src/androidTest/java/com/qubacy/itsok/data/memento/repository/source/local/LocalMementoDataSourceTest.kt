@@ -79,7 +79,7 @@ class LocalMementoDataSourceTest : LocalDatabaseDataSourceTest() {
         val expectedMementoEntity = MementoEntity(id = 1, text = "test memento")
 
         mLocalMementoDataSource.insertMemento(expectedMementoEntity)
-        mLocalMementoDataSource.deleteMementoById(expectedMementoEntity)
+        mLocalMementoDataSource.deleteMementoById(expectedMementoEntity.id)
 
         val gottenMemento = mLocalMementoDataSource.getMementoById(expectedMementoEntity.id)
 

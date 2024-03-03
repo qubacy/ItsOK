@@ -12,7 +12,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.qubacy.itsok.domain.chat.model._test.util.MessageUtilGenerator
 import com.qubacy.itsok.ui._common._test.view.util.action.wait.WaitViewAction
-import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.BaseFragmentTest
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.model.ChatViewModel
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.model.module.ChatViewModelModule
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.model.operation.NextMessagesUiOperation
@@ -23,6 +22,7 @@ import kotlinx.coroutines.test.runTest
 import com.qubacy.itsok.R
 import com.qubacy.itsok._common.chat.stage.ChatStage
 import com.qubacy.itsok.ui._common._test.view.util.matcher.image.animated.AnimatedImageViewMatcher
+import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.business.BusinessFragmentTest
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.operation.loading.SetLoadingStateUiOperation
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.component.typing.view.TypingMaterialTextView
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.model.operation.ChangeStageUiOperation
@@ -39,7 +39,7 @@ import org.junit.runner.RunWith
 )
 class ChatFragmentTest(
 
-) : BaseFragmentTest<ChatUiState, ChatViewModel, ChatFragment>() {
+) : BusinessFragmentTest<ChatUiState, ChatViewModel, ChatFragment>() {
     override fun getFragmentClass(): Class<ChatFragment> {
         return ChatFragment::class.java
     }

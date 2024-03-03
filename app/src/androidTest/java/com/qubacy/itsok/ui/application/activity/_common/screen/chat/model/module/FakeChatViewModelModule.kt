@@ -2,7 +2,7 @@ package com.qubacy.itsok.ui.application.activity._common.screen.chat.model.modul
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.factory.FakeBaseViewModelFactory
+import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.base._common.model.factory.FakeBaseViewModelFactory
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.model.ChatViewModel
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.model.ChatViewModelFactoryQualifier
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.model.state.ChatUiState

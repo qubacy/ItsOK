@@ -23,8 +23,7 @@ import org.mockito.Mockito
 abstract class BaseViewModelTest<
     UiStateType : BaseUiState, UseCaseType: UseCase, ViewModelType : BaseViewModel<UiStateType>
 >(
-    private val mUseCaseClass: Class<UseCaseType>,
-    private val mViewModelClass: Class<ViewModelType>? = null
+    private val mUseCaseClass: Class<UseCaseType>
 ) {
     @get:Rule
     val mainCoroutineRule = MainDispatcherRule()
@@ -33,9 +32,7 @@ abstract class BaseViewModelTest<
     protected lateinit var mResultFlow: MutableSharedFlow<DomainResult>
 
     protected open fun setUiState(uiState: UiStateType) {
-        if (mViewModelClass == null) throw IllegalStateException()
-
-        mViewModelClass.getDeclaredField("mUiState")
+        BaseViewModel::class.java.getDeclaredField("mUiState")
             .apply { isAccessible = true }
             .set(mModel, uiState)
     }

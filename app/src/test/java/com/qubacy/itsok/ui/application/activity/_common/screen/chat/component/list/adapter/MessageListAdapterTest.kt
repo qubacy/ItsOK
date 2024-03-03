@@ -1,5 +1,6 @@
 package com.qubacy.itsok.ui.application.activity._common.screen.chat.component.list.adapter
 
+import android.content.Context
 import android.view.ViewGroup
 import com.qubacy.itsok._common._test.util.mock.AnyMockUtil
 import com.qubacy.itsok._common._test.util.mock.LayoutInflaterMockUtil
@@ -40,6 +41,10 @@ class MessageListAdapterTest {
             Assert.assertEquals(testCase.expectedItemViewTypeId, testCase.gottenItemViewTypeId)
     }
 
+    @Deprecated(
+        "Not testable for now. It demands to refactor the whole View Holder " +
+        "producing system (via Factory pattern, etc.)."
+    )
     @Test
     fun onCreateViewHolderTest() {
         data class TestCase(
@@ -48,6 +53,9 @@ class MessageListAdapterTest {
         )
 
         val parentViewMock = Mockito.mock(ViewGroup::class.java)
+
+        Mockito.`when`(parentViewMock.context).thenReturn(Mockito.mock(Context::class.java))
+
         val testCases = IntRange(0, 9).map {
             val viewTypeId = mMessageListAdapter.getItemViewType(it)
             val viewMock =

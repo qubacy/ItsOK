@@ -1,4 +1,4 @@
-package com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.factory
+package com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.base._common.model.factory
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

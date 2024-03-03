@@ -24,7 +24,7 @@ class MementoDataRepositoryTest : DataRepositoryTest<MementoDataRepository>() {
         getMementoes: List<MementoEntity> = listOf(),
         insertMementoResult: AtomicReference<MementoEntity?> = AtomicReference<MementoEntity?>(null),
         updateMementoResult: AtomicReference<MementoEntity?> = AtomicReference<MementoEntity?>(null),
-        deleteMementoResult: AtomicReference<MementoEntity?> = AtomicReference<MementoEntity?>(null),
+        deleteMementoByIdResult: AtomicReference<Long?> = AtomicReference<Long?>(null),
     ) {
         val localMementoDataSourceMock = Mockito.mock(LocalMementoDataSource::class.java)
 
@@ -37,6 +37,8 @@ class MementoDataRepositoryTest : DataRepositoryTest<MementoDataRepository>() {
                 val memento = it.arguments[0] as MementoEntity
 
                 insertMementoResult.set(memento)
+
+                return@thenAnswer memento.id
             }
         Mockito.`when`(localMementoDataSourceMock.updateMemento(AnyMockUtil.anyObject()))
             .thenAnswer {
@@ -44,11 +46,11 @@ class MementoDataRepositoryTest : DataRepositoryTest<MementoDataRepository>() {
 
                 updateMementoResult.set(memento)
             }
-        Mockito.`when`(localMementoDataSourceMock.deleteMementoById(AnyMockUtil.anyObject()))
+        Mockito.`when`(localMementoDataSourceMock.deleteMementoById(Mockito.anyLong()))
             .thenAnswer {
-                val memento = it.arguments[0] as MementoEntity
+                val mementoId = it.arguments[0] as Long
 
-                deleteMementoResult.set(memento)
+                deleteMementoByIdResult.set(mementoId)
             }
 
         mDataRepository = MementoDataRepository(localMementoDataSourceMock)
@@ -83,35 +85,45 @@ class MementoDataRepositoryTest : DataRepositoryTest<MementoDataRepository>() {
     fun insertMementoTest() {
         val mementoToInsert = DataMemento(1, "test memento")
         val insertMementoResult = AtomicReference<MementoEntity?>(null)
+        val getMementoByIdResult = mementoToInsert.toMementoEntity()
 
-        initRepository(insertMementoResult = insertMementoResult)
+        initRepository(
+            insertMementoResult = insertMementoResult,
+            getMementoByIdResult = getMementoByIdResult
+        )
 
-        mDataRepository.addMemento(mementoToInsert)
+        val gottenInsertedMemento = mDataRepository.addMemento(mementoToInsert)
 
-        Assert.assertEquals(mementoToInsert.toMementoEntity(), insertMementoResult.get())
+        Assert.assertEquals(getMementoByIdResult, insertMementoResult.get())
+        Assert.assertEquals(mementoToInsert, gottenInsertedMemento)
     }
 
     @Test
     fun updateMementoTest() {
         val mementoToUpdate = DataMemento(1, "test memento")
         val updateMementoResult = AtomicReference<MementoEntity?>(null)
+        val getMementoByIdResult = mementoToUpdate.toMementoEntity()
 
-        initRepository(updateMementoResult = updateMementoResult)
+        initRepository(
+            updateMementoResult = updateMementoResult,
+            getMementoByIdResult = getMementoByIdResult
+        )
 
-        mDataRepository.updateMemento(mementoToUpdate)
+        val gottenUpdatedMemento = mDataRepository.updateMemento(mementoToUpdate)
 
-        Assert.assertEquals(mementoToUpdate.toMementoEntity(), updateMementoResult.get())
+        Assert.assertEquals(getMementoByIdResult, updateMementoResult.get())
+        Assert.assertEquals(mementoToUpdate, gottenUpdatedMemento)
     }
 
     @Test
     fun deleteMementoTest() {
         val mementoToDelete = DataMemento(1, "test memento")
-        val deleteMementoResult = AtomicReference<MementoEntity?>(null)
+        val deleteMementoByIdResult = AtomicReference<Long?>(null)
 
-        initRepository(deleteMementoResult = deleteMementoResult)
+        initRepository(deleteMementoByIdResult = deleteMementoByIdResult)
 
-        mDataRepository.deleteMementoById(mementoToDelete)
+        mDataRepository.deleteMementoById(mementoToDelete.id!!)
 
-        Assert.assertEquals(mementoToDelete.toMementoEntity(), deleteMementoResult.get())
+        Assert.assertEquals(mementoToDelete.id, deleteMementoByIdResult.get())
     }
 }
