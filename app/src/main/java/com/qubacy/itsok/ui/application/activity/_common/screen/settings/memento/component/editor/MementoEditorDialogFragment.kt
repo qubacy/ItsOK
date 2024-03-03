@@ -8,8 +8,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.graphics.Insets
 import androidx.core.os.BundleCompat
+import androidx.core.view.marginBottom
+import androidx.core.view.updateLayoutParams
+import androidx.core.view.updateMargins
 import androidx.core.view.updatePadding
 import androidx.core.widget.addTextChangedListener
 import androidx.navigation.Navigation
@@ -17,10 +21,14 @@ import androidx.navigation.fragment.navArgs
 import com.qubacy.itsok.R
 import com.qubacy.itsok._common.util.context.checkUriValidity
 import com.qubacy.itsok.databinding.ComponentMementoEditorBinding
+import com.qubacy.itsok.domain.settings.memento.model.Memento
 import com.qubacy.itsok.ui.application.activity._common.MainActivity
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.BaseFragment
+import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.util.extensional.setNavigationResult
 import com.qubacy.itsok.ui.application.activity._common.screen.settings.memento.component.editor._common.mode.MementoEditorMode
 import com.qubacy.itsok.ui.application.activity._common.screen.settings.memento.component.editor.data.MementoEditData
+import com.qubacy.itsok.ui.application.activity._common.screen.settings.memento.component.editor.data.toMemento
+import com.qubacy.itsok.ui.application.activity._common.screen.settings.memento.component.editor.result.MementoEditorResult
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -34,7 +42,9 @@ class MementoEditorDialogFragment() : BaseFragment() {
     private val mArgs: MementoEditorDialogFragmentArgs by navArgs()
 
     private lateinit var mBinding: ComponentMementoEditorBinding
+
     private var mImagePreviewVisibilityChangeAnimationDuration: Long = 0L
+    private var mDefaultButtonMarginBottomEnd: Int = 0
 
     private var mMementoEditData: MementoEditData = MementoEditData()
 
@@ -47,6 +57,9 @@ class MementoEditorDialogFragment() : BaseFragment() {
             resources.getInteger(R.integer
                 .component_memento_editor_image_preview_visibility_change_animation_duration
             ).toLong()
+        mDefaultButtonMarginBottomEnd = resources.getDimension(
+            R.dimen.medium_gap_between_components
+        ).toInt()
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
@@ -94,6 +107,12 @@ class MementoEditorDialogFragment() : BaseFragment() {
         }
         mBinding.componentMementoEditorImagePreviewButtonRemove.setOnClickListener {
             onRemovePreviewImageButtonClicked()
+        }
+        mBinding.componentMementoEditorButtonCancel.setOnClickListener {
+            onCancelButtonClicked()
+        }
+        mBinding.componentMementoEditorButtonSave.setOnClickListener {
+            onSaveButtonClicked()
         }
     }
 
@@ -244,11 +263,38 @@ class MementoEditorDialogFragment() : BaseFragment() {
         else null
     }
 
+    private fun onCancelButtonClicked() {
+        dismiss()
+    }
+
+    private fun onSaveButtonClicked() {
+        val mode = mArgs.mode
+        val mementoId = mArgs.memento?.id
+        val memento = mMementoEditData.toMemento(mementoId)
+
+        saveOrUpdateMementoByMode(memento, mode)
+    }
+
+    private fun saveOrUpdateMementoByMode(memento: Memento, mode: MementoEditorMode) {
+        val result = MementoEditorResult(mode, memento)
+
+        setNavigationResult(result)
+        dismiss()
+    }
+
     override fun adjustViewToInsets(insets: Insets) {
         super.adjustViewToInsets(insets)
 
         mBinding.componentMementoEditorTopBarWrapper.apply {
             updatePadding(top = insets.top)
+        }
+        mBinding.componentMementoEditorButtonSave.apply {
+            updateLayoutParams<ConstraintLayout.LayoutParams> {
+                updateMargins(
+                    bottom = mDefaultButtonMarginBottomEnd + insets.bottom,
+                    right = mDefaultButtonMarginBottomEnd + insets.right
+                )
+            }
         }
     }
 }

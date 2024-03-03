@@ -2,6 +2,7 @@ package com.qubacy.itsok.ui.application.activity._common.screen.settings.memento
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.qubacy.itsok.domain.settings.memento.model.Memento
 import com.qubacy.itsok.ui.application.activity._common.screen.settings.memento._common.data.UIMemento
 import com.qubacy.itsok.ui.application.activity._common.screen.settings.memento.component.list.helper.PositiveMementoItemHelperCallback
 import com.qubacy.itsok.ui.application.activity._common.screen.settings.memento.component.preview.PositiveMementoPreviewView
@@ -53,6 +54,12 @@ class PositiveMementoListAdapter(
         mMementoList.add(memento)
 
         notifyItemInserted(mMementoList.size - 1)
+    }
+
+    fun updateMemento(memento: UIMemento, index: Int) {
+        mMementoList[index] = memento
+
+        notifyItemChanged(index)
     }
 
     fun setMementoes(mementoes: List<UIMemento>) {

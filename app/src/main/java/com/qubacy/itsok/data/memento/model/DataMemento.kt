@@ -5,7 +5,7 @@ import com.qubacy.itsok.data.memento.repository.source.local.entity.MementoEntit
 import com.qubacy.itsok.domain.settings.memento.model.Memento
 
 data class DataMemento(
-    val id: Long,
+    val id: Long? = null,
     val text: String? = null,
     val imageUriString: String? = null
 )
@@ -19,5 +19,7 @@ fun DataMemento.toMemento(): Memento {
 }
 
 fun DataMemento.toMementoEntity(): MementoEntity {
-    return MementoEntity(id, text, imageUriString)
+    val preparedId = id ?: 0
+
+    return MementoEntity(preparedId, text, imageUriString)
 }

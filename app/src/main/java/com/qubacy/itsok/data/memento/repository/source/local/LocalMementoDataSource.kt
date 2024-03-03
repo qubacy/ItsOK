@@ -24,11 +24,14 @@ interface LocalMementoDataSource : DataSource {
     fun getMementoes(): List<MementoEntity>
 
     @Insert
-    fun insertMemento(memento: MementoEntity)
+    fun insertMemento(memento: MementoEntity): Long
 
     @Update
     fun updateMemento(memento: MementoEntity)
 
-    @Delete
-    fun deleteMemento(memento: MementoEntity)
+    @Query(
+        "DELETE FROM ${MementoEntity.TABLE_NAME} " +
+        "WHERE ${MementoEntity.ID_PROP_NAME} = :id"
+    )
+    fun deleteMementoById(id: Long)
 }

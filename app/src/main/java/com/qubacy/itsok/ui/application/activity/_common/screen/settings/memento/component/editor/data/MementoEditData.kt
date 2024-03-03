@@ -4,6 +4,7 @@ import android.net.Uri
 import android.os.Parcel
 import android.os.Parcelable
 import androidx.core.os.ParcelCompat
+import com.qubacy.itsok.domain.settings.memento.model.Memento
 
 data class MementoEditData(
     var text: String? = null,
@@ -38,4 +39,8 @@ data class MementoEditData(
             return arrayOfNulls(size)
         }
     }
+}
+
+fun MementoEditData.toMemento(id: Long? = null): Memento {
+    return Memento(id, text, imageUri)
 }

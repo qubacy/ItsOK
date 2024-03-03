@@ -31,15 +31,20 @@ class MementoDataRepository @Inject constructor(
         return mementoes[randomMementoIndex].toDataMemento()
     }
 
-    fun addMemento(memento: DataMemento) {
-        mLocalMementoDataSource.insertMemento(memento.toMementoEntity())
+    fun addMemento(memento: DataMemento): DataMemento {
+        val insertedMementoId = mLocalMementoDataSource
+            .insertMemento(memento.toMementoEntity())
+
+        return mLocalMementoDataSource.getMementoById(insertedMementoId)!!.toDataMemento()
     }
 
-    fun updateMemento(memento: DataMemento) {
+    fun updateMemento(memento: DataMemento): DataMemento {
         mLocalMementoDataSource.updateMemento(memento.toMementoEntity())
+
+        return mLocalMementoDataSource.getMementoById(memento.id!!)!!.toDataMemento()
     }
 
-    fun deleteMemento(memento: DataMemento) {
-        mLocalMementoDataSource.deleteMemento(memento.toMementoEntity())
+    fun deleteMementoById(id: Long) {
+        mLocalMementoDataSource.deleteMementoById(id)
     }
 }

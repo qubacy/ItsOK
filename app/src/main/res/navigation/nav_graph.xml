@@ -39,6 +39,11 @@
             app:exitAnim="@anim/scale_fade_out"
             app:popEnterAnim="@anim/scale_fade_in"
             app:popExitAnim="@anim/slide_out_bottom" />
+        <argument
+            android:name="result"
+            app:argType="com.qubacy.itsok.ui.application.activity._common.screen.settings.memento.component.editor.result.MementoEditorResult"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
     <fragment
         android:id="@+id/mementoEditorDialogFragment"

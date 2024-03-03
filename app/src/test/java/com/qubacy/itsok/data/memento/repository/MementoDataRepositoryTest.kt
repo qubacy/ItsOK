@@ -44,7 +44,7 @@ class MementoDataRepositoryTest : DataRepositoryTest<MementoDataRepository>() {
 
                 updateMementoResult.set(memento)
             }
-        Mockito.`when`(localMementoDataSourceMock.deleteMemento(AnyMockUtil.anyObject()))
+        Mockito.`when`(localMementoDataSourceMock.deleteMementoById(AnyMockUtil.anyObject()))
             .thenAnswer {
                 val memento = it.arguments[0] as MementoEntity
 
@@ -110,7 +110,7 @@ class MementoDataRepositoryTest : DataRepositoryTest<MementoDataRepository>() {
 
         initRepository(deleteMementoResult = deleteMementoResult)
 
-        mDataRepository.deleteMemento(mementoToDelete)
+        mDataRepository.deleteMementoById(mementoToDelete)
 
         Assert.assertEquals(mementoToDelete.toMementoEntity(), deleteMementoResult.get())
     }
