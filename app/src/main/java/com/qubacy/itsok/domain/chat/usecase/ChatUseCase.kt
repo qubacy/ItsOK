@@ -77,7 +77,7 @@ class ChatUseCase @Inject constructor(
         if (memento == null)
             return AnswerType.MEMENTO_OFFERING_NO_MEMENTO
 
-        return if (memento.text == null) {
+        return if (memento.text.isNullOrEmpty()) {
             if (memento.imageUri == null)
                 throw IllegalArgumentException()
 

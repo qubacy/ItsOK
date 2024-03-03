@@ -3,7 +3,6 @@ package com.qubacy.itsok.ui.application.activity._common.screen.chat.component.m
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,6 +32,7 @@ open class MessageView<
         const val TAG = "MessageView"
 
         const val DEFAULT_ELEMENT_GAP_IN_DP = 8
+        const val IMAGE_HEIGHT_COEFFICIENT = 0.5
     }
 
     protected var mElementGapInPx: Int
@@ -100,7 +100,7 @@ open class MessageView<
         if (parent == null) return
 
         val parentView = parent as View
-        val imageHeight = (parentView.measuredHeight * 0.5).toInt()
+        val imageHeight = (parentView.measuredHeight * IMAGE_HEIGHT_COEFFICIENT).toInt()
 
         mImageView!!.updateLayoutParams {
             height = imageHeight
