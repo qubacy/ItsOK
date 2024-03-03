@@ -3,6 +3,7 @@ package com.qubacy.itsok.ui.application.activity._common.screen.chat.component.m
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -58,6 +59,7 @@ open class MessageView<
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
+        orientation = VERTICAL
     }
 
     private fun inflate() {
@@ -73,17 +75,42 @@ open class MessageView<
 
         prepareImageViewForImageAndText(image, mMessage?.text) // todo: is it ok?
         mImageView!!.setImageDrawable(image)
+
+        mImageView!!.measure(0, 0)
+
     }
 
     protected fun initImageView() {
         mImageView = inflateImageView()
 
+        setImageViewParams()
         addElementView(mImageView!!, StandardElementType.IMAGE)
     }
 
     protected open fun inflateImageView(): ImageViewType {
         return LayoutInflater.from(context).inflate(
             R.layout.component_message_image, this, false) as ImageViewType
+    }
+
+    private fun setImageViewParams() {
+        setImageViewLayoutParams()
+    }
+
+    private fun setImageViewLayoutParams() {
+        if (parent == null) return
+
+        val parentView = parent as View
+        val imageHeight = (parentView.measuredHeight * 0.5).toInt()
+
+        mImageView!!.updateLayoutParams {
+            height = imageHeight
+        }
+    }
+
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+
+        if (mImageView != null) setImageViewLayoutParams()
     }
 
     protected open fun prepareImageViewForImageAndText(image: Drawable?, text: String?) {
