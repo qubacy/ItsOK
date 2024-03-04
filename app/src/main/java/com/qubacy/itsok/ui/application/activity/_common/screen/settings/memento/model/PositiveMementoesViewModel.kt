@@ -34,6 +34,7 @@ class PositiveMementoesViewModel(
 
         mPositiveMementoUseCase.getMementoes()
     }
+
     fun getMementoById(id: Long): Memento {
         return mUiState.mementoes.find { it.id == id }!!
     }

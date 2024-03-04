@@ -7,8 +7,8 @@ import com.qubacy.itsok.data.error.repository.ErrorDataRepository
 import com.qubacy.itsok.domain.chat.usecase.ChatUseCase
 import com.qubacy.itsok.domain.chat.model._test.util.MessageGeneratorUtil
 import com.qubacy.itsok.domain.chat.usecase.result.GetNextMessagesDomainResult
-import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.BaseViewModelTest
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.operation.loading.SetLoadingStateUiOperation
+import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment.business.model.BusinessViewModelTest
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.model.operation.ChangeStageUiOperation
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.model.operation.NextMessagesUiOperation
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.model.state.ChatUiState
@@ -18,7 +18,7 @@ import org.junit.Test
 import org.mockito.Mockito
 import java.util.concurrent.atomic.AtomicBoolean
 
-class ChatViewModelTest : BaseViewModelTest<ChatUiState, ChatUseCase, ChatViewModel>(
+class ChatViewModelTest : BusinessViewModelTest<ChatUiState, ChatUseCase, ChatViewModel>(
     ChatUseCase::class.java
 ) {
     private var mGetIntroMessagesCallFlag: AtomicBoolean = AtomicBoolean(false)
@@ -56,10 +56,9 @@ class ChatViewModelTest : BaseViewModelTest<ChatUiState, ChatUseCase, ChatViewMo
 
     override fun createViewModel(
         savedStateHandle: SavedStateHandle,
-        errorDataRepository: ErrorDataRepository,
-        useCase: ChatUseCase
+        errorDataRepository: ErrorDataRepository
     ): ChatViewModel {
-        return ChatViewModel(savedStateHandle, errorDataRepository, useCase)
+        return ChatViewModel(savedStateHandle, errorDataRepository, mUseCase)
     }
 
     @Test
