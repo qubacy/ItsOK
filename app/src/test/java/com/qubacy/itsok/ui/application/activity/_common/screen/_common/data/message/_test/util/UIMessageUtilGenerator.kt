@@ -11,8 +11,8 @@ object UIMessageUtilGenerator {
 
     fun generateUIMessages(
         count: Int, textPrefix: String = DEFAULT_TEXT_PREFIX
-    ): List<UIMessage> {
+    ): MutableList<UIMessage> {
         return IntRange(0, count - 1)
-            .map { generateUIMessage(textPrefix + it.toString()) }
+            .map { generateUIMessage(textPrefix + it.toString()) }.toMutableList()
     }
 }

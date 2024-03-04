@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import com.qubacy.itsok._common._test.util.mock.AnyMockUtil
 import com.qubacy.itsok._common._test.util.mock.LayoutInflaterMockUtil
 import com.qubacy.itsok.ui.application.activity._common.screen._common.data.message._test.util.UIMessageUtilGenerator
+import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.component.list.adapter.BaseRecyclerViewAdapterTest
 import com.qubacy.itsok.ui.application.activity._common.screen.chat._common.data.message.UIMessage
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.component.message.view.active.ActiveMessageView
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.component.message.view.previous.PreviousMessageView
@@ -14,12 +15,19 @@ import org.junit.Test
 import org.mockito.Mockito
 import kotlin.reflect.KClass
 
-class MessageListAdapterTest {
-    private lateinit var mMessageListAdapter: MessageListAdapter
+class MessageListAdapterTest : BaseRecyclerViewAdapterTest<
+    UIMessage, MessageListAdapter.MessageViewHolder, MessageListAdapter
+>(MessageListAdapter::class.java) {
 
     @Before
-    fun setup() {
-        mMessageListAdapter = MessageListAdapter()
+    override fun setup() {
+        super.setup()
+    }
+
+    override fun spyAdapter(spiedAdapter: MessageListAdapter) {
+        super.spyAdapter(spiedAdapter)
+
+        Mockito.doAnswer{ }.`when`(spiedAdapter).scrollToActiveMessage()
     }
 
     @Test
@@ -34,7 +42,7 @@ class MessageListAdapterTest {
                 if (it == 0) MessageListAdapter.ItemType.ACTIVE.id
                 else MessageListAdapter.ItemType.PREVIOUS.id
 
-            TestCase(expectedItemTypeId, mMessageListAdapter.getItemViewType(it))
+            TestCase(expectedItemTypeId, mAdapter.getItemViewType(it))
         }
 
         for (testCase in testCases)
@@ -57,7 +65,7 @@ class MessageListAdapterTest {
         Mockito.`when`(parentViewMock.context).thenReturn(Mockito.mock(Context::class.java))
 
         val testCases = IntRange(0, 9).map {
-            val viewTypeId = mMessageListAdapter.getItemViewType(it)
+            val viewTypeId = mAdapter.getItemViewType(it)
             val viewMock =
                 if (it == 0) Mockito.mock(ActiveMessageView::class.java)
                 else Mockito.mock(PreviousMessageView::class.java)
@@ -70,7 +78,7 @@ class MessageListAdapterTest {
 
             TestCase(
                 expectedViewHolderClass,
-                mMessageListAdapter.onCreateViewHolder(parentViewMock, viewTypeId)::class
+                mAdapter.onCreateViewHolder(parentViewMock, viewTypeId)::class
             )
         }
 
@@ -87,7 +95,9 @@ class MessageListAdapterTest {
         var setActiveMessage: UIMessage? = null
         var setPreviousMessage: UIMessage? = null
 
-        val activeMessageViewHolderMock = Mockito.mock(MessageListAdapter.ActiveMessageViewHolder::class.java).apply {
+        val activeMessageViewHolderMock = Mockito.mock(
+            MessageListAdapter.ActiveMessageViewHolder::class.java
+        ).apply {
             Mockito.`when`(setData(
                 AnyMockUtil.anyObject(),
                 Mockito.anyBoolean(),
@@ -101,7 +111,9 @@ class MessageListAdapterTest {
                 Unit
             }
         }
-        val previousMessageViewHolderMock = Mockito.mock(MessageListAdapter.PreviousMessageViewHolder::class.java).apply {
+        val previousMessageViewHolderMock = Mockito.mock(
+            MessageListAdapter.PreviousMessageViewHolder::class.java
+        ).apply {
             Mockito.`when`(setData(AnyMockUtil.anyObject()))
                 .thenAnswer {
                     val messageToSet = it.arguments[0] as UIMessage
@@ -112,30 +124,68 @@ class MessageListAdapterTest {
                 }
         }
 
-        mMessageListAdapter.onBindViewHolder(activeMessageViewHolderMock, 0)
-        mMessageListAdapter.onBindViewHolder(previousMessageViewHolderMock, 1)
+        mAdapter.onBindViewHolder(activeMessageViewHolderMock, 0)
+        mAdapter.onBindViewHolder(previousMessageViewHolderMock, 1)
 
         Assert.assertEquals(messages[0], setActiveMessage)
         Assert.assertEquals(messages[1], setPreviousMessage)
     }
 
     @Test
-    fun getItemCountTest() {
-        Assert.assertEquals(0, mMessageListAdapter.itemCount)
+    fun addItemTest() {
+        setMessagesToAdapter(listOf())
 
-        val messages = UIMessageUtilGenerator.generateUIMessages(3)
+        val expectedMessage = UIMessageUtilGenerator.generateUIMessage()
+        val expectedMessageCount = 1
 
-        setMessagesToAdapter(messages)
+        mAdapter.addItem(expectedMessage)
 
-        Assert.assertEquals(messages.size, mMessageListAdapter.itemCount)
+        val gottenMessages = mAdapter.items
+
+        Assert.assertEquals(expectedMessageCount, gottenMessages.size)
+
+        val gottenMessage = gottenMessages.first()
+
+        Assert.assertEquals(expectedMessage, gottenMessage)
     }
 
-    private fun setMessagesToAdapter(messages: List<UIMessage>) {
-        MessageListAdapter::class.java.getDeclaredField("mItems")
-            .apply {
-                isAccessible = true
+    @Test
+    fun addItemsTest() {
+        val initMessages = UIMessageUtilGenerator
+            .generateUIMessages(2, "Init message")
 
-                set(mMessageListAdapter, messages)
-            }
+        setMessagesToAdapter(initMessages)
+
+        val newMessages = UIMessageUtilGenerator.generateUIMessages(3)
+        val expectedMessages = initMessages.apply { add(0, newMessages.first()) }
+
+        mAdapter.addItems(newMessages)
+
+        val gottenMessages = mAdapter.items
+
+        Assert.assertEquals(expectedMessages.size, gottenMessages.size)
+
+        for (i in expectedMessages.indices)
+            Assert.assertEquals(expectedMessages[i], gottenMessages[i])
+    }
+
+    @Test
+    fun setItemsTest() {
+        val initMessages = UIMessageUtilGenerator
+            .generateUIMessages(2, "Init message")
+
+        setMessagesToAdapter(initMessages)
+
+        val newMessages = UIMessageUtilGenerator.generateUIMessages(2)
+        val expectedMessages = newMessages.reversed()
+
+        mAdapter.setItems(newMessages)
+
+        val gottenMessages = mAdapter.items
+
+        Assert.assertEquals(expectedMessages.size, gottenMessages.size)
+
+        for (i in expectedMessages.indices)
+            Assert.assertEquals(expectedMessages[i], gottenMessages[i])
     }
 }

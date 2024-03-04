@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.UiThread
 import androidx.recyclerview.widget.RecyclerView
+import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.component.list.adapter.BaseRecyclerViewAdapter
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.component.message.view.active.ActiveMessageView
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.component.message.view.previous.PreviousMessageView
 import com.qubacy.itsok.ui.application.activity._common.screen.chat._common.data.message.UIMessage
@@ -15,7 +16,9 @@ import kotlinx.coroutines.GlobalScope
 
 open class MessageListAdapter(
     private val mCoroutineScope: CoroutineScope = GlobalScope
-) : RecyclerView.Adapter<MessageListAdapter.MessageViewHolder>(), MessageListLayoutManagerCallback {
+) : BaseRecyclerViewAdapter<UIMessage, MessageListAdapter.MessageViewHolder>(),
+    MessageListLayoutManagerCallback
+{
     enum class ItemType(val id: Int) {
         ACTIVE(0), PREVIOUS(1);
     }
@@ -64,9 +67,6 @@ open class MessageListAdapter(
     private var mIsActiveMessageViewHolderAnimationInterrupted: Boolean = true
     private var mLastActiveMessageHash: Int = 0
 
-    private val mItems: MutableList<UIMessage> = mutableListOf()
-    val items: List<UIMessage> get() = mItems
-
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
 
@@ -99,10 +99,6 @@ open class MessageListAdapter(
 
     override fun getItemViewType(position: Int): Int {
         return if (position == 0) ItemType.ACTIVE.id else ItemType.PREVIOUS.id
-    }
-
-    override fun getItemCount(): Int {
-        return mItems.size
     }
 
     override fun onBindViewHolder(holder: MessageViewHolder, position: Int) {
@@ -144,10 +140,10 @@ open class MessageListAdapter(
 
         mItems.addAll(0, mPendingMessagesToAdd)
 
-        notifyItemRangeInserted(0, mPendingMessagesToAdd.size)
+        wrappedNotifyItemRangeInserted(0, mPendingMessagesToAdd.size)
 
         if (originalMessageCount > 0)
-            notifyItemRangeChanged(mPendingMessagesToAdd.size, mItems.size)
+            wrappedNotifyItemRangeChanged(mPendingMessagesToAdd.size, mItems.size)
 
         mPendingMessagesToAdd.clear()
     }
@@ -156,13 +152,13 @@ open class MessageListAdapter(
     fun addItem(message: UIMessage) {
         mItems.add(0, message)
 
-        notifyItemInserted(0)
-        notifyItemRangeChanged(0, mItems.size - 1)
+        wrappedNotifyItemInserted(0)
+        wrappedNotifyItemRangeChanged(0, mItems.size - 1)
 
         scrollToActiveMessage()
     }
 
-    private fun scrollToActiveMessage() {
+    open fun scrollToActiveMessage() {
         mRecyclerView.scrollToPosition(0)
     }
 
@@ -192,18 +188,9 @@ open class MessageListAdapter(
 
         mLastActiveMessageHash = reversedMessages[0].hashCode()
 
-        mItems.apply {
-            clear()
-            addAll(reversedMessages)
-        }
+        replaceItems(reversedMessages)
 
-        notifyDataSetChanged()
-    }
-
-    @UiThread
-    fun resetItems() {
-        notifyItemRangeRemoved(0, mItems.size)
-        mItems.clear()
+        wrappedNotifyDataSetChanged()
     }
 
     override fun onViewRecycled(holder: MessageViewHolder) {

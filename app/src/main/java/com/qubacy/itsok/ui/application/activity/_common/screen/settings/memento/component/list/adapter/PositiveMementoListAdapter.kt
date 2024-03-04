@@ -1,15 +1,16 @@
 package com.qubacy.itsok.ui.application.activity._common.screen.settings.memento.component.list.adapter
 
 import android.view.ViewGroup
+import androidx.annotation.UiThread
 import androidx.recyclerview.widget.RecyclerView
-import com.qubacy.itsok.domain.settings.memento.model.Memento
+import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.component.list.adapter.BaseRecyclerViewAdapter
 import com.qubacy.itsok.ui.application.activity._common.screen.settings.memento._common.data.UIMemento
 import com.qubacy.itsok.ui.application.activity._common.screen.settings.memento.component.list.helper.PositiveMementoItemHelperCallback
 import com.qubacy.itsok.ui.application.activity._common.screen.settings.memento.component.preview.PositiveMementoPreviewView
 
 class PositiveMementoListAdapter(
     private val mCallback: PositiveMementoListAdapterCallback? = null
-) : RecyclerView.Adapter<PositiveMementoListAdapter.PositiveMementoViewHolder>(),
+) : BaseRecyclerViewAdapter<UIMemento, PositiveMementoListAdapter.PositiveMementoViewHolder>(),
     PositiveMementoItemHelperCallback
 {
     class PositiveMementoViewHolder(
@@ -20,20 +21,14 @@ class PositiveMementoListAdapter(
         }
     }
 
-    private val mMementoList: MutableList<UIMemento> = mutableListOf()
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PositiveMementoViewHolder {
         val mementoPreviewView = PositiveMementoPreviewView(parent.context)
 
         return PositiveMementoViewHolder(mementoPreviewView)
     }
 
-    override fun getItemCount(): Int {
-        return mMementoList.size
-    }
-
     override fun onBindViewHolder(holder: PositiveMementoViewHolder, position: Int) {
-        val memento = mMementoList[position]
+        val memento = mItems[position]
 
         holder.apply {
             setData(memento)
@@ -42,33 +37,34 @@ class PositiveMementoListAdapter(
         }
     }
 
+    @UiThread
     fun removeMementoAt(position: Int) {
-        val memento = mMementoList.removeAt(position)
+        val memento = mItems.removeAt(position)
 
         mCallback?.onMementoRemoved(memento.id)
 
-        notifyItemRemoved(position)
+        wrappedNotifyItemRemoved(position)
     }
 
+    @UiThread
     fun addMemento(memento: UIMemento) {
-        mMementoList.add(memento)
+        mItems.add(memento)
 
-        notifyItemInserted(mMementoList.size - 1)
+        wrappedNotifyItemInserted(mItems.size - 1)
     }
 
+    @UiThread
     fun updateMemento(memento: UIMemento, index: Int) {
-        mMementoList[index] = memento
+        mItems[index] = memento
 
-        notifyItemChanged(index)
+        wrappedNotifyItemChanged(index)
     }
 
+    @UiThread
     fun setMementoes(mementoes: List<UIMemento>) {
-        mMementoList.apply {
-            clear()
-            addAll(mementoes)
-        }
+        replaceItems(mementoes)
 
-        notifyDataSetChanged()
+        wrappedNotifyDataSetChanged()
     }
 
     override fun onMementoSwipedOut(position: Int) {
