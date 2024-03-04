@@ -44,6 +44,10 @@ class ChatFragmentTest(
         return ChatFragment::class.java
     }
 
+    override fun getCurrentDestination(): Int {
+        return R.id.chatFragment
+    }
+
     @Before
     override fun setup() {
         super.setup()

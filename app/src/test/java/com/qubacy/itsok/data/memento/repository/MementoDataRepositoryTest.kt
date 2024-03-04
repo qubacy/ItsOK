@@ -116,7 +116,7 @@ class MementoDataRepositoryTest : DataRepositoryTest<MementoDataRepository>() {
     }
 
     @Test
-    fun deleteMementoTest() {
+    fun deleteMementoByIdTest() {
         val mementoToDelete = DataMemento(1, "test memento")
         val deleteMementoByIdResult = AtomicReference<Long?>(null)
 

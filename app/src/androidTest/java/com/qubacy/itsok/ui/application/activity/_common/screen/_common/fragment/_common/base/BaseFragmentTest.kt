@@ -1,6 +1,7 @@
 package com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.base
 
 import android.widget.Toast
+import androidx.annotation.IdRes
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.navigation.testing.TestNavHostController
@@ -43,6 +44,8 @@ abstract class BaseFragmentTest<FragmentType : BaseFragment> {
     }
 
     abstract fun getFragmentClass(): Class<FragmentType>
+    @IdRes
+    abstract fun getCurrentDestination(): Int
 
     private fun retrieveModelFieldReflection(): Field {
         return getFragmentClass()
@@ -57,7 +60,11 @@ abstract class BaseFragmentTest<FragmentType : BaseFragment> {
     }
 
     protected open fun initFragmentOnActivity(fragment: Fragment) {
-        mNavController.setGraph(R.navigation.nav_graph)
+        mNavController.apply {
+            setGraph(R.navigation.nav_graph)
+            setCurrentDestination(getCurrentDestination())
+        }
+
         Navigation.setViewNavController(fragment.requireView(), mNavController)
 
         mFragment = fragment as FragmentType

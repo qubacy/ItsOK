@@ -75,7 +75,7 @@ class LocalMementoDataSourceTest : LocalDatabaseDataSourceTest() {
     }
 
     @Test
-    fun deleteMementoTest() {
+    fun deleteMementoByIdTest() {
         val expectedMementoEntity = MementoEntity(id = 1, text = "test memento")
 
         mLocalMementoDataSource.insertMemento(expectedMementoEntity)
