@@ -13,10 +13,10 @@ class PositiveMementoListAdapter(
 ) : BaseRecyclerViewAdapter<UIMemento, PositiveMementoListAdapter.PositiveMementoViewHolder>(),
     PositiveMementoItemHelperCallback
 {
-    class PositiveMementoViewHolder(
+    open class PositiveMementoViewHolder(
         val view: PositiveMementoPreviewView
     ) : RecyclerView.ViewHolder(view) {
-        fun setData(memento: UIMemento) {
+        open fun setData(memento: UIMemento) {
             view.setMemento(memento)
         }
     }

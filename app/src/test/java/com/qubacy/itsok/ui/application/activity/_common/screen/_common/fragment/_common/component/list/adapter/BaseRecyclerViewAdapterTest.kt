@@ -1,8 +1,6 @@
 package com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.component.list.adapter
 
 import androidx.recyclerview.widget.RecyclerView
-import com.qubacy.itsok.ui.application.activity._common.screen._common.data.message._test.util.UIMessageUtilGenerator
-import com.qubacy.itsok.ui.application.activity._common.screen.chat._common.data.message.UIMessage
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -12,9 +10,7 @@ abstract class BaseRecyclerViewAdapterTest<
     ItemType,
     ViewHolderType : RecyclerView.ViewHolder,
     AdapterType : BaseRecyclerViewAdapter<ItemType, ViewHolderType>
->(
-    private val mAdapterClass: Class<AdapterType>
-) {
+> {
     protected lateinit var mAdapter: AdapterType
 
     @Before
@@ -27,12 +23,15 @@ abstract class BaseRecyclerViewAdapterTest<
     }
 
     private fun initAdapter() {
-        val spiedAdapter = Mockito.spy(mAdapterClass)
+        val adapter = createAdapter()
+        val spiedAdapter = Mockito.spy(adapter)
 
         spyAdapter(spiedAdapter)
 
         mAdapter = spiedAdapter
     }
+
+    protected abstract fun createAdapter(): AdapterType
 
     protected open fun spyAdapter(spiedAdapter: AdapterType) {
         Mockito.doAnswer{ }.`when`(spiedAdapter).wrappedNotifyDataSetChanged()
@@ -53,31 +52,32 @@ abstract class BaseRecyclerViewAdapterTest<
     fun getItemCountTest() {
         Assert.assertEquals(0, mAdapter.itemCount)
 
-        val messages = UIMessageUtilGenerator.generateUIMessages(3)
+        val messages = getTestItems(3)
 
-        setMessagesToAdapter(messages)
+        setItemsToAdapter(messages)
 
         Assert.assertEquals(messages.size, mAdapter.itemCount)
     }
 
     @Test
     fun resetItemsTest() {
-        val initMessages = UIMessageUtilGenerator
-            .generateUIMessages(2, "Init message")
+        val initMessages = getTestItems(2)
 
-        setMessagesToAdapter(initMessages)
+        setItemsToAdapter(initMessages)
 
         mAdapter.resetItems()
 
         Assert.assertTrue(mAdapter.items.isEmpty())
     }
 
-    protected fun setMessagesToAdapter(messages: List<UIMessage>) {
+    protected abstract fun getTestItems(count: Int): List<ItemType>
+
+    protected fun setItemsToAdapter(items: List<ItemType>) {
         BaseRecyclerViewAdapter::class.java.getDeclaredField("mItems")
             .apply {
                 isAccessible = true
 
-                set(mAdapter, messages.toMutableList())
+                set(mAdapter, items.toMutableList())
             }
     }
 }

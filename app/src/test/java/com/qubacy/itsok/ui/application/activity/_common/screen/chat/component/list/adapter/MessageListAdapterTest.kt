@@ -17,11 +17,19 @@ import kotlin.reflect.KClass
 
 class MessageListAdapterTest : BaseRecyclerViewAdapterTest<
     UIMessage, MessageListAdapter.MessageViewHolder, MessageListAdapter
->(MessageListAdapter::class.java) {
+>() {
 
     @Before
     override fun setup() {
         super.setup()
+    }
+
+    override fun createAdapter(): MessageListAdapter {
+        return MessageListAdapter()
+    }
+
+    override fun getTestItems(count: Int): List<UIMessage> {
+        return UIMessageUtilGenerator.generateUIMessages(count)
     }
 
     override fun spyAdapter(spiedAdapter: MessageListAdapter) {
@@ -90,7 +98,7 @@ class MessageListAdapterTest : BaseRecyclerViewAdapterTest<
     fun onBindViewHolderTest() {
         val messages = UIMessageUtilGenerator.generateUIMessages(2)
 
-        setMessagesToAdapter(messages)
+        setItemsToAdapter(messages)
 
         var setActiveMessage: UIMessage? = null
         var setPreviousMessage: UIMessage? = null
@@ -133,7 +141,7 @@ class MessageListAdapterTest : BaseRecyclerViewAdapterTest<
 
     @Test
     fun addItemTest() {
-        setMessagesToAdapter(listOf())
+        setItemsToAdapter(listOf())
 
         val expectedMessage = UIMessageUtilGenerator.generateUIMessage()
         val expectedMessageCount = 1
@@ -154,7 +162,7 @@ class MessageListAdapterTest : BaseRecyclerViewAdapterTest<
         val initMessages = UIMessageUtilGenerator
             .generateUIMessages(2, "Init message")
 
-        setMessagesToAdapter(initMessages)
+        setItemsToAdapter(initMessages)
 
         val newMessages = UIMessageUtilGenerator.generateUIMessages(3)
         val expectedMessages = initMessages.apply { add(0, newMessages.first()) }
@@ -174,7 +182,7 @@ class MessageListAdapterTest : BaseRecyclerViewAdapterTest<
         val initMessages = UIMessageUtilGenerator
             .generateUIMessages(2, "Init message")
 
-        setMessagesToAdapter(initMessages)
+        setItemsToAdapter(initMessages)
 
         val newMessages = UIMessageUtilGenerator.generateUIMessages(2)
         val expectedMessages = newMessages.reversed()
