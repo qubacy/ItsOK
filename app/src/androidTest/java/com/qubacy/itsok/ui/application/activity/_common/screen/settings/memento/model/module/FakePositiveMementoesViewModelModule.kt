@@ -2,12 +2,13 @@ package com.qubacy.itsok.ui.application.activity._common.screen.settings.memento
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.qubacy.itsok._common._test.util.mock.AnyMockUtil
+import com.qubacy.itsok.domain.settings.memento.model.Memento
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.base._common.model.factory.FakeBaseViewModelFactory
-import com.qubacy.itsok.ui.application.activity._common.screen.chat.model.ChatViewModel
-import com.qubacy.itsok.ui.application.activity._common.screen.chat.model.state.ChatUiState
 import com.qubacy.itsok.ui.application.activity._common.screen.settings.memento.model.PositiveMementoesViewModel
 import com.qubacy.itsok.ui.application.activity._common.screen.settings.memento.model.PositiveMementoesViewModelFactoryQualifier
 import com.qubacy.itsok.ui.application.activity._common.screen.settings.memento.model.state.PositiveMementoesUiState
+import com.qubacy.itsok.ui.application.activity._common.screen.settings.memento.model.state.TestPositiveMementoesUiState
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.android.components.ActivityRetainedComponent
@@ -25,9 +26,30 @@ object FakePositiveMementoesViewModelModule {
     ) : FakeBaseViewModelFactory<PositiveMementoesUiState>() {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val viewModel = super.create(modelClass) as PositiveMementoesViewModel
+            val uiState = TestPositiveMementoesUiState()
 
-            // todo: rethink this one:
-            Mockito.`when`(viewModel.uiState).thenReturn(PositiveMementoesUiState())
+            Mockito.`when`(viewModel.uiState).thenReturn(uiState)
+            Mockito.`when`(viewModel.createMemento(AnyMockUtil.anyObject())).thenAnswer {
+                val mementoToCreate = it.arguments[0] as Memento
+
+                uiState.mementoToCreate = mementoToCreate
+
+                Unit
+            }
+            Mockito.`when`(viewModel.updateMemento(AnyMockUtil.anyObject())).thenAnswer {
+                val mementoToUpdate = it.arguments[0] as Memento
+
+                uiState.mementoToUpdate = mementoToUpdate
+
+                Unit
+            }
+            Mockito.`when`(viewModel.removeMemento(Mockito.anyLong())).thenAnswer {
+                val mementoToRemoveId = it.arguments[0] as Long
+
+                uiState.mementoToRemoveId = mementoToRemoveId
+
+                Unit
+            }
 
             return viewModel as T
         }

@@ -73,14 +73,11 @@ abstract class BaseFragmentTest<FragmentType : BaseFragment> {
     }
 
     protected open fun initFragmentOnActivity(fragment: Fragment) {
-//        mNavController.apply {
-//            setGraph(R.navigation.nav_graph)
-//            setCurrentDestination(getCurrentDestination())
-//        }
-//
-//        Navigation.setViewNavController(fragment.requireView(), mNavController)
-
         mFragment = fragment as FragmentType
+    }
+
+    protected fun getCurrentDestinationNavArgs(): Bundle? {
+        return mNavController.backStack.last().arguments
     }
 
     @Test

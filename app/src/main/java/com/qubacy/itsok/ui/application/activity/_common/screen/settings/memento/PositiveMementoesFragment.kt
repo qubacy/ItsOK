@@ -96,7 +96,7 @@ class PositiveMementoesFragment(
 
             onMementoEditorResultGotten(it)
 
-            mMementoEditorLiveData?.value = null
+            mMementoEditorLiveData?.value = null // todo: is it a good decision?
         }
     }
 

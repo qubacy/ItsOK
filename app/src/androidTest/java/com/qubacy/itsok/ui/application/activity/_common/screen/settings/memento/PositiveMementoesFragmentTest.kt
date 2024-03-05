@@ -2,6 +2,7 @@ package com.qubacy.itsok.ui.application.activity._common.screen.settings.memento
 
 import android.view.View
 import androidx.test.espresso.Espresso
+import androidx.test.espresso.action.GeneralLocation
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
@@ -16,10 +17,16 @@ import org.junit.runner.RunWith
 import com.qubacy.itsok.R
 import com.qubacy.itsok.domain.settings.memento.model.Memento
 import com.qubacy.itsok.domain.settings.memento.model._test.util.MementoUtilGenerator
+import com.qubacy.itsok.ui._common._test.view.util.action.swipe.SwipeViewActionUtil
+import com.qubacy.itsok.ui._common._test.view.util.action.wait.WaitViewAction
+import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.util.extensional.setNavigationResult
+import com.qubacy.itsok.ui.application.activity._common.screen.settings.memento.component.editor._common.mode.MementoEditorMode
+import com.qubacy.itsok.ui.application.activity._common.screen.settings.memento.component.editor.result.MementoEditorResult
 import com.qubacy.itsok.ui.application.activity._common.screen.settings.memento.model.module.PositiveMementoesViewModelModule
 import com.qubacy.itsok.ui.application.activity._common.screen.settings.memento.model.operation.AddMementoUiOperation
 import com.qubacy.itsok.ui.application.activity._common.screen.settings.memento.model.operation.SetMementoesUiOperation
 import com.qubacy.itsok.ui.application.activity._common.screen.settings.memento.model.operation.UpdateMementoUiOperation
+import com.qubacy.itsok.ui.application.activity._common.screen.settings.memento.model.state.TestPositiveMementoesUiState
 import dagger.hilt.android.testing.UninstallModules
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert
@@ -121,13 +128,76 @@ class PositiveMementoesFragmentTest : BusinessFragmentTest<
     }
 
     @Test
-    fun removeMementoByRightSwipeTest() {
-        // todo: implement..
-        //  mb it's a good idea to have an extended version of UiState specifically for tests. it
-        //  could provide us with an opportunity to build a backward connection between the mocked
-        //  View Model and the Fragment;
+    fun removeMementoByRightSwipeTest() = runTest {
+        val initMementoes = MementoUtilGenerator.generateMementoes(2)
+        val setMementoesUiOperation = SetMementoesUiOperation(initMementoes)
 
+        mUiOperationFlow.emit(setMementoesUiOperation)
 
+        val mementoToRemove = initMementoes.first()
+
+        var mementoPreviewView: View? = null
+        var mementoPreviewContainerView: View? = null
+
+        mActivityScenario.onActivity {
+            mementoPreviewView = it.findViewById<View>(
+                R.id.component_positive_memento_preview_wrapper)
+            mementoPreviewContainerView = it.findViewById<View>(
+                R.id.fragment_positive_mementoes_list)
+        }
+
+        val mementoCenterY = mementoPreviewContainerView!!.y +
+                mementoPreviewView!!.measuredHeight / 2
+
+        val swipeEndX = mementoPreviewContainerView!!.width.toFloat()
+        val swipeEndY = mementoCenterY
+
+        Espresso.onView(withText(mementoToRemove.text))
+            .perform(
+                SwipeViewActionUtil.generateSwipeViewAction(
+                    swipeEndX, swipeEndY, GeneralLocation.CENTER_LEFT),
+                WaitViewAction(500)
+            ).check(ViewAssertions.doesNotExist())
+
+        val testUiState = getTestUiState()
+
+        Assert.assertEquals(mementoToRemove.id, testUiState.mementoToRemoveId)
+    }
+
+    @Test
+    fun processMementoEditorResultInCreatingModeTest() {
+        navigateToMementoEditor()
+
+        val editorMode = MementoEditorMode.CREATOR
+        val expectedMemento = MementoUtilGenerator.generateMemento()
+        val editorResult = MementoEditorResult(editorMode, expectedMemento)
+
+        mActivityScenario.onActivity {
+            mFragment.setNavigationResult(editorResult)
+        }
+
+        val testUiState = getTestUiState()
+        val gottenMemento = testUiState.mementoToCreate
+
+        Assert.assertEquals(expectedMemento, gottenMemento)
+    }
+
+    @Test
+    fun processMementoEditorResultInEditingModeTest() {
+        navigateToMementoEditor()
+
+        val editorMode = MementoEditorMode.EDITOR
+        val expectedMemento = MementoUtilGenerator.generateMemento()
+        val editorResult = MementoEditorResult(editorMode, expectedMemento)
+
+        mActivityScenario.onActivity {
+            mFragment.setNavigationResult(editorResult)
+        }
+
+        val testUiState = getTestUiState()
+        val gottenMemento = testUiState.mementoToUpdate
+
+        Assert.assertEquals(expectedMemento, gottenMemento)
     }
 
     @Test
@@ -141,8 +211,11 @@ class PositiveMementoesFragmentTest : BusinessFragmentTest<
         Espresso.onView(withText(clickableMemento.text)).perform(ViewActions.click())
 
         val curDestination = mNavController.currentDestination?.id
+        val curDestinationArgs = getCurrentDestinationNavArgs()
+        val mode = curDestinationArgs?.get("mode") as MementoEditorMode
 
         Assert.assertEquals(R.id.mementoEditorDialogFragment, curDestination)
+        Assert.assertEquals(MementoEditorMode.EDITOR, mode)
     }
 
     @Test
@@ -151,8 +224,24 @@ class PositiveMementoesFragmentTest : BusinessFragmentTest<
             .perform(ViewActions.click())
 
         val curDestination = mNavController.currentDestination?.id
+        val curDestinationArgs = getCurrentDestinationNavArgs()
+        val mode = curDestinationArgs?.get("mode") as MementoEditorMode
 
         Assert.assertEquals(R.id.mementoEditorDialogFragment, curDestination)
+        Assert.assertEquals(MementoEditorMode.CREATOR, mode)
+    }
+
+    private fun getTestUiState(): TestPositiveMementoesUiState {
+        return mModel.uiState as TestPositiveMementoesUiState
+    }
+
+    private fun navigateToMementoEditor() {
+        mActivityScenario.onActivity {
+            val action = PositiveMementoesFragmentDirections
+                .actionPositiveMementoesFragmentToMementoEditorDialogFragment()
+
+            mNavController.navigate(action)
+        }
     }
 
     private fun assertMaxExpectedMementoesVisible(
