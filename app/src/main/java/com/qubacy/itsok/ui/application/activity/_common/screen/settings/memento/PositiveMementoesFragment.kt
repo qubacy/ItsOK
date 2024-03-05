@@ -85,6 +85,10 @@ class PositiveMementoesFragment(
             setOnClickListener { onComposeMementoButtonClicked() }
         }
 
+        initMementoEditorResultCallback()
+    }
+
+    private fun initMementoEditorResultCallback() {
         mMementoEditorLiveData = getNavigationResult()
 
         mMementoEditorLiveData?.observe(viewLifecycleOwner) {

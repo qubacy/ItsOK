@@ -18,7 +18,7 @@ import com.qubacy.itsok.ui.application.activity._common.screen.settings.memento.
 import com.qubacy.itsok.ui.application.activity._common.screen.settings.memento.model.state.PositiveMementoesUiState
 import javax.inject.Qualifier
 
-class PositiveMementoesViewModel(
+open class PositiveMementoesViewModel(
     mSavedStateHandle: SavedStateHandle,
     mErrorDataRepository: ErrorDataRepository,
     private val mPositiveMementoUseCase: PositiveMementoUseCase
@@ -29,25 +29,25 @@ class PositiveMementoesViewModel(
         return PositiveMementoesUiState()
     }
 
-    fun getMementoes() {
+    open fun getMementoes() {
         changeLoadingState(true)
 
         mPositiveMementoUseCase.getMementoes()
     }
 
-    fun getMementoById(id: Long): Memento {
+    open fun getMementoById(id: Long): Memento {
         return mUiState.mementoes.find { it.id == id }!!
     }
 
-    fun createMemento(memento: Memento) {
+    open fun createMemento(memento: Memento) {
         mPositiveMementoUseCase.createMemento(memento)
     }
 
-    fun updateMemento(memento: Memento) {
+    open fun updateMemento(memento: Memento) {
         mPositiveMementoUseCase.updateMemento(memento)
     }
 
-    fun removeMemento(mementoId: Long) {
+    open fun removeMemento(mementoId: Long) {
         mPositiveMementoUseCase.removeMemento(mementoId)
     }
 

@@ -1,9 +1,9 @@
 package com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.base
 
+import android.os.Bundle
 import android.widget.Toast
 import androidx.annotation.IdRes
 import androidx.fragment.app.Fragment
-import androidx.navigation.Navigation
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
@@ -53,19 +53,32 @@ abstract class BaseFragmentTest<FragmentType : BaseFragment> {
             .apply { isAccessible = true }
     }
 
+    protected open fun getFragmentArgs(): Bundle? {
+        return null
+    }
+
     private fun initFragment() {
-        mActivityScenario = launchFragmentInHiltContainer(fragmentClass = getFragmentClass()) {
-            initFragmentOnActivity(this)
-        }
+        mActivityScenario = launchFragmentInHiltContainer(
+            fragmentArgs = getFragmentArgs(),
+            fragmentClass = getFragmentClass(),
+            navHostController = mNavController,
+            navHostControllerInitAction = {
+                apply {
+                    setGraph(R.navigation.nav_graph)
+                    setCurrentDestination(getCurrentDestination())
+                }
+            }) {
+                initFragmentOnActivity(this)
+            }
     }
 
     protected open fun initFragmentOnActivity(fragment: Fragment) {
-        mNavController.apply {
-            setGraph(R.navigation.nav_graph)
-            setCurrentDestination(getCurrentDestination())
-        }
-
-        Navigation.setViewNavController(fragment.requireView(), mNavController)
+//        mNavController.apply {
+//            setGraph(R.navigation.nav_graph)
+//            setCurrentDestination(getCurrentDestination())
+//        }
+//
+//        Navigation.setViewNavController(fragment.requireView(), mNavController)
 
         mFragment = fragment as FragmentType
     }
