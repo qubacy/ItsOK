@@ -15,6 +15,7 @@ import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment.
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.operation._common.UiOperation
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.operation.error.ErrorUiOperation
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.state.BaseUiState
+import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.stateful.model.state.TestUiState
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment.stateful.StatefulFragment
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.test.runTest
@@ -25,9 +26,10 @@ import java.lang.reflect.Field
 
 abstract class StatefulFragmentTest<
     UiStateType : BaseUiState,
+    TestUiStateType : TestUiState,
     ViewModelType : BaseViewModel<UiStateType>,
     FragmentType : StatefulFragment<UiStateType, ViewModelType>
-> : BaseFragmentTest<FragmentType>() {
+>() : BaseFragmentTest<FragmentType>() {
     protected lateinit var mModel: ViewModelType
     protected lateinit var mUiOperationFlow: MutableSharedFlow<UiOperation>
 
@@ -58,6 +60,10 @@ abstract class StatefulFragmentTest<
 
     private suspend fun postUiOperation(uiOperation: UiOperation) {
         mUiOperationFlow.emit(uiOperation)
+    }
+
+    protected fun getTestUiState(): TestUiStateType {
+        return mModel.uiState as TestUiStateType
     }
 
     @Test

@@ -41,6 +41,7 @@ import kotlin.math.min
 @RunWith(AndroidJUnit4::class)
 class PositiveMementoesFragmentTest : BusinessFragmentTest<
     PositiveMementoesUiState,
+    TestPositiveMementoesUiState,
     PositiveMementoesViewModel,
     PositiveMementoesFragment
 >() {
@@ -229,10 +230,6 @@ class PositiveMementoesFragmentTest : BusinessFragmentTest<
 
         Assert.assertEquals(R.id.mementoEditorDialogFragment, curDestination)
         Assert.assertEquals(MementoEditorMode.CREATOR, mode)
-    }
-
-    private fun getTestUiState(): TestPositiveMementoesUiState {
-        return mModel.uiState as TestPositiveMementoesUiState
     }
 
     private fun navigateToMementoEditor() {

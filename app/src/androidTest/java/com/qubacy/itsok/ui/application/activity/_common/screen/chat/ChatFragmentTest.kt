@@ -1,5 +1,6 @@
 package com.qubacy.itsok.ui.application.activity._common.screen.chat
 
+import android.view.KeyEvent
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.assertion.ViewAssertions
@@ -15,7 +16,6 @@ import com.qubacy.itsok.ui._common._test.view.util.action.wait.WaitViewAction
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.model.ChatViewModel
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.model.module.ChatViewModelModule
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.model.operation.NextMessagesUiOperation
-import com.qubacy.itsok.ui.application.activity._common.screen.chat.model.state.ChatUiState
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.UninstallModules
 import kotlinx.coroutines.test.runTest
@@ -26,6 +26,8 @@ import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment.
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.operation.loading.SetLoadingStateUiOperation
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.component.typing.view.TypingMaterialTextView
 import com.qubacy.itsok.ui.application.activity._common.screen.chat.model.operation.ChangeStageUiOperation
+import com.qubacy.itsok.ui.application.activity._common.screen.chat.model.state.ChatUiState
+import com.qubacy.itsok.ui.application.activity._common.screen.chat.model.state.TestChatUiState
 import org.hamcrest.Matchers
 import org.junit.Assert
 import org.junit.Before
@@ -39,7 +41,7 @@ import org.junit.runner.RunWith
 )
 class ChatFragmentTest(
 
-) : BusinessFragmentTest<ChatUiState, ChatViewModel, ChatFragment>() {
+) : BusinessFragmentTest<ChatUiState, TestChatUiState, ChatViewModel, ChatFragment>() {
     override fun getFragmentClass(): Class<ChatFragment> {
         return ChatFragment::class.java
     }
@@ -103,7 +105,7 @@ class ChatFragmentTest(
         Espresso.onView(withId(R.id.fragment_chat_gripe_input))
             .perform(ViewActions.click())
         Espresso.onView(withId(R.id.component_chat_gripe_input_text))
-            .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+            .check(ViewAssertions.matches(isDisplayed()))
     }
 
     private fun getActiveMessageCharTypingAnimationDuration(): Long {
@@ -132,7 +134,7 @@ class ChatFragmentTest(
 
         Espresso.onView(isRoot()).perform(WaitViewAction(typingDuration))
         Espresso.onView(withText(message.text))
-            .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+            .check(ViewAssertions.matches(isDisplayed()))
     }
 
     @Deprecated("Should be synchronized properly.")
@@ -270,5 +272,62 @@ class ChatFragmentTest(
         val gottenDestination = mNavController.currentDestination!!.id
 
         Assert.assertEquals(R.id.generalSettingsFragment, gottenDestination)
+    }
+
+    @Test
+    fun gettingIntroMessagesOnResumeTest() {
+        val uiState = getTestUiState()
+
+        Assert.assertTrue(uiState.getIntroMessagesCalled)
+    }
+
+    @Test
+    fun gettingGripeMessagesAfterTextingGripeTest() = runTest {
+        mUiOperationFlow.emit(ChangeStageUiOperation(ChatStage.GRIPE))
+
+        val gripeText = "test gripe"
+
+        Espresso.onView(withId(R.id.component_chat_gripe_input_text))
+            .perform(ViewActions.typeText(gripeText), ViewActions.pressKey(KeyEvent.KEYCODE_ENTER))
+
+        val uiState = getTestUiState()
+
+        Assert.assertTrue(uiState.getGripeMessagesCalled)
+    }
+
+    @Test
+    fun gettingMementoMessagesAfterMementoOfferingNegativeButtonClickedTest() = runTest {
+        mUiOperationFlow.emit(ChangeStageUiOperation(ChatStage.MEMENTO_OFFERING))
+
+        Espresso.onView(withId(R.id.component_chat_memento_buttons_button_negative))
+            .perform(ViewActions.click())
+
+        val uiState = getTestUiState()
+
+        Assert.assertTrue(uiState.getMementoMessagesCalled)
+    }
+
+    @Test
+    fun movingToByeAfterMementoOfferingPositiveButtonClickedTest() = runTest {
+        mUiOperationFlow.emit(ChangeStageUiOperation(ChatStage.MEMENTO_OFFERING))
+
+        Espresso.onView(withId(R.id.component_chat_memento_buttons_button_positive))
+            .perform(ViewActions.click())
+
+        val uiState = getTestUiState()
+
+        Assert.assertTrue(uiState.moveToByeCalled)
+    }
+
+    @Test
+    fun restartingAfterRestartButtonClickedTest() = runTest {
+        mUiOperationFlow.emit(ChangeStageUiOperation(ChatStage.BYE))
+
+        Espresso.onView(withId(R.id.component_chat_bye_buttons_button_restart))
+            .perform(ViewActions.click())
+
+        val uiState = getTestUiState()
+
+        Assert.assertTrue(uiState.restartCalled)
     }
 }

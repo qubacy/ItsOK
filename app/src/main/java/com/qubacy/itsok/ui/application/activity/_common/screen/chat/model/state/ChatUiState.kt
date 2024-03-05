@@ -5,7 +5,7 @@ import com.qubacy.itsok.domain.chat.model.Message
 import com.qubacy.itsok._common.chat.stage.ChatStage
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment.business.model.state.BusinessUiState
 
-class ChatUiState(
+open class ChatUiState(
     var stage: ChatStage = ChatStage.IDLE,
     var messages: List<Message> = listOf(),
     isLoading: Boolean = false,

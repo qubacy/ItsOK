@@ -28,7 +28,7 @@ open class ChatViewModel @Inject constructor(
     companion object {
         const val TAG = "ChatViewModel"
 
-        val GRIPE_REGEX = Regex("^\\S.*\$")
+        val GRIPE_REGEX = Regex("^\\S.*$")
     }
 
     override fun generateDefaultUiState(): ChatUiState {
