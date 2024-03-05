@@ -7,7 +7,10 @@
 
     <string name="fragment_general_settings_top_bar_title">Settings</string>
     <string name="fragment_general_settings_setting_positive_mementoes_title">Positive mementoes</string>
+
     <string name="fragment_positive_mementoes_settings_top_bar_title">Positive mementoes</string>
+    
+    <string name="fragment_memento_editor_dialog_error_invalid_memento">Invalid memento has been provided!</string>
 
     <!--  Components:  -->
 
@@ -27,7 +30,7 @@
     <string name="component_memento_editor_text_input_wrapper_hint_text">Memento text</string>
     <string name="component_memento_editor_image_description_text">You can upload an image that is associated with positive experience</string>
     <string name="component_memento_editor_title_editor_mode">Edit memento</string>
-    <string name="component_memento_editor_title_create_mode">Create memento</string>
+    <string name="component_memento_editor_title_creator_mode">Create memento</string>
     <string name="component_memento_editor_button_save_caption">Save</string>
     <string name="component_memento_editor_button_cancel_caption">Cancel</string>
 

@@ -138,7 +138,7 @@ class MementoEditorDialogFragment() : BaseFragment() {
     private fun initDialogTitle() {
         val titleStringResId =
             when (mArgs.mode) {
-                MementoEditorMode.CREATOR -> R.string.component_memento_editor_title_create_mode
+                MementoEditorMode.CREATOR -> R.string.component_memento_editor_title_creator_mode
                 MementoEditorMode.EDITOR -> R.string.component_memento_editor_title_editor_mode
             }
 
@@ -267,6 +267,10 @@ class MementoEditorDialogFragment() : BaseFragment() {
     }
 
     private fun onSaveButtonClicked() {
+        if (mMementoEditData.isEmpty())
+            return onPopupMessageOccurred(
+                R.string.fragment_memento_editor_dialog_error_invalid_memento)
+
         val mode = mArgs.mode
         val mementoId = mArgs.memento?.id
         val memento = mMementoEditData.toMemento(mementoId)

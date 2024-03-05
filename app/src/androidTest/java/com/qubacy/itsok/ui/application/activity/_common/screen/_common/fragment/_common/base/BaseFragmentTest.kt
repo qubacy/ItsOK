@@ -38,14 +38,18 @@ abstract class BaseFragmentTest<FragmentType : BaseFragment> {
 
     @Before
     open fun setup() {
-        mNavController = TestNavHostController(ApplicationProvider.getApplicationContext())
-
-        initFragment()
+        init()
     }
 
     abstract fun getFragmentClass(): Class<FragmentType>
     @IdRes
     abstract fun getCurrentDestination(): Int
+
+    protected fun init() {
+        mNavController = TestNavHostController(ApplicationProvider.getApplicationContext())
+
+        initFragment()
+    }
 
     private fun retrieveModelFieldReflection(): Field {
         return getFragmentClass()
@@ -63,13 +67,21 @@ abstract class BaseFragmentTest<FragmentType : BaseFragment> {
             fragmentClass = getFragmentClass(),
             navHostController = mNavController,
             navHostControllerInitAction = {
-                apply {
-                    setGraph(R.navigation.nav_graph)
-                    setCurrentDestination(getCurrentDestination())
-                }
+                initNavController(this)
             }) {
                 initFragmentOnActivity(this)
             }
+    }
+
+    private fun initNavController(navController: TestNavHostController) {
+        navController.apply {
+            setGraph(R.navigation.nav_graph)
+            initNavControllerDestination(navController)
+        }
+    }
+
+    protected open fun initNavControllerDestination(navController: TestNavHostController) {
+        navController.setCurrentDestination(getCurrentDestination())
     }
 
     protected open fun initFragmentOnActivity(fragment: Fragment) {
@@ -81,7 +93,7 @@ abstract class BaseFragmentTest<FragmentType : BaseFragment> {
     }
 
     @Test
-    fun showMessageTest() = runTest {
+    open fun showMessageTest() = runTest {
         val onPopupMessageOccurredMethodReflection = BaseFragment::class.java
             .getDeclaredMethod(
                 "onPopupMessageOccurred", String::class.java, Int::class.java)

@@ -7,9 +7,13 @@ import androidx.core.graphics.drawable.toBitmap
 import org.hamcrest.BaseMatcher
 import org.hamcrest.Description
 
-class CommonImageViewMatcher(
+class CommonImageViewMatcher : BaseMatcher<View> {
     private val mImage: Drawable
-) : BaseMatcher<View>() {
+
+    constructor(image: Drawable) : super() {
+        mImage = image
+    }
+
     override fun describeTo(description: Description?) { }
 
     override fun matches(item: Any?): Boolean {
