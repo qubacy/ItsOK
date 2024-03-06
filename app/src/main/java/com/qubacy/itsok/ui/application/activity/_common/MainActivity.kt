@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.qubacy.itsok.R
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -24,9 +25,15 @@ open class MainActivity : AppCompatActivity() {
     private var mPickPhotoCallback: ((Uri?) -> Unit)? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        enableEdgeToEdge()
-
         super.onCreate(savedInstanceState)
+
+        installSplashScreen().apply {
+            setOnExitAnimationListener {
+                it.remove()
+
+                enableEdgeToEdge() // todo: is it safe?
+            }
+        }
 
         setContentView(R.layout.activity_main)
         initPickPhotoLauncher()
