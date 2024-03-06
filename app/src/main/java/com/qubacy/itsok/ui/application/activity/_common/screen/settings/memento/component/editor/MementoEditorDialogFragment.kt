@@ -43,7 +43,7 @@ class MementoEditorDialogFragment() : BaseFragment() {
     private lateinit var mBinding: ComponentMementoEditorBinding
 
     private var mImagePreviewVisibilityChangeAnimationDuration: Long = 0L
-    private var mDefaultButtonMarginBottomEnd: Int = 0
+    private var mDefaultComponentMargin: Int = 0
 
     private var mMementoEditData: MementoEditData = MementoEditData()
 
@@ -56,7 +56,7 @@ class MementoEditorDialogFragment() : BaseFragment() {
             resources.getInteger(R.integer
                 .component_memento_editor_image_preview_visibility_change_animation_duration
             ).toLong()
-        mDefaultButtonMarginBottomEnd = resources.getDimension(
+        mDefaultComponentMargin = resources.getDimension(
             R.dimen.medium_gap_between_components
         ).toInt()
     }
@@ -294,8 +294,8 @@ class MementoEditorDialogFragment() : BaseFragment() {
         mBinding.componentMementoEditorButtonSave.apply {
             updateLayoutParams<ConstraintLayout.LayoutParams> {
                 updateMargins(
-                    bottom = mDefaultButtonMarginBottomEnd + insets.bottom,
-                    right = mDefaultButtonMarginBottomEnd + insets.right
+                    bottom = mDefaultComponentMargin + insets.bottom,
+                    right = mDefaultComponentMargin + insets.right
                 )
             }
         }
