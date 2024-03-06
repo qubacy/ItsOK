@@ -14,6 +14,6 @@ class PreviousMessageView(
 ) : MessageView<MaterialTextView, ShapeableImageView, UIMessage>(context, attrs) {
     init {
         background = ResourcesCompat.getDrawable(
-            context.resources, R.drawable.message_back, context.theme)
+            context.resources, R.drawable.message_back_adaptive, context.theme)
     }
 }

@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:navigationIcon="@drawable/ic_go_back"
+        app:navigationIconTint="?attr/colorOnSurface"
         tools:title="Test title" />
 
 </merge>

@@ -36,7 +36,7 @@ class ActiveMessageView(
 
     init {
         background = ResourcesCompat.getDrawable(
-            context.resources, R.drawable.active_message_back, context.theme)
+            context.resources, R.drawable.active_message_back_adaptive, context.theme)
     }
 
     override fun inflateTextView(): TypingMaterialTextView {
