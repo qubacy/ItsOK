@@ -252,6 +252,17 @@ class ChatFragment(
             if (stage == ChatStage.MEMENTO_OFFERING) View.VISIBLE else View.GONE
         mBinding.fragmentChatByeButtons.root.visibility =
             if (stage == ChatStage.BYE) View.VISIBLE else View.GONE
+
+        mSnackbarAnchorView = getSnackbarAnchorViewWithStage(stage)
+    }
+
+    private fun getSnackbarAnchorViewWithStage(stage: ChatStage): View? {
+        return when (stage) {
+            ChatStage.IDLE -> null
+            ChatStage.GRIPE -> mBinding.fragmentChatGripeInput.root
+            ChatStage.MEMENTO_OFFERING -> mBinding.fragmentChatMementoButtons.root
+            ChatStage.BYE -> mBinding.fragmentChatByeButtons.root
+        }
     }
 
     override fun setLoadingState(isLoading: Boolean) {

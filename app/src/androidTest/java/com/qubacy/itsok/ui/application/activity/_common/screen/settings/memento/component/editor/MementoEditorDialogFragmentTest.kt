@@ -9,7 +9,6 @@ import androidx.navigation.testing.TestNavHostController
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.assertion.ViewAssertions
-import androidx.test.espresso.matcher.RootMatchers
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
@@ -22,7 +21,6 @@ import com.qubacy.itsok._common.context.util.getUriFromResId
 import com.qubacy.itsok.domain.settings.memento.model._test.util.MementoUtilGenerator
 import com.qubacy.itsok.ui._common._test.view.util.action.wait.WaitViewAction
 import com.qubacy.itsok.ui._common._test.view.util.matcher.image.common.CommonImageViewMatcher
-import com.qubacy.itsok.ui._common._test.view.util.matcher.toast.root.ToastRootMatcher
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.util.extensional.getNavigationResult
 import com.qubacy.itsok.ui.application.activity._common.screen.settings.memento.PositiveMementoesFragmentDirections
 import com.qubacy.itsok.ui.application.activity._common.screen.settings.memento.component.editor._common.mode.MementoEditorMode
@@ -156,7 +154,6 @@ class MementoEditorDialogFragmentTest(
         Espresso.onView(withId(R.id.component_memento_editor_button_save))
             .perform(ViewActions.click())
         Espresso.onView(withText(R.string.fragment_memento_editor_dialog_error_invalid_memento))
-            .inRoot(RootMatchers.withDecorView(ToastRootMatcher(mFragment.requireActivity())))
             .check(ViewAssertions.matches(isDisplayed()))
     }
 

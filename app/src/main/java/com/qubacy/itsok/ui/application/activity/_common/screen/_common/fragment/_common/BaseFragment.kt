@@ -10,6 +10,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.qubacy.itsok.R
 import com.qubacy.itsok._common.error.Error
 
@@ -19,6 +20,8 @@ abstract class BaseFragment() : Fragment() {
     }
 
     private var mErrorDialog: AlertDialog? = null
+
+    protected var mSnackbarAnchorView: View? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -53,7 +56,8 @@ abstract class BaseFragment() : Fragment() {
         message: String,
         duration: Int = Toast.LENGTH_SHORT
     ) {
-        Toast.makeText(requireContext(), message, duration).show()
+        Snackbar.make(requireContext(), requireView(), message, duration)
+            .setAnchorView(mSnackbarAnchorView).show()
     }
 
     fun onPopupMessageOccurred(

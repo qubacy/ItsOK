@@ -9,12 +9,10 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.assertion.ViewAssertions
-import androidx.test.espresso.matcher.RootMatchers
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.qubacy.itsok.R
 import com.qubacy.itsok._common._test.util.launcher.launchFragmentInHiltContainer
-import com.qubacy.itsok.ui._common._test.view.util.matcher.toast.root.ToastRootMatcher
 import com.qubacy.itsok.ui.application.activity._common.HiltTestActivity
 import dagger.hilt.android.testing.HiltAndroidRule
 import kotlinx.coroutines.test.runTest
@@ -104,7 +102,6 @@ abstract class BaseFragmentTest<FragmentType : BaseFragment> {
         }
 
         Espresso.onView(withText(TEST_MESSAGE))
-            .inRoot(RootMatchers.withDecorView(ToastRootMatcher(mFragment.requireActivity())))
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
     }
 }

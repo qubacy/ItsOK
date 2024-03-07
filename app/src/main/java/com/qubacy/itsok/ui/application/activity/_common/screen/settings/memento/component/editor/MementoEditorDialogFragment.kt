@@ -113,6 +113,8 @@ class MementoEditorDialogFragment() : BaseFragment() {
         mBinding.componentMementoEditorButtonSave.setOnClickListener {
             onSaveButtonClicked()
         }
+
+        mSnackbarAnchorView = mBinding.componentMementoEditorButtonSave
     }
 
     private fun initMementoDataWithMode(mode: MementoEditorMode) {

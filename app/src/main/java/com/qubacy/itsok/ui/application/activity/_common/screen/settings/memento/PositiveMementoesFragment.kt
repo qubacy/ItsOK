@@ -84,6 +84,7 @@ class PositiveMementoesFragment(
         mBinding.fragmentPositiveMementoesButtonComposeMemento.apply {
             setOnClickListener { onComposeMementoButtonClicked() }
         }
+        mSnackbarAnchorView = mBinding.fragmentPositiveMementoesButtonComposeMemento
 
         initMementoEditorResultCallback()
     }
