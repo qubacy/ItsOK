@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">It\'s OK</string>
+
+    <string name="fragment_chat_error_invalid_gripe">Некорректная жалоба!</string>
+
+    <string name="fragment_general_settings_top_bar_title">Настройки</string>
+    <string name="fragment_general_settings_setting_positive_mementoes_title">Позитивные воспоминания</string>
+    <string name="fragment_general_settings_main_section_title_text">Главное</string>
+
+    <string name="fragment_positive_mementoes_settings_top_bar_title">Позитивные воспоминания</string>
+    <string name="fragment_positive_mementoes_header_title_text">Ваше вдохновение</string>
+    <string name="fragment_positive_mementoes_header_description_text">Удаляйте ненужные воспоминания свайпом вправо</string>
+
+    <string name="fragment_memento_editor_dialog_error_invalid_memento">Некорректное воспоминание!</string>
+
+    <string name="component_error_dialog_title_text">Ошибка</string>
+
+    <string name="component_chat_top_bar_action_settings_title_text">Настройки</string>
+    <string name="component_chat_gripe_input_hint_text">Честно говоря..</string>
+    <string name="component_chat_memento_buttons_button_positive_caption">Ты права!</string>
+    <string name="component_chat_memento_buttons_button_negative_caption">Хочу еще</string>
+    <string name="component_chat_bye_buttons_button_bye_caption">Пока!</string>
+    <string name="component_chat_bye_buttons_button_restart_caption">Перезапуск</string>
+
+    <string name="component_memento_editor_text_input_wrapper_helper_text">Напишите вдохновляющее сообщение для себя</string>
+    <string name="component_memento_editor_image_title_text">Картинка</string>
+    <string name="component_memento_editor_text_input_wrapper_hint_text">Подпись к воспоминанию</string>
+    <string name="component_memento_editor_image_description_text">Вы можете прикрепить изображение, которое ассоциируется с позитивным опытом</string>
+    <string name="component_memento_editor_title_editor_mode">Редактировать воспоминание</string>
+    <string name="component_memento_editor_title_creator_mode">Создать воспоминание</string>
+    <string name="component_memento_editor_button_save_caption">Сохранить</string>
+    <string name="component_memento_editor_button_cancel_caption">Отмена</string>
+</resources>
