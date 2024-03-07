@@ -9,7 +9,7 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.business.BusinessFragmentTest
+import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment.business.BusinessFragmentTest
 import com.qubacy.itsok.ui.application.activity._common.screen.settings.memento.model.PositiveMementoesViewModel
 import com.qubacy.itsok.ui.application.activity._common.screen.settings.memento.model.state.PositiveMementoesUiState
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -85,7 +85,7 @@ class PositiveMementoesFragmentTest : BusinessFragmentTest<
 
     @Test
     fun processAddMementoUiOperationOnEmptyListTest() = runTest {
-        val expectedMemento = MementoUtilGenerator.generateMemento()
+        val expectedMemento = MementoUtilGenerator.generateMemento(0)
         val addMementoUiOperation = AddMementoUiOperation(expectedMemento)
 
         mUiOperationFlow.emit(addMementoUiOperation)

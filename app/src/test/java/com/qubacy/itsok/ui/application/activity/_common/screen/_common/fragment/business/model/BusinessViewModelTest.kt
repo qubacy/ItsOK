@@ -6,11 +6,11 @@ import com.qubacy.itsok._common.error.type._test.TestErrorType
 import com.qubacy.itsok.domain._common.usecase._common.UseCase
 import com.qubacy.itsok.domain._common.usecase._common.result._common.DomainResult
 import com.qubacy.itsok.domain._common.usecase._common.result.error.ErrorDomainResult
-import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.BaseViewModel
-import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.BaseViewModelTest
-import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.operation.error.ErrorUiOperation
-import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.operation.loading.SetLoadingStateUiOperation
-import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.state.BaseUiState
+import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment.stateful.model.StatefulViewModel
+import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment.stateful.model.StatefulViewModelTest
+import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment.stateful.model.operation.error.ErrorUiOperation
+import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment.stateful.model.operation.loading.SetLoadingStateUiOperation
+import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment.stateful.model.state.BaseUiState
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert
@@ -20,10 +20,10 @@ import org.mockito.Mockito
 abstract class BusinessViewModelTest<
     UiStateType : BaseUiState,
     UseCaseType: UseCase,
-    ViewModelType : BaseViewModel<UiStateType>
+    ViewModelType : StatefulViewModel<UiStateType>
 >(
     private val mUseCaseClass: Class<UseCaseType>
-) : BaseViewModelTest<UiStateType, ViewModelType>() {
+) : StatefulViewModelTest<UiStateType, ViewModelType>() {
     protected lateinit var mUseCase: UseCaseType
     protected lateinit var mResultFlow: MutableSharedFlow<DomainResult>
 

@@ -2,14 +2,14 @@ package com.qubacy.itsok.ui.application.activity._common.screen.settings.memento
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
-import com.qubacy.itsok._common._test.util.mock.AnyMockUtil
+import com.qubacy.itsok._common._test._common.util.mock.AnyMockUtil
 import com.qubacy.itsok.data.error.repository.ErrorDataRepository
 import com.qubacy.itsok.domain.settings.memento.model._test.usecase.MementoGeneratorUtil
 import com.qubacy.itsok.domain.settings.memento.usecase.PositiveMementoUseCase
 import com.qubacy.itsok.domain.settings.memento.usecase.result.CreateMementoDomainResult
 import com.qubacy.itsok.domain.settings.memento.usecase.result.GetMementoesDomainResult
 import com.qubacy.itsok.domain.settings.memento.usecase.result.UpdateMementoDomainResult
-import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.operation.loading.SetLoadingStateUiOperation
+import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment.stateful.model.operation.loading.SetLoadingStateUiOperation
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment.business.model.BusinessViewModelTest
 import com.qubacy.itsok.ui.application.activity._common.screen.settings.memento.model.operation.AddMementoUiOperation
 import com.qubacy.itsok.ui.application.activity._common.screen.settings.memento.model.operation.SetMementoesUiOperation

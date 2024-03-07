@@ -4,7 +4,7 @@ import androidx.lifecycle.AbstractSavedStateViewModelFactory
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.qubacy.itsok.data.error.repository.ErrorDataRepository
-import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.BaseViewModel
+import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment.stateful.model.StatefulViewModel
 import com.qubacy.itsok.ui.application.activity._common.screen.settings.general.model.state.GeneralSettingsUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -14,7 +14,7 @@ import javax.inject.Qualifier
 open class GeneralSettingsViewModel @Inject constructor(
     mSavedStateHandle: SavedStateHandle,
     mErrorDataRepository: ErrorDataRepository
-) : BaseViewModel<GeneralSettingsUiState>(mSavedStateHandle, mErrorDataRepository) {
+) : StatefulViewModel<GeneralSettingsUiState>(mSavedStateHandle, mErrorDataRepository) {
     override fun generateDefaultUiState(): GeneralSettingsUiState {
         return GeneralSettingsUiState()
     }

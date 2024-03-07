@@ -1,6 +1,6 @@
 package com.qubacy.itsok.domain._common.usecase
 
-import com.qubacy.itsok._common._test.util.rule.dispatcher.MainDispatcherRule
+import com.qubacy.itsok._common._test._common.rule.dispatcher.MainDispatcherRule
 import com.qubacy.itsok._common.error.Error
 import com.qubacy.itsok.data._common.repository._common.DataRepository
 import com.qubacy.itsok.data.error.repository.ErrorDataRepository

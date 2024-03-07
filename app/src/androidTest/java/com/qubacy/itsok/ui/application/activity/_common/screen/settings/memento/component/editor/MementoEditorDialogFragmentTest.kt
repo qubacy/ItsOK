@@ -16,7 +16,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.base.BaseFragmentTest
+import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.BaseFragmentTest
 import com.qubacy.itsok.R
 import com.qubacy.itsok._common.context.util.getUriFromResId
 import com.qubacy.itsok.domain.settings.memento.model._test.util.MementoUtilGenerator
@@ -24,11 +24,9 @@ import com.qubacy.itsok.ui._common._test.view.util.action.wait.WaitViewAction
 import com.qubacy.itsok.ui._common._test.view.util.matcher.image.common.CommonImageViewMatcher
 import com.qubacy.itsok.ui._common._test.view.util.matcher.toast.root.ToastRootMatcher
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.util.extensional.getNavigationResult
-import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.util.extensional.setNavigationResult
 import com.qubacy.itsok.ui.application.activity._common.screen.settings.memento.PositiveMementoesFragmentDirections
 import com.qubacy.itsok.ui.application.activity._common.screen.settings.memento.component.editor._common.mode.MementoEditorMode
 import com.qubacy.itsok.ui.application.activity._common.screen.settings.memento.component.editor.data.MementoEditData
-import com.qubacy.itsok.ui.application.activity._common.screen.settings.memento.component.editor.data.toMemento
 import com.qubacy.itsok.ui.application.activity._common.screen.settings.memento.component.editor.result.MementoEditorResult
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Assert

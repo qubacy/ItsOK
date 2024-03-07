@@ -18,7 +18,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "com.qubacy.itsok._common._test.util.runner.CustomTestRunner"
+        testInstrumentationRunner = "com.qubacy.itsok._common._test._common.runner.CustomTestRunner"
     }
 
     buildTypes {

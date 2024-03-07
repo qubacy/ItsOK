@@ -1,7 +1,7 @@
 package com.qubacy.itsok.domain.settings.memento.usecase
 
 import app.cash.turbine.test
-import com.qubacy.itsok._common._test.util.mock.AnyMockUtil
+import com.qubacy.itsok._common._test._common.util.mock.AnyMockUtil
 import com.qubacy.itsok.data._common.repository._common.DataRepository
 import com.qubacy.itsok.data.error.repository.ErrorDataRepository
 import com.qubacy.itsok.data.memento.model.DataMemento

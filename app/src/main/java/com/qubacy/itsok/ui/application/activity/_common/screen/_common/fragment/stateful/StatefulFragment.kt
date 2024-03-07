@@ -2,16 +2,16 @@ package com.qubacy.itsok.ui.application.activity._common.screen._common.fragment
 
 import androidx.lifecycle.lifecycleScope
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.BaseFragment
-import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.BaseViewModel
-import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.operation._common.UiOperation
-import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.operation.error.ErrorUiOperation
-import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.state.BaseUiState
+import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment.stateful.model.StatefulViewModel
+import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment.stateful.model.operation._common.UiOperation
+import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment.stateful.model.operation.error.ErrorUiOperation
+import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment.stateful.model.state.BaseUiState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 abstract class StatefulFragment<
     UiStateType : BaseUiState,
-    ViewModelType : BaseViewModel<UiStateType>
+    ViewModelType : StatefulViewModel<UiStateType>
 >() : BaseFragment() {
     companion object {
         const val TAG = "StatefulFragment"

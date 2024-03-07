@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import com.qubacy.itsok.databinding.FragmentPositiveMementoesBinding
 import com.qubacy.itsok.domain.settings.memento.model.Memento
 import com.qubacy.itsok.domain.settings.memento.model.toUIMemento
-import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.operation._common.UiOperation
+import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment.stateful.model.operation._common.UiOperation
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.util.extensional.getNavigationResult
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment.business.BusinessFragment
 import com.qubacy.itsok.ui.application.activity._common.screen.settings.memento._common.data.UIMemento

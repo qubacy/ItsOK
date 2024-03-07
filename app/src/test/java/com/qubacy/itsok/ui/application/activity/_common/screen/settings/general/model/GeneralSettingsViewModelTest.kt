@@ -2,12 +2,12 @@ package com.qubacy.itsok.ui.application.activity._common.screen.settings.general
 
 import androidx.lifecycle.SavedStateHandle
 import com.qubacy.itsok.data.error.repository.ErrorDataRepository
-import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.BaseViewModelTest
+import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment.stateful.model.StatefulViewModelTest
 import com.qubacy.itsok.ui.application.activity._common.screen.settings.general.model.state.GeneralSettingsUiState
 
 class GeneralSettingsViewModelTest(
 
-) : BaseViewModelTest<GeneralSettingsUiState, GeneralSettingsViewModel>() {
+) : StatefulViewModelTest<GeneralSettingsUiState, GeneralSettingsViewModel>() {
     override fun createViewModel(
         savedStateHandle: SavedStateHandle,
         errorDataRepository: ErrorDataRepository

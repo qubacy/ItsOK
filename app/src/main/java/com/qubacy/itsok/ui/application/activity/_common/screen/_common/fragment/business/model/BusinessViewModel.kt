@@ -6,10 +6,10 @@ import com.qubacy.itsok.data.error.repository.ErrorDataRepository
 import com.qubacy.itsok.domain._common.usecase._common.UseCase
 import com.qubacy.itsok.domain._common.usecase._common.result._common.DomainResult
 import com.qubacy.itsok.domain._common.usecase._common.result.error.ErrorDomainResult
-import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.BaseViewModel
-import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.operation._common.UiOperation
-import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.operation.error.ErrorUiOperation
-import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.operation.loading.SetLoadingStateUiOperation
+import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment.stateful.model.StatefulViewModel
+import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment.stateful.model.operation._common.UiOperation
+import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment.stateful.model.operation.error.ErrorUiOperation
+import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment.stateful.model.operation.loading.SetLoadingStateUiOperation
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment.business.model.state.BusinessUiState
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
@@ -19,7 +19,7 @@ abstract class BusinessViewModel<UiStateType: BusinessUiState>(
     mSavedStateHandle: SavedStateHandle,
     mErrorDataRepository: ErrorDataRepository,
     protected val mUseCase: UseCase
-) : BaseViewModel<UiStateType>(mSavedStateHandle, mErrorDataRepository) {
+) : StatefulViewModel<UiStateType>(mSavedStateHandle, mErrorDataRepository) {
     companion object {
         const val TAG = "BusinessViewModel"
     }

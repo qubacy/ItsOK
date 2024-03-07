@@ -1,6 +1,6 @@
 package com.qubacy.itsok.data.memento.repository
 
-import com.qubacy.itsok._common._test.util.mock.AnyMockUtil
+import com.qubacy.itsok._common._test._common.util.mock.AnyMockUtil
 import com.qubacy.itsok.data._common.repository.DataRepositoryTest
 import com.qubacy.itsok.data.memento.model.DataMemento
 import com.qubacy.itsok.data.memento.model.toMementoEntity

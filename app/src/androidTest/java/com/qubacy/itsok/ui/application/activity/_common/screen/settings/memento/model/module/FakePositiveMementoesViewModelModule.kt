@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.qubacy.itsok._common._test.util.mock.AnyMockUtil
 import com.qubacy.itsok.domain.settings.memento.model.Memento
-import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.base._common.model.factory.FakeBaseViewModelFactory
+import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment.stateful.model.factory.FakeStatefulViewModelFactory
 import com.qubacy.itsok.ui.application.activity._common.screen.settings.memento.model.PositiveMementoesViewModel
 import com.qubacy.itsok.ui.application.activity._common.screen.settings.memento.model.PositiveMementoesViewModelFactoryQualifier
 import com.qubacy.itsok.ui.application.activity._common.screen.settings.memento.model.state.PositiveMementoesUiState
@@ -23,7 +23,7 @@ import org.mockito.Mockito
 object FakePositiveMementoesViewModelModule {
     class FakePositiveMementoesViewModelFactory(
 
-    ) : FakeBaseViewModelFactory<PositiveMementoesUiState>() {
+    ) : FakeStatefulViewModelFactory<PositiveMementoesUiState>() {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val viewModel = super.create(modelClass) as PositiveMementoesViewModel
             val uiState = TestPositiveMementoesUiState()

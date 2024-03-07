@@ -2,7 +2,7 @@ package com.qubacy.itsok.ui.application.activity._common.screen.settings.general
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.base._common.model.factory.FakeBaseViewModelFactory
+import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment.stateful.model.factory.FakeStatefulViewModelFactory
 import com.qubacy.itsok.ui.application.activity._common.screen.settings.general.model.GeneralSettingsViewModel
 import com.qubacy.itsok.ui.application.activity._common.screen.settings.general.model.GeneralSettingsViewModelFactoryQualifier
 import com.qubacy.itsok.ui.application.activity._common.screen.settings.general.model.state.GeneralSettingsUiState
@@ -20,7 +20,7 @@ import org.mockito.Mockito
 object FakeGeneralSettingsViewModelModule {
     class FakeGeneralSettingsViewModelFactory(
 
-    ) : FakeBaseViewModelFactory<GeneralSettingsUiState>() {
+    ) : FakeStatefulViewModelFactory<GeneralSettingsUiState>() {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             val viewModel = super.create(modelClass) as GeneralSettingsViewModel
 

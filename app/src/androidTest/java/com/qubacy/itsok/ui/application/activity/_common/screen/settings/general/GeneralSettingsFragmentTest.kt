@@ -14,7 +14,7 @@ import dagger.hilt.android.testing.UninstallModules
 import org.junit.Test
 import org.junit.runner.RunWith
 import com.qubacy.itsok.R
-import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.stateful.StatefulFragmentTest
+import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment.stateful.StatefulFragmentTest
 import com.qubacy.itsok.ui.application.activity._common.screen.settings.general.model.state.TestGeneralSettingsUiState
 import org.hamcrest.Matchers
 import org.junit.Assert
@@ -25,11 +25,11 @@ import org.junit.Assert
 class GeneralSettingsFragmentTest(
 
 ) : StatefulFragmentTest<
-    GeneralSettingsUiState,
-    TestGeneralSettingsUiState,
-    GeneralSettingsViewModel,
-    GeneralSettingsFragment
->() {
+        GeneralSettingsUiState,
+        TestGeneralSettingsUiState,
+        GeneralSettingsViewModel,
+        GeneralSettingsFragment
+        >() {
     override fun getFragmentClass(): Class<GeneralSettingsFragment> {
         return GeneralSettingsFragment::class.java
     }

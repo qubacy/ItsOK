@@ -10,7 +10,7 @@ import com.qubacy.itsok.domain.settings.memento.usecase.PositiveMementoUseCase
 import com.qubacy.itsok.domain.settings.memento.usecase.result.CreateMementoDomainResult
 import com.qubacy.itsok.domain.settings.memento.usecase.result.GetMementoesDomainResult
 import com.qubacy.itsok.domain.settings.memento.usecase.result.UpdateMementoDomainResult
-import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.model._common.operation._common.UiOperation
+import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment.stateful.model.operation._common.UiOperation
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment.business.model.BusinessViewModel
 import com.qubacy.itsok.ui.application.activity._common.screen.settings.memento.model.operation.AddMementoUiOperation
 import com.qubacy.itsok.ui.application.activity._common.screen.settings.memento.model.operation.SetMementoesUiOperation

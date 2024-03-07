@@ -1,6 +1,6 @@
 package com.qubacy.itsok.ui.application.activity._common.screen.settings.memento.component.list.adapter
 
-import com.qubacy.itsok._common._test.util.mock.AnyMockUtil
+import com.qubacy.itsok._common._test._common.util.mock.AnyMockUtil
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.component.list.adapter.BaseRecyclerViewAdapterTest
 import com.qubacy.itsok.ui.application.activity._common.screen.settings.memento._common.data.UIMemento
 import com.qubacy.itsok.ui.application.activity._common.screen.settings.memento._common.data._test.util.UIMementoUtilGenerator

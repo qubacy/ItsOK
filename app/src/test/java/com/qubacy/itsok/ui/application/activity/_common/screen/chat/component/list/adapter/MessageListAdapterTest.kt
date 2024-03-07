@@ -2,8 +2,8 @@ package com.qubacy.itsok.ui.application.activity._common.screen.chat.component.l
 
 import android.content.Context
 import android.view.ViewGroup
-import com.qubacy.itsok._common._test.util.mock.AnyMockUtil
-import com.qubacy.itsok._common._test.util.mock.LayoutInflaterMockUtil
+import com.qubacy.itsok._common._test._common.util.mock.AnyMockUtil
+import com.qubacy.itsok._common._test._common.util.mock.LayoutInflaterMockUtil
 import com.qubacy.itsok.ui.application.activity._common.screen._common.data.message._test.util.UIMessageUtilGenerator
 import com.qubacy.itsok.ui.application.activity._common.screen._common.fragment._common.component.list.adapter.BaseRecyclerViewAdapterTest
 import com.qubacy.itsok.ui.application.activity._common.screen.chat._common.data.message.UIMessage
