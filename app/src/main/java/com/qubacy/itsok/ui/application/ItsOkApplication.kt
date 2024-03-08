@@ -19,9 +19,13 @@ class ItsOkApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        mDB = Room.databaseBuilder(
+        mDB = buildDatabase()
+    }
+
+    private fun buildDatabase(): Database {
+        return Room.databaseBuilder(
             this, Database::class.java, Database.DATABASE_NAME)
-            .fallbackToDestructiveMigration()
+//            .fallbackToDestructiveMigration()
             .createFromAsset(Database.DATABASE_NAME)
             .build()
     }

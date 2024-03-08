@@ -6,9 +6,9 @@
     <string name="fragment_chat_error_invalid_gripe">Invalid gripe has been provided!</string>
 
     <string name="fragment_general_settings_top_bar_title">Settings</string>
-    <string name="fragment_general_settings_setting_positive_mementoes_title">Positive mementoes</string>
+    <string name="fragment_general_settings_setting_positive_mementoes_title">Positive mementos</string>
 
-    <string name="fragment_positive_mementoes_settings_top_bar_title">Positive mementoes</string>
+    <string name="fragment_positive_mementoes_settings_top_bar_title">Positive mementos</string>
     
     <string name="fragment_memento_editor_dialog_error_invalid_memento">Invalid memento has been provided!</string>
 

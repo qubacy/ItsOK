@@ -11,7 +11,7 @@ import com.qubacy.itsok.data.memento.repository.source.local.entity.MementoEntit
 
 @Database(
     entities = [ErrorEntity::class, AnswerEntity::class, MementoEntity::class],
-    version = 2
+    version = 1
 )
 abstract class Database : RoomDatabase() {
     companion object {
